@@ -58,14 +58,30 @@
     transform: translateY(-2px);
 }
 
+/* Обикновените стилове за menu li остават същите */
+
+/* По-лесен начин - активен линк при кликване */
 .menu li.active {
-    background: white;
-    color: #00733b;
+    background: white !important;
+    color: #00733b !important;
     border-radius: 18px 0px 172px 5px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     transform: scale(1.05);
 }
 
+
+
+.menu li.active {
+    background: white !important;
+    color: #00733b !important;
+    border-radius: 18px 0px 172px 5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    /* transform: scale(1.05); */
+}
+
+.menu li.active a {
+    color: #00733b !important;
+}
 /* Tablet - 768px и по-малко */
 @media screen and (max-width: 768px) {
     .header-css {
