@@ -1,0 +1,231 @@
+.header-css {
+    display: flex;
+    align-items: center;
+    background-color: #fefafe;
+    padding: 10px 20px;
+    margin: 20px auto 0 auto;
+    width: 90%;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
+}
+
+.nav-css {
+    background-color: #0c2529;
+    padding: 10px 20px;
+    border-radius: 25px;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.logo {
+    height: 80px;
+    margin-right: 30px;
+    flex-shrink: 0;
+}
+
+.menu {
+    list-style: none;
+    display: flex;
+    padding: 0;
+    margin: 0;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.menu li {
+    padding: 12px 30px;
+    background: #00733b;
+    color: #fefafe;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 18px 0px 172px 5px;
+    white-space: nowrap;
+    font-size: 14px;
+}
+
+.menu li a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.menu li:hover {
+    background: #018a46;
+    transform: translateY(-2px);
+}
+
+.menu li.active {
+    background: white;
+    color: #00733b;
+    border-radius: 18px 0px 172px 5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+}
+
+/* Tablet - 768px и по-малко */
+@media screen and (max-width: 768px) {
+    .header-css {
+        padding: 8px 15px;
+        width: 95%;
+        gap: 10px;
+    }
+    
+    .logo {
+        height: 60px;
+        margin-right: 15px;
+    }
+    
+    .nav-css {
+        padding: 8px 15px;
+        min-width: 0;
+    }
+    
+    .menu {
+        gap: 5px;
+        overflow-x: auto;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+    }
+    
+    .menu::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
+    }
+    
+    .menu li {
+        padding: 8px 16px;
+        font-size: 12px;
+        flex-shrink: 0;
+    }
+}
+
+/* Mobile - 480px и по-малко */
+@media screen and (max-width: 480px) {
+    .header-css {
+        padding: 6px 10px;
+        width: 98%;
+        margin: 10px auto 0 auto;
+    }
+    
+    .logo {
+        height: 45px;
+        margin-right: 10px;
+    }
+    
+    .nav-css {
+        padding: 5px 10px;
+        flex: 1;
+    }
+    
+    .menu {
+        gap: 3px;
+        justify-content: flex-start;
+    }
+    
+    .menu li {
+        padding: 6px 12px;
+        font-size: 11px;
+        border-radius: 15px 0px 80px 3px; /* По-малко екстремен border-radius */
+    }
+    
+    .menu li.active {
+        transform: scale(1.02);
+    }
+}
+
+/* Extra Small - 360px и по-малко */
+@media screen and (max-width: 360px) {
+    .header-css {
+        padding: 5px 8px;
+    }
+    
+    .logo {
+        height: 40px;
+        margin-right: 8px;
+    }
+    
+    .nav-css {
+        padding: 4px 8px;
+    }
+    
+    .menu li {
+        padding: 5px 8px;
+        font-size: 10px;
+        border-radius: 12px 0px 60px 2px;
+    }
+}
+
+/* Large Desktop - 1200px и повече */
+@media screen and (min-width: 1200px) {
+    .header-css {
+        width: 80%;
+        padding: 12px 25px;
+    }
+    
+    .logo {
+        height: 90px;
+        margin-right: 40px;
+    }
+    
+    .nav-css {
+        padding: 12px 25px;
+    }
+    
+    .menu {
+        gap: 12px;
+    }
+    
+    .menu li {
+        padding: 14px 35px;
+        font-size: 16px;
+    }
+}
+
+/* Landscape Tablets */
+@media screen and (max-width: 1024px) and (orientation: landscape) and (max-height: 768px) {
+    .header-css {
+        height: 60px;
+        padding: 5px 15px;
+    }
+    
+    .logo {
+        height: 50px;
+        margin-right: 15px;
+    }
+    
+    .nav-css {
+        padding: 5px 15px;
+    }
+    
+    .menu li {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+}
+
+/* Very Small Devices */
+@media screen and (max-width: 320px) {
+    .header-css {
+        padding: 4px 6px;
+        border-radius: 10px;
+    }
+    
+    .logo {
+        height: 35px;
+        margin-right: 6px;
+    }
+    
+    .nav-css {
+        padding: 3px 6px;
+        border-radius: 15px;
+    }
+    
+    .menu li {
+        padding: 4px 6px;
+        font-size: 9px;
+        border-radius: 8px 0px 40px 2px;
+    }
+}
