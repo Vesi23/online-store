@@ -1,38 +1,25 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route} from 'react-router-dom';
+import './App.css';
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
+import About from './views/About/About';
+import WhatsAppButton from './components/WhatsApp-btn/WhatsApp-btn';
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
-      <div className="flex space-x-4">
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="w-16 h-16" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="w-16 h-16" alt="React logo" />
-        </a>
-      </div>
-      <h1 className="text-4xl font-bold text-blue-600 mt-4">Vite + React + Tailwind</h1>
-      <div className="card mt-6 p-4 bg-white shadow-md rounded-lg">
-        <button
-          className="px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-        <p className="mt-4 text-gray-600">
-          Edit <code className="bg-gray-200 px-1 rounded">src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs mt-6 text-gray-500">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+    // <AppContext.Provider value={{ ...context, setContext }}>
+      <BrowserRouter>
+        <Header />
+        <WhatsAppButton />
+        <Routes>
+          <Route path="/about" element={<About/>} />
+
+        </Routes>
+        <Footer /> 
+      </BrowserRouter>
+
+  );
 }
 
-export default App
+export default App;
