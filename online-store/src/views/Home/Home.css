@@ -40,4 +40,15 @@
 color: #e5e7eb;
 }
 
+.home-product-right{
+ margin-bottom: 13%;
+}
+.home-product-text{
+      /* text-align: left;
+       */
+        text-align: justify;
+}
 
+.home-product-t-l{
+   text-align: left;
+}

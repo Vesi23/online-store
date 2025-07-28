@@ -111,7 +111,7 @@ const Home = () => {
 
             {/* Секция с предимства */}
             {/* from-blue-50 to-green-200  преливане на цветовете */}
-            <div className="w-full bg-gradient-to-br from-blue-50 to-green-200 py-16">
+            <div className="w-full h-[150hv] bg-gradient-to-br from-blue-50 to-green-200 py-16">
                 <div className="max-w-6xl mx-auto px-8">
                     <h2 className="text-4xl font-bold text-center mb-4 text-gray-800">
                         Защо да изберете <span className="text-green-600">Albayrak EOOD</span>?
@@ -208,11 +208,16 @@ const Home = () => {
            <div className='home-products w-full min-h-[90vh] py-16 flex justify-center items-center'>
                 <div className="max-w-6xl mx-auto px-8">
 
-                    {/* Заглавие */}
-                    <div className="text-center mb-12">
-                        <h1 className="font-montserrat text-4xl  text-white mb-8">
-                            Нашите <span className='text-green-400'>Продукти</span>
-                        </h1>
+                    {/* Заглавие с модерен дизайн */}
+                    <div className="text-center mb-16">
+                        <div className="relative inline-block">
+                            <h1 className="font-extrabold text-5xl lg:text-6xl text-white mb-4 tracking-tight leading-tight">
+                                Нашите <span className='text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-emerald-500 to-green-600 animate-pulse'>Продукти</span>
+                            </h1>
+                            {/* Декоративна линия под заглавието */}
+                            <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-green-400 to-emerald-600 rounded-full shadow-lg"></div>
+                        </div>
+        
                     </div>
                     {/* Основно съдържание */}
                     <div className="flex flex-col lg:flex-row gap-12 items-center">
@@ -293,24 +298,28 @@ const Home = () => {
                                 </div>
                             </div>
                         </div>
-                        {/* Дясна част - текст */}
-                        <div className="flex-1 lg:pl-8">
-                            <div className="text-white">
-                                <p className="text-xl leading-relaxed mb-8">
-                                    <span className="font-bold text-white">В Albayrak EOOD</span> знаем колко е важно
-                                    опаковането да бъде <span className="text-green-400 font-semibold">сигурно, удобно
+                        {/* Дясна част - текст с бял изпъкнал фон */}
+                        <div className="home-product-right flex-1 lg:pl-8">
+                            <div className="bg-white rounded-2xl p-8 shadow-2xl border border-gray-100 transform hover:scale-105 transition-all duration-300">
+                                <p className="home-product-t-l text-xl leading-relaxed mb-8 text-gray-800">
+                                    <span className=" font-bold text-gray-900">В Albayrak EOOD</span> знаем колко е важно
+                                    опаковането да бъде <span className="text-green-600 font-semibold">сигурно, удобно
                                         и бързо.</span>
                                 </p>
 
-                                <p className="text-lg leading-relaxed mb-10 text-gray-300">
+                                <p className="home-product-text text-lg leading-relaxed mb-10 text-gray-600 ">
                                     Затова предлагаме подбрана гама от продукти, които отговарят на
                                     нуждите на всеки бизнес – от малки складове до големи логистични
                                     центрове.
                                 </p>
 
-
-                                <button className="bg-green-500 hover:bg-green-600 text-white px-7 py-4 rounded-xl transition duration-300 text-lg font-semibold shadow-lg ">
-                                    <a href="/shop">Нашите Продукти</a>
+                                <button className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-8 py-4 rounded-xl transition-all duration-300 text-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 w-full">
+                                    <a href="/shop" className="flex items-center justify-center space-x-2">
+                                        <span>Нашите Продукти</span>
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                        </svg>
+                                    </a>
                                 </button>
                             </div>
                         </div>
