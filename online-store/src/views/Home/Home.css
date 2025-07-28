@@ -36,22 +36,8 @@
     text-align: left;
 }
 
-.home-image-box {
-    background-color: #bfdbfe;
-    color: #1f2937;
-    padding: 60px 40px;
-    border-radius: 20px;
-    text-align: center;
-    min-width: 300px;
-    min-height: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.home-products{
+color: #e5e7eb;
 }
 
-.image-text {
-    font-size: 1.5rem;
-    font-weight: bold;
-    line-height: 1.4;
-    margin: 0;
-}
+
