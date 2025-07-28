@@ -4,14 +4,13 @@ import { useState, useEffect } from 'react';
 const Home = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [currentProductIndex, setCurrentProductIndex] = useState(0);
-    // const [autoPlay, setAutoPlay] = useState(true);
+    const [autoPlay] = useState(true); // Добавете това
 
     const mediaFiles = [
         { src: "/images/office1.jpg", type: "image", alt: "Office 1" },
         { src: "/images/office2.jpg", type: "image", alt: "Office 2" },
         { src: "/images/officeVideo1.mp4", type: "video", alt: "Office Video" }
     ];
-
 
     // Автоматично сменяне на снимките
     useEffect(() => {
@@ -21,6 +20,17 @@ const Home = () => {
 
         return () => clearInterval(interval);
     }, [mediaFiles.length]);
+
+    // Автоматично сменяне на продуктите
+    useEffect(() => {
+        if (!autoPlay) return;
+
+        const interval = setInterval(() => {
+            setCurrentProductIndex((prev) => (prev + 1) % 8);
+        }, 4000); // Сменя на всеки 4 секунди
+
+        return () => clearInterval(interval);
+    }, [autoPlay]);
 
     return (
         <div className="body min-h-[90vh] flex flex-col items-center">
@@ -195,7 +205,7 @@ const Home = () => {
             </div>
 
             {/* Секция с продукти */}
-            <div className='home-products w-full min-h-[90vh] py-16 flex justify-center items-center'>
+           <div className='home-products w-full min-h-[90vh] py-16 flex justify-center items-center'>
                 <div className="max-w-6xl mx-auto px-8">
 
                     {/* Заглавие */}
@@ -211,45 +221,46 @@ const Home = () => {
                         {/* Лява част - интерактивен carousel */}
                         <div className="flex-1">
                             <div className="relative">
-                                {/* Главна показвана снимка */}
-                                <div className="relative overflow-hidden rounded-2xl shadow-2xl mb-6">
-                                    <img
-                                        src={`/images/home${currentProductIndex + 1}.jpg`}
-                                        alt={`Product ${currentProductIndex + 1}`}
-                                        className="w-full h-96 object-cover transition-all duration-500"
-                                    />
+                                {/* Главна показвана снимка с по-добро aspect ratio */}
+                                <div className="relative overflow-hidden rounded-2xl  mb-6 ">
+                                    <div className="w-full h-[500px] flex items-center justify-center"> {/* Увеличена височина */}
+                                        <img
+                                            src={`/images/home${currentProductIndex + 1}.jpg`}
+                                            alt={`Product ${currentProductIndex + 1}`}
+                                            className="max-w-full max-h-full object-contain transition-all duration-500"
+                                        />
+                                    </div>
+                                 {/* Навигационни стрелки - по-малки */}
+<button
+    onClick={() => setCurrentProductIndex((prev) => prev === 0 ? 7 : prev - 1)}
+    className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300 hover:scale-110"
+>
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+    </svg>
+</button>
 
-                                    {/* Навигационни стрелки */}
-                                    <button
-                                        onClick={() => setCurrentProductIndex((prev) => prev === 0 ? 8 : prev - 1)}
-                                        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300 hover:scale-110"
-                                    >
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                                        </svg>
-                                    </button>
+<button
+    onClick={() => setCurrentProductIndex((prev) => prev === 7 ? 0 : prev + 1)}
+    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300 hover:scale-110"
+>
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+    </svg>
+</button>
 
-                                    <button
-                                        onClick={() => setCurrentProductIndex((prev) => prev === 8 ? 0 : prev + 1)}
-                                        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-3 rounded-full transition-all duration-300 hover:scale-110"
-                                    >
-                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                        </svg>
-                                    </button>
-
-
+                                  
                                 </div>
-
-                                {/* Thumbnail navigation с 3D ефект */}
-                                <div className="grid grid-cols-9 gap-2">
-                                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num, index) => (
+                                
+                                {/* Thumbnail navigation с по-добър размер */}
+                                <div className="grid grid-cols-8 gap-2">
+                                    {[1, 2, 3, 4, 5, 6, 7, 8].map((num, index) => (
                                         <div
                                             key={index}
                                             onClick={() => setCurrentProductIndex(index)}
                                             className={`group relative cursor-pointer transition-all duration-300 transform hover:scale-110 ${currentProductIndex === index
-                                                    ? 'scale-110 ring-2 ring-green-500'
-                                                    : 'hover:scale-105'
+                                                ? 'scale-110 ring-2 ring-green-400'
+                                                : 'hover:scale-105'
                                                 }`}
                                         >
                                             <div className="aspect-square rounded-lg overflow-hidden shadow-lg">
@@ -257,8 +268,8 @@ const Home = () => {
                                                     src={`/images/home${num}.jpg`}
                                                     alt={`Product ${num}`}
                                                     className={`w-full h-full object-cover transition-all duration-300 ${currentProductIndex === index
-                                                            ? 'brightness-100'
-                                                            : 'brightness-75 group-hover:brightness-90'
+                                                        ? 'brightness-100'
+                                                        : 'brightness-75 group-hover:brightness-90'
                                                         }`}
                                                 />
                                             </div>
@@ -269,18 +280,17 @@ const Home = () => {
 
                                 {/* Dot индикатори */}
                                 <div className="flex justify-center mt-6 space-x-2">
-                                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((_, index) => (
+                                    {[1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => (
                                         <button
                                             key={index}
                                             onClick={() => setCurrentProductIndex(index)}
                                             className={`w-3 h-3 rounded-full transition-all duration-300 ${currentProductIndex === index
-                                                    ? 'bg-green-400 scale-125'
-                                                    : 'bg-white/40 hover:bg-white/60 hover:scale-110'
+                                                ? 'bg-green-400 scale-125'
+                                                : 'bg-white/40 hover:bg-white/60 hover:scale-110'
                                                 }`}
                                         />
                                     ))}
                                 </div>
-
                             </div>
                         </div>
                         {/* Дясна част - текст */}
@@ -299,8 +309,8 @@ const Home = () => {
                                 </p>
 
 
-                                <button className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 rounded-xl transition duration-300 text-lg font-semibold shadow-lg w-full">
-                                    <a href="/shop">Разгледай Всички Продукти</a>
+                                <button className="bg-green-500 hover:bg-green-600 text-white px-7 py-4 rounded-xl transition duration-300 text-lg font-semibold shadow-lg ">
+                                    <a href="/shop">Нашите Продукти</a>
                                 </button>
                             </div>
                         </div>
