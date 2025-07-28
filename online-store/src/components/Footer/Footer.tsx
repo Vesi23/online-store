@@ -1,6 +1,8 @@
+import "./Footer.css";
+
 const Footer = () => {
     return (
-        <footer className="text-white py-8 mt-auto">
+        <footer className="text-white py-8 mt-auto footer-css">
             <div className="container mx-auto px-4">
                 <div className="flex flex-col md:flex-row justify-between items-center">
                     {/* Logo Section */}
