@@ -16,7 +16,10 @@ const Header = () => {
 
   return (
     <header className="header-css">
-      <img src="/images/logo.JPG" alt="Logo" className="logo" />
+      <span>
+
+      <img src="/images/logo.JPG" alt="Logo" className="logo" onClick={() => handleNavigation('/')} />
+      </span>
 
       <nav className="nav nav-css">
         <ul className="menu">
@@ -28,7 +31,7 @@ const Header = () => {
           </li>
           <li 
             className={activeItem === '/' ? 'active' : ''}
-            onClick={() => handleNavigation('/')}
+            onClick={() => handleNavigation('/shop')}
           >
             <span>Shop</span>
           </li>
