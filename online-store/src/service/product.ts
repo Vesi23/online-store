@@ -21,11 +21,7 @@ export const getAllProducts = async (search: string) => {
     const posts = Object.keys(snapshot.val()).map(key => ({
         id: key,
         ...snapshot.val()[key],
-        // createdOn: new Date(snapshot.val()[key].createdOn).toString(),
-        // likedBy: snapshot.val()[key].likedBy ? Object.keys(snapshot.val()[key].likedBy) : [],
         imageUrl: snapshot.val().imageUrl,
-        // pagesRead: snapshot.val()[key].pagesRead, // updated this line
-    // totalPages: snapshot.val()[key].totalPages, // updated this line
     }))
         .filter(p => p.title?.toLowerCase().includes(search.toLowerCase()));
 
