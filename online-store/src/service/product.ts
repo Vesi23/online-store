@@ -40,10 +40,7 @@ export const getProductById = async (id: string) => {
         id,
         ...snapshot.val(),
         createdOn: new Date(snapshot.val().createdOn).toString(),
-        likedBy: snapshot.val().likedBy ? Object.keys(snapshot.val().likedBy) : [],
         imageUrl: snapshot.val().imageUrl,
-        pagesRead:snapshot.val().pagesRead,
-        totalPages: snapshot.val().totalPages,
     }];
 
     return product;
