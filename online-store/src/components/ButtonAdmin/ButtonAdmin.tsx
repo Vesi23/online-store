@@ -2,8 +2,12 @@ import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../config/firebase-config';
 
-const ButtonAdmin = () => {
-    const [showLogin, setShowLogin] = useState(false);
+interface ButtonAdminProps {
+    showLogin?: boolean;
+    onClose?: () => void;
+}
+
+const ButtonAdmin = ({ showLogin = false, onClose }: ButtonAdminProps) => {
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -36,31 +40,13 @@ const ButtonAdmin = () => {
     };
 
     const closeModal = () => {
-        setShowLogin(false);
+        if (onClose) onClose();
         setFormData({ email: '', password: '' });
         setError('');
     };
 
     return (
         <>
-            {/* Admin Button - Positioned под header дясно */}
-            <button
-                onClick={() => setShowLogin(true)}
-                className="right-7 ml-12 from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-1 py-1 rounded-lg shadow-lg hover:shadow-green-500/25 transition-all duration-300 transform hover:scale-105 z-50 group"
-                title="Админ панел"
-            >
-                <div className="flex items-center space-x-2">
-                    <svg className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
-                    </svg>
-                </div>
-                {/* Tooltip */}
-                <div className="absolute top-full right-0 mt-2 px-3 py-1 bg-black text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                    Админ панел
-                    <div className="absolute bottom-full right-2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-black"></div>
-                </div>
-            </button>
-
             {/* Login Modal с модерен дизайн */}
             {showLogin && (
                 <div className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
