@@ -8,19 +8,19 @@ const Footer = () => {
                     {/* Logo Section */}
                     <div className="mb-4 md:mb-0">
                         {/* <img src="" alt="Logo" className="h-12 w-12" /> */}
-                       <img src="/images/logo.JPG" alt="Logo" className="h-12 w-12" />
+                        <img src="/images/logo.JPG" alt="Logo" className="h-12 w-12" />
                         <h3 className="text-xl font-bold mt-2">Albayrak EOOD</h3>
                     </div>
-                  
 
 
-{/* Информация за контакт */}
-<div className="text-center md:text-left">
+
+                    {/* Информация за контакт */}
+                    <div className="text-center md:text-left">
                         <h4 className="text-lg font-semibold mb-2">Информация за контакт</h4>
                         <p className="text-gray-400">Телефон: +359882042698</p>
                         <p className="text-gray-400">Имейл: albayrak.ood@gmail.com</p>
                         <p className="text-gray-400">Адрес: ул.Георги Герасимов 2 гр.Пазрджик</p>
-                       </div>
+                    </div>
                     {/* Social Media Icons */}
                     <div className="flex space-x-4">
                         {/* Instagram */}
