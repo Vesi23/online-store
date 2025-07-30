@@ -1,6 +1,9 @@
 import "./Footer.css";
+import { useState } from 'react';
+import ButtonAdmin from "../ButtonAdmin/ButtonAdmin";
 
 const Footer = () => {
+    const [showAdminModal, setShowAdminModal] = useState(false);
     return (
         <footer className="text-white py-8 mt-auto footer-css">
             <div className="container mx-auto px-4">
@@ -8,7 +11,12 @@ const Footer = () => {
                     {/* Logo Section */}
                     <div className="mb-4 md:mb-0">
                         {/* <img src="" alt="Logo" className="h-12 w-12" /> */}
-                        <img src="/images/logo.JPG" alt="Logo" className="h-12 w-12" />
+                        <img
+                            src="/images/logo.JPG"
+                            alt="Logo"
+                            className="h-12 w-12"
+                            onClick={() => setShowAdminModal(true)}
+                        />
                         <h3 className="text-xl font-bold mt-2">Albayrak EOOD</h3>
                     </div>
 
@@ -87,7 +95,7 @@ const Footer = () => {
                     </p>
                 </div>
             </div>
-        </footer>
+            {showAdminModal && <ButtonAdmin showLogin={true} onClose={() => setShowAdminModal(false)} />}        </footer>
     );
 };
 
