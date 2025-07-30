@@ -111,7 +111,7 @@ const Home = () => {
 
             {/* Секция с предимства */}
             {/* from-blue-50 to-green-200  преливане на цветовете */}
-            <div className="w-full h-[150hv] bg-gradient-to-br from-blue-50 to-green-200 py-16">
+            <div className="w-full h-[150hv] bg-gradient-to-br from-blue-100 to-green-200 py-16">
                 <div className="max-w-6xl mx-auto px-8">
                     <h2 className="text-4xl font-bold text-center mb-4 text-gray-800">
                         Защо да изберете <span className="text-green-600">Albayrak EOOD</span>?
