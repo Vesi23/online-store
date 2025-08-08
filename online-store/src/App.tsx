@@ -7,6 +7,7 @@ import Home from './views/Home/Home';
 import Create from './views/Create/Create';
 import WhatsAppButton from './components/WhatsApp-btn/WhatsApp-btn';
 import Shop from './views/Shop/Shop';
+import Feedback from './views/Feedback/Feedback';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path='/shop' element={<Shop />} />
         <Route path="/create" element={<Create />} />
+        <Route path="/feedback" element={<Feedback />} />
       </Routes>
       <Footer />
     </BrowserRouter>
