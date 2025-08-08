@@ -12,11 +12,37 @@ const Create = () => {
 
     const [category, setCategory] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [selectedImages, setSelectedImages] = useState<File[]>([]);
+    const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
     const handleCategory = (e: any) => {
         setCategory(e.target.value);
     }
+    // Handle image selection and preview
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(e.target.files || []);
+        const totalFiles = selectedImages.length + files.length;
+        if (totalFiles > 10) {
+            alert("Може да качите максимум 10 снимки!");
+            return;
+        }
 
+        setSelectedImages(prev => [...prev, ...files]);
+
+        files.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                setImagePreviews(prev => [...prev, ev.target?.result as string]);
+            };
+            reader.readAsDataURL(file);
+        });
+    };
+
+    // Remove image from preview and selected images
+    const removeImage = (index: number) => {
+    setSelectedImages(prev => prev.filter((_, i) => i !== index));
+    setImagePreviews(prev => prev.filter((_, i) => i !== index));
+};
     const createProduct = async () => {
         let isValid = true;
 
@@ -113,6 +139,35 @@ const Create = () => {
 
                             {/* Category Select */}
                             <div className="space-y-2">
+                           {/* Image Upload */}
+                           <div className="space-y-2">
+                               <label className="block text-sm font-bold text-gray-700">
+                                   Снимки на продукта (до 10)
+                               </label>
+                               <input
+                                   type="file"
+                                   multiple
+                                   accept="image/*"
+                                   onChange={handleImageChange}
+                                   className="w-full px-4 py-4 border-2 border-dashed border-gray-300 rounded-xl"
+                               />
+                               {imagePreviews.length > 0 && (
+                                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4 my-4">
+                                       {imagePreviews.map((url, idx) => (
+                                           <div key={idx} className="relative">
+                                               <img src={url} alt={`preview-${idx}`} className="w-full h-32 object-cover rounded-lg" />
+                                               <button
+                                                   type="button"
+                                                   onClick={() => removeImage(idx)}
+                                                   className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                                               >
+                                                   ×
+                                               </button>
+                                           </div>
+                                       ))}
+                                   </div>
+                               )}
+                           </div>
                                 <label className="block text-sm font-bold text-gray-700">
                                     Категория
                                 </label>
@@ -136,8 +191,8 @@ const Create = () => {
                                 onClick={createProduct}
                                 disabled={isLoading}
                                 className={`w-full py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 relative overflow-hidden ${isLoading
-                                        ? 'bg-gray-300 cursor-not-allowed text-gray-500'
-                                        : 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white transform hover:scale-105 shadow-lg hover:shadow-2xl active:scale-95'
+                                    ? 'bg-gray-300 cursor-not-allowed text-gray-500'
+                                    : 'bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white transform hover:scale-105 shadow-lg hover:shadow-2xl active:scale-95'
                                     }`}
                             >
                                 {/* Button shine effect */}
@@ -163,7 +218,8 @@ const Create = () => {
                                 )}
                             </button>
                         </div>
-
+                       
+ 
                         {/* Form Footer */}
                         <div className="bg-gradient-to-r from-gray-50 to-green-50 px-8 py-6 border-t border-gray-100">
                             <div className="flex items-center justify-center space-x-2 text-gray-600">
