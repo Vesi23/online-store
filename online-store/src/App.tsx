@@ -8,6 +8,7 @@ import Create from './views/Create/Create';
 import WhatsAppButton from './components/WhatsApp-btn/WhatsApp-btn';
 import Shop from './views/Shop/Shop';
 import Feedback from './views/Feedback/Feedback';
+import Product from './views/Shop/Product';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path='/shop' element={<Shop />} />
+        <Route path="/product/:id" element={<Product />} />
         <Route path="/create" element={<Create />} />
         <Route path="/feedback" element={<Feedback />} />
       </Routes>
