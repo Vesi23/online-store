@@ -58,14 +58,6 @@ const Header = () => {
           </li>
           {isLoggedIn && (
             <li 
-              className={activeItem === '/create' ? 'active' : ''}
-              onClick={() => handleNavigation('/create')}
-            >
-              <span>Admin Panel</span>
-            </li>
-          )}
-          {isLoggedIn && (
-            <li 
               onClick={handleLogout}
               style={{ background: '#dc2626', color: 'white' }}
             >
