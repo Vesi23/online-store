@@ -96,7 +96,7 @@ function App() {
           <Route path='/shop' element={<Shop />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/create" element={<Authenticated><Create /></Authenticated>} />
-          <Route path="/feedback" element={<Feedback />} />
+          <Route path="/feedback" element={<Authenticated><Feedback /></Authenticated>} />
         </Routes>
         <Footer />
       </BrowserRouter>
