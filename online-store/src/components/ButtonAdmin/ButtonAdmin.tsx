@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../config/firebase-config';
+import { useAppContext } from '../../context/appContext';
+import { useNavigate } from 'react-router-dom';
 
 interface ButtonAdminProps {
     showLogin?: boolean;
@@ -8,6 +10,8 @@ interface ButtonAdminProps {
 }
 
 const ButtonAdmin = ({ showLogin = false, onClose }: ButtonAdminProps) => {
+    const { setContext } = useAppContext();
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -29,9 +33,20 @@ const ButtonAdmin = ({ showLogin = false, onClose }: ButtonAdminProps) => {
         setIsLoading(true);
 
         try {
-            await signInWithEmailAndPassword(auth, formData.email, formData.password);
-            // Redirect to create page after successful login
-            window.location.href = '/create';
+            const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
+            const user = userCredential.user;
+            
+            // Обновяваме контекста с потребителските данни
+            setContext({
+                admin: { email: user.email },
+                adminData: { email: user.email }
+            });
+            
+            // Затваряме модала
+            closeModal();
+            
+            // Пренасочваме към create страницата
+            navigate('/create');
         } catch (err: any) {
             setError('Невалидни данни за влизане');
         } finally {
