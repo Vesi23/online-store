@@ -187,25 +187,21 @@ const Feedback = () => {
                                 </div>
 
                                 <div className="p-6 flex-1 flex flex-col">
-                                    {/* Контактна информация с икони */}
-                                    <div className="grid grid-cols-1 gap-4 mb-6">
-                                        <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl">
+                                    {/* Контактна информация в отделни блокове */}
+                                    <div className="space-y-3 mb-6">
+                                        <div className="flex items-center space-x-2 p-3 bg-gray-50 rounded-xl">
                                             <div className="text-blue-500 text-xl">📧</div>
-                                            <div className="min-w-0 flex-1">
-                                                <p className="text-sm text-gray-600 font-medium">Email</p>
-                                                <a href={`mailto:${feedback.email}`} className="text-blue-600 hover:text-blue-800 font-medium hover:underline transition-colors block truncate">
-                                                    {feedback.email}
-                                                </a>
-                                            </div>
+                                            <span className="text-sm text-gray-600 font-medium">Email:</span>
+                                            <a href={`mailto:${feedback.email}`} className="text-blue-600 hover:text-blue-800 font-medium hover:underline transition-colors truncate">
+                                                {feedback.email}
+                                            </a>
                                         </div>
-                                        <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl">
+                                        <div className="flex items-center space-x-2 p-3 bg-gray-50 rounded-xl">
                                             <div className="text-green-500 text-xl">📱</div>
-                                            <div className="min-w-0 flex-1">
-                                                <p className="text-sm text-gray-600 font-medium">Телефон</p>
-                                                <a href={`tel:${feedback.phone}`} className="text-green-600 hover:text-green-800 font-medium hover:underline transition-colors block truncate">
-                                                    {feedback.phone}
-                                                </a>
-                                            </div>
+                                            <span className="text-sm text-gray-600 font-medium">Телефон:</span>
+                                            <a href={`tel:${feedback.phone}`} className="text-green-600 hover:text-green-800 font-medium hover:underline transition-colors">
+                                                {feedback.phone}
+                                            </a>
                                         </div>
                                     </div>
 
@@ -215,8 +211,8 @@ const Feedback = () => {
                                             <div className="text-purple-500 text-xl">💬</div>
                                             <p className="text-sm font-semibold text-gray-700">Съобщение</p>
                                         </div>
-                                        <div className="bg-gradient-to-r from-gray-50 to-blue-50 p-4 rounded-xl border-l-4 border-blue-500 h-full">
-                                            <p className="text-gray-800 leading-relaxed text-sm">
+                                        <div className="bg-gradient-to-r from-gray-50 to-blue-50 p-4 rounded-xl border-l-4 border-blue-500 max-h-32 overflow-y-auto">
+                                            <p className="text-gray-800 leading-relaxed text-sm text-left">
                                                 {feedback.message}
                                             </p>
                                         </div>
