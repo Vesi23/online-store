@@ -21,6 +21,8 @@ function App() {
     adminData: {}
   });
 
+  
+
   useEffect(() => {
     // Проверяваме за запазени данни в localStorage
     const savedAdmin = localStorage.getItem('admin');
