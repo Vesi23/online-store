@@ -211,7 +211,7 @@ const Feedback = () => {
                                             <div className="text-purple-500 text-xl">💬</div>
                                             <p className="text-sm font-semibold text-gray-700">Съобщение</p>
                                         </div>
-                                        <div className="bg-gradient-to-r from-gray-50 to-blue-50 p-4 rounded-xl border-l-4 border-blue-500 max-h-32 overflow-y-auto">
+                                        <div className="bg-gradient-to-r from-gray-50 to-blue-50 p-4 rounded-xl border-l-4 border-blue-500 max-h-32 overflow-y-scroll">
                                             <p className="text-gray-800 leading-relaxed text-sm text-left">
                                                 {feedback.message}
                                             </p>
