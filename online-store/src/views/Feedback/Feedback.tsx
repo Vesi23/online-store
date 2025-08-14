@@ -223,13 +223,12 @@ const Feedback = () => {
                                     </div>
 
                                     {/* Компактни бутони на ред */}
-                                    <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-100 mt-auto">
+                                    <div className="flex flex-wrap gap-2 pt-6 border-t border-gray-100 mt-auto">
                                         {feedback.status === 'unread' && (
                                             <button
                                                 onClick={() => markAsRead(feedback.id)}
                                                 className="flex items-center space-x-1 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white px-3 py-1.5 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 text-xs"
                                             >
-                                                <span>✅</span>
                                                 <span>Прочетен</span>
                                             </button>
                                         )}
@@ -240,14 +239,12 @@ const Feedback = () => {
                                                     onClick={() => markAsReplied(feedback.id)}
                                                     className="flex items-center space-x-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-3 py-1.5 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 text-xs"
                                                 >
-                                                    <span>💙</span>
                                                     <span>Отговорен</span>
                                                 </button>
                                                 <button
                                                     onClick={() => markAsUnread(feedback.id)}
                                                     className="flex items-center space-x-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-3 py-1.5 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 text-xs"
                                                 >
-                                                    <span>🔄</span>
                                                     <span>Непрочетен</span>
                                                 </button>
                                             </>
@@ -258,7 +255,6 @@ const Feedback = () => {
                                                 onClick={() => markAsUnread(feedback.id)}
                                                 className="flex items-center space-x-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-3 py-1.5 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md transform hover:-translate-y-0.5 text-xs"
                                             >
-                                                <span>🔄</span>
                                                 <span>Непрочетен</span>
                                             </button>
                                         )}
