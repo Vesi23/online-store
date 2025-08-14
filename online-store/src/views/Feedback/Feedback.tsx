@@ -111,141 +111,173 @@ const Feedback = () => {
 
 
     return (
-        <div className="container mx-auto px-4 py-8">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold text-gray-800">
-                    Feedbacks ({feedbacks.length})
-                </h1>
+        <div className="min-h-screen bg-gradient-to-br">
+            <div className="container mx-auto px-6 py-12">
+                {/* Header с градиент и shadow */}
+                <div className="bg-green-100 rounded-2xl shadow-lg p-8 mb-8 border border-gray-100">
+                    <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-6">
+                        <div>
+                            <h1 className="text-4xl font-bold bg-gradient-to-r from-green-800 to-blue-600 bg-clip-text text-transparent">
+                                Обратна връзка
+                            </h1>
+                            <p className="text-gray-600 mt-2 text-lg">
+                                Общо {feedbacks.length} съобщения
+                            </p>
+                        </div>
 
-                {/* Филтриране по статус */}
-                <div className="flex items-center space-x-2">
-                    <label className="text-sm font-medium text-gray-700">
-                        Филтрирай по статус:
-                    </label>
-                    <select
-                        value={filterStatus}
-                        onChange={(e) => setFilterStatus(e.target.value)}
-                        className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <option value="all">Всички</option>
-                        <option value="unread">Непрочетени</option>
-                        <option value="read">Прочетени</option>
-                        <option value="replied">Отговорени</option>
-                    </select>
+                        {/* Модерен филтър */}
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                            <label className="text-sm font-semibold text-gray-700">
+                                Филтрирай по статус:
+                            </label>
+                            <select
+                                value={filterStatus}
+                                onChange={(e) => setFilterStatus(e.target.value)}
+                                className="px-4 py-3 border-2 border-gray-200 rounded-xl bg-white focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-200 shadow-sm"
+                            >
+                                <option value="all">🗂️ Всички</option>
+                                <option value="unread">🔴 Непрочетени</option>
+                                <option value="read">🟢 Прочетени</option>
+                                <option value="replied">🔵 Отговорени</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
             {loading ? (
-                <div className="flex justify-center items-center py-12">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-                    <p className="ml-4 text-gray-600">Loading...</p>
+                <div className="flex justify-center items-center py-20">
+                    <div className="bg-white rounded-2xl p-8 shadow-lg">
+                        <div className="flex items-center space-x-4">
+                            <div className="animate-spin rounded-full h-8 w-8 border-4 border-blue-500 border-t-transparent"></div>
+                            <p className="text-gray-700 font-medium">Зареждане на съобщения...</p>
+                        </div>
+                    </div>
                 </div>
             ) : (
-                <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     {filteredFeedbacks.length === 0 ? (
-                        <div className="text-center py-12">
-                            <p className="text-gray-500 text-lg">Няма feedback-и за показване</p>
+                        <div className="col-span-full text-center py-20">
+                            <div className="bg-white rounded-2xl p-12 shadow-lg border border-gray-100">
+                                <div className="text-6xl mb-4">📭</div>
+                                <p className="text-gray-500 text-xl font-medium">Няма съобщения за показване</p>
+                                <p className="text-gray-400 mt-2">Проверете филтъра или изчакайте нови съобщения</p>
+                            </div>
                         </div>
                     ) : (
                         filteredFeedbacks.map((feedback) => (
                             <div
                                 key={feedback.id}
-                                className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 p-6"
+                                className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden flex flex-col h-full"
                             >
-                                {/* Header с име и статус */}
-                                <div className="flex justify-between items-start mb-4">
-                                    <h3 className="text-xl font-semibold text-gray-800">
-                                        {feedback.name}
-                                    </h3>
-                                    <span className={`px-3 py-1 rounded-full text-white text-sm font-medium ${getStatusColor(feedback.status)}`}>
-                                        {getStatusText(feedback.status)}
-                                    </span>
-                                </div>
-
-                                {/* Информация */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                    <div>
-                                        <p className="text-sm text-gray-600">
-                                            <span className="font-medium">Email:</span>
-                                            <a href={`mailto:${feedback.email}`} className="text-blue-600 hover:underline ml-1">
-                                                {feedback.email}
-                                            </a>
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-600">
-                                            <span className="font-medium">Phone:</span>
-                                            <a href={`tel:${feedback.phone}`} className="text-blue-600 hover:underline ml-1">
-                                                {feedback.phone}
-                                            </a>
-                                        </p>
+                                {/* Модерен header с градиент */}
+                                <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-6 border-b border-gray-100">
+                                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+                                        <div>
+                                            <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                                                👤 {feedback.name}
+                                            </h3>
+                                            <p className="text-sm text-gray-500">
+                                                📅 {new Date(feedback.createdOn).toLocaleString('bg-BG')}
+                                            </p>
+                                        </div>
+                                        <span className={`px-4 py-2 rounded-full text-white text-sm font-semibold shadow-md ${getStatusColor(feedback.status)}`}>
+                                            {getStatusText(feedback.status)}
+                                        </span>
                                     </div>
                                 </div>
 
-                                {/* Съобщение */}
-                                <div className="mb-4">
-                                    <p className="text-sm text-gray-600 mb-1">
-                                        <span className="font-medium">Message:</span>
-                                    </p>
-                                    <p className="text-gray-800 bg-gray-50 p-3 rounded-md">
-                                        {feedback.message}
-                                    </p>
-                                </div>
+                                <div className="p-6 flex-1 flex flex-col">
+                                    {/* Контактна информация с икони */}
+                                    <div className="grid grid-cols-1 gap-4 mb-6">
+                                        <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl">
+                                            <div className="text-blue-500 text-xl">📧</div>
+                                            <div className="min-w-0 flex-1">
+                                                <p className="text-sm text-gray-600 font-medium">Email</p>
+                                                <a href={`mailto:${feedback.email}`} className="text-blue-600 hover:text-blue-800 font-medium hover:underline transition-colors block truncate">
+                                                    {feedback.email}
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-xl">
+                                            <div className="text-green-500 text-xl">📱</div>
+                                            <div className="min-w-0 flex-1">
+                                                <p className="text-sm text-gray-600 font-medium">Телефон</p>
+                                                <a href={`tel:${feedback.phone}`} className="text-green-600 hover:text-green-800 font-medium hover:underline transition-colors block truncate">
+                                                    {feedback.phone}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                {/* Дата */}
-                                <p className="text-xs text-gray-500 mb-4">
-                                    <span className="font-medium">Created:</span> {new Date(feedback.createdOn).toLocaleString()}
-                                </p>
+                                    {/* Съобщение със стилизиран дизайн */}
+                                    <div className="mb-6 flex-1">
+                                        <div className="flex items-center space-x-2 mb-3">
+                                            <div className="text-purple-500 text-xl">💬</div>
+                                            <p className="text-sm font-semibold text-gray-700">Съобщение</p>
+                                        </div>
+                                        <div className="bg-gradient-to-r from-gray-50 to-blue-50 p-4 rounded-xl border-l-4 border-blue-500 h-full">
+                                            <p className="text-gray-800 leading-relaxed text-sm">
+                                                {feedback.message}
+                                            </p>
+                                        </div>
+                                    </div>
 
-                                {/* Бутони за управление */}
-                                <div className="flex flex-wrap gap-2">
-                                    {feedback.status === 'unread' && (
-                                        <button
-                                            onClick={() => markAsRead(feedback.id)}
-                                            className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200"
-                                        >
-                                            Маркирай като прочетен
-                                        </button>
-                                    )}
-
-                                    {feedback.status === 'read' && (
-                                        <>
+                                    {/* Модерни бутони с hover ефекти */}
+                                    <div className="flex flex-col gap-2 pt-4 border-t border-gray-100 mt-auto">
+                                        {feedback.status === 'unread' && (
                                             <button
-                                                onClick={() => markAsReplied(feedback.id)}
-                                                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                                                onClick={() => markAsRead(feedback.id)}
+                                                className="flex items-center justify-center space-x-2 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white px-4 py-2 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm"
                                             >
-                                                Маркирай като отговорен
+                                                <span>✅</span>
+                                                <span>Прочетен</span>
                                             </button>
+                                        )}
+
+                                        {feedback.status === 'read' && (
+                                            <>
+                                                <button
+                                                    onClick={() => markAsReplied(feedback.id)}
+                                                    className="flex items-center justify-center space-x-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-2 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm"
+                                                >
+                                                    <span>💙</span>
+                                                    <span>Отговорен</span>
+                                                </button>
+                                                <button
+                                                    onClick={() => markAsUnread(feedback.id)}
+                                                    className="flex items-center justify-center space-x-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-4 py-2 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm"
+                                                >
+                                                    <span>🔄</span>
+                                                    <span>Непрочетен</span>
+                                                </button>
+                                            </>
+                                        )}
+
+                                        {feedback.status === 'replied' && (
                                             <button
                                                 onClick={() => markAsUnread(feedback.id)}
-                                                className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                                                className="flex items-center justify-center space-x-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-4 py-2 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm"
                                             >
-                                                Върни в непрочетени
+                                                <span>🔄</span>
+                                                <span>Непрочетен</span>
                                             </button>
-                                        </>
-                                    )}
+                                        )}
 
-                                    {feedback.status === 'replied' && (
                                         <button
-                                            onClick={() => markAsUnread(feedback.id)}
-                                            className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                                            onClick={() => handleDelete(feedback.id)}
+                                            className="flex items-center justify-center space-x-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-sm"
                                         >
-                                            Върни в непрочетени
+                                            <span>🗑️</span>
+                                            <span>Изтрий</span>
                                         </button>
-                                    )}
-
-                                    <button
-                                        onClick={() => handleDelete(feedback.id)}
-                                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200"
-                                    >
-                                        Изтрий
-                                    </button>
+                                    </div>
                                 </div>
                             </div>
                         ))
                     )}
                 </div>
             )}
+            </div>
         </div>
     );
 };
