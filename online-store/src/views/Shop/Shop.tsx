@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAllProducts } from "../../service/product";
 import { useNavigate } from "react-router-dom";
-
+import './Shop.css';
 interface Product {
     id: string;
     title: string;
@@ -15,163 +15,210 @@ interface Product {
 const Shop = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [search, setSearch] = useState("");
+    const [category, setCategory] = useState("");
+    const [priceRange, setPriceRange] = useState<[number, number] | null>(null);
+    const [rating, setRating] = useState<number | null>(null);
 
     const navigate = useNavigate();
 
-useEffect(() => {
-    const fetchProducts = async () => {
-        try {
-            const productsData = await getAllProducts('');
-            setProducts(productsData);
-        } catch (error) {
-            console.error('Error fetching products:', error);
-        
-        } finally {
-            setLoading(false);
-        }
-    };
-    fetchProducts();
-}, []);
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const productsData = await getAllProducts('');
+                setProducts(productsData);
+            } catch (error) {
+                console.error('Error fetching products:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProducts();
+    }, []);
 
-if(loading){
-    return(
-        <div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-green-50 via-white to-gray-50">
-            <div className="relative">
-                <div className="animate-spin rounded-full h-16 w-16 border-4 border-transparent bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-border"></div>
-                <div className="animate-spin rounded-full h-16 w-16 border-4 border-t-transparent border-green-500 absolute top-0 left-0 animate-reverse"></div>
-                <p className="mt-6 text-gray-700 font-bold text-xl animate-pulse">⚙️ Зареждане на машини...</p>
+    if (loading) {
+        return (
+            <div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-green-50 via-white to-gray-50">
+                <div className="relative">
+                    <div className="animate-spin rounded-full h-16 w-16 border-4 border-transparent bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-border"></div>
+                    <div className="animate-spin rounded-full h-16 w-16 border-4 border-t-transparent border-green-500 absolute top-0 left-0 animate-reverse"></div>
+                    <p className="mt-6 text-gray-700 font-bold text-xl animate-pulse">⚙️ Зареждане на машини...</p>
+                </div>
+            </div>
+        );
+    }
+
+    // Филтрирани продукти
+    const filteredProducts = products.filter(p =>
+        (!search || p.title.toLowerCase().includes(search.toLowerCase())) &&
+        (!category || p.category === category)
+    );
+
+    return (
+        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-100">
+            {/* Header & Search */}
+            <div className=" mx-auto pt-10 pb-6 px-6 background-shop-header">
+                <h1 className="text-4xl font-black text-center mb-6 bg-gradient-to-r from-green-700 via-emerald-600 to-green-800 bg-clip-text text-transparent">
+                    Search Product
+                </h1>
+                
+                {/* Search Bar */}
+                <div className="flex gap-3 items-center mb-4 max-w-4xl mx-auto">
+                    <div className="relative flex-1">
+                        <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <input
+                            type="text"
+                            placeholder="Cleaners"
+                            value={search}
+                            onChange={e => setSearch(e.target.value)}
+                            className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent text-lg"
+                        />
+                    </div>
+                    <button className="p-3 bg-gray-100 rounded-xl border border-gray-300 hover:bg-gray-200 transition-colors">
+                        <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+
+            {/* Products Container */}
+            <div className="flex max-w-7xl mx-auto px-6 gap-6">
+                {/* Left Sidebar */}
+                <div className="w-64 flex-shrink-0">
+                    <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-4 mt-5 mb-5">
+                        <h3 className="text-xl font-bold text-gray-800 mb-4">Found</h3>
+                        <p className="text-3xl font-black text-gray-900 mb-6">{filteredProducts.length} Results</p>
+                        
+                    
+                        
+                        {/* Categories */}
+                        <div className="mb-6">
+                            <h4 className="font-semibold text-gray-700 mb-3">Категории</h4>
+                            <div className="space-y-2">
+                                <button 
+                                    onClick={() => setCategory("")}
+                                    className={`w-full text-left px-3 py-2 rounded-lg text-sm ${category === "" ? "bg-gray-900 text-white" : "hover:bg-gray-100"}`}
+                                >
+                                    Всички
+                                </button>
+                                <button 
+                                    onClick={() => setCategory("electronics")}
+                                    className={`w-full text-left px-3 py-2 rounded-lg text-sm ${category === "electronics" ? "bg-gray-900 text-white" : "hover:bg-gray-100"}`}
+                                >
+                                    Електроника
+                                </button>
+                                <button 
+                                    onClick={() => setCategory("fashion")}
+                                    className={`w-full text-left px-3 py-2 rounded-lg text-sm ${category === "fashion" ? "bg-gray-900 text-white" : "hover:bg-gray-100"}`}
+                                >
+                                    Мода
+                                </button>
+                                <button 
+                                    onClick={() => setCategory("home")}
+                                    className={`w-full text-left px-3 py-2 rounded-lg text-sm ${category === "home" ? "bg-gray-900 text-white" : "hover:bg-gray-100"}`}
+                                >
+                                    Дом и градина
+                                </button>
+                                <button 
+                                    onClick={() => setCategory("sports")}
+                                    className={`w-full text-left px-3 py-2 rounded-lg text-sm ${category === "sports" ? "bg-gray-900 text-white" : "hover:bg-gray-100"}`}
+                                >
+                                    Спорт
+                                </button>
+                                <button 
+                                    onClick={() => setCategory("books")}
+                                    className={`w-full text-left px-3 py-2 rounded-lg text-sm ${category === "books" ? "bg-gray-900 text-white" : "hover:bg-gray-100"}`}
+                                >
+                                    Книги
+                                </button>
+                                <button 
+                                    onClick={() => setCategory("beauty")}
+                                    className={`w-full text-left px-3 py-2 rounded-lg text-sm ${category === "beauty" ? "bg-gray-900 text-white" : "hover:bg-gray-100"}`}
+                                >
+                                    Красота
+                                </button>
+                            </div>
+                        </div>
+                        
+                   
+                        
+                        <div className="flex gap-2">
+                            <button 
+                                onClick={() => {
+                                    setSearch("");
+                                    setCategory("");
+                                    setPriceRange(null);
+                                    setRating(null);
+                                }}
+                                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50"
+                            >
+                                Reset
+                            </button>
+                            <button className="flex-1 px-4 py-2 bg-gray-900 text-white rounded-lg text-sm hover:bg-gray-800">Apply</button>
+                        </div>
+                    </div>
+                </div>
+                
+                {/* Right Content */}
+                <div className="flex-1">
+                    {filteredProducts.length === 0 ? (
+                        <div className="text-center py-20">
+                            <div className="text-8xl mb-8 animate-bounce">🛒</div>
+                            <h3 className="text-3xl font-bold text-gray-700 mb-6">Няма продукти</h3>
+                            <p className="text-xl text-gray-500">Скоро ще има налични продукти!</p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {filteredProducts.map((product, index) => (
+                                <div 
+                                    key={product.id}
+                                    onClick={() => navigate(`/product/${product.id}`)}
+                                    className="group bg-white mt-5 mb-5 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer border border-gray-200 hover:border-green-300 flex flex-col"
+                                >
+                                    <div className="relative aspect-square overflow-hidden bg-gray-50">
+                                        <img
+                                            src={product.imagePost || '/images/placeholder.jpg'}
+                                            alt={product.title}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                        />
+                                        <div className="absolute top-3 left-3 bg-white/90 rounded-full px-2 py-1 text-xs font-medium text-gray-700 shadow">
+                                            {product.category}
+                                        </div>
+                                        <div className="absolute bottom-3 right-3">
+                                            <button 
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    // Add to cart logic here
+                                                }}
+                                                className="bg-green-600 text-white rounded-full p-2 shadow-lg hover:scale-110 transition-transform"
+                                            >
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="p-4 flex-1 flex flex-col">
+                                        <h3 className="font-bold text-gray-800 mb-2 line-clamp-2 text-sm">{product.title}</h3>
+                                        <div className="mt-auto flex items-center justify-between">
+                                            <span className="text-xl font-bold text-gray-900">${Math.floor(Math.random()*20+5)}.99</span>
+                                            <div className="flex items-center gap-2">
+                                          
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );
-}
-
-return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-gray-50">
-        {/* Industrial Hero Section */}
-        <div className="relative overflow-hidden py-20 px-6">
-            {/* Subtle geometric shapes */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-20 left-10 w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-lg opacity-10 animate-pulse"></div>
-                <div className="absolute top-40 right-20 w-12 h-12 bg-gradient-to-br from-gray-400 to-green-500 rounded-full opacity-10 animate-bounce"></div>
-                <div className="absolute bottom-40 left-1/4 w-8 h-8 bg-gradient-to-br from-green-500 to-gray-600 rotate-45 opacity-15 animate-pulse"></div>
-            </div>
-            
-            <div className="max-w-7xl mx-auto text-center relative z-10">
-                <div className="inline-block">
-                    <h1 className="text-6xl md:text-7xl font-black mb-6 relative">
-                        <span className="bg-gradient-to-r from-green-700 via-emerald-600 to-green-800 bg-clip-text text-transparent">
-                        Нашите       продукти
-                        </span>
-                     
-                    </h1>
-                </div>
-                <div className="flex justify-center">
-                    <div className="w-32 h-2 bg-gradient-to-r from-green-600 via-emerald-500 to-green-700 rounded-full shadow-lg"></div>
-                </div>
-            </div>
-        </div>
-        
-        <div className="max-w-7xl mx-auto px-6 pb-20">
-            {products.length === 0 ? (
-                <div className="text-center py-20">
-                    <div className="text-8xl mb-8 animate-bounce">�</div>
-                    <h3 className="text-3xl font-bold text-gray-700 mb-6">Зареждаме машините!</h3>
-                    <p className="text-xl text-gray-500">Скоро ще има налично оборудване! ⚙️</p>
-                </div>
-            ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                    {products.map((product, index) => (
-                        <div 
-                            key={product.id}
-                            onClick={() => navigate(`/product/${product.id}`)}
-                            className="group relative bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden cursor-pointer transform hover:-translate-y-3 border border-gray-200 hover:border-green-300"
-                            style={{
-                                animationDelay: `${index * 100}ms`,
-                                animation: 'fadeInUp 0.6s ease-out forwards'
-                            }}
-                        >
-                            {/* Industrial border accent */}
-                            <div className="absolute -inset-0.5 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
-                            
-                            {/* Main card */}
-                            <div className="relative bg-white rounded-2xl overflow-hidden">
-                                {/* Green accent stripe */}
-                                <div className="h-2 bg-gradient-to-r from-green-600 to-emerald-600"></div>
-                                
-                                {/* Image with professional effects */}
-                                <div className="relative aspect-square overflow-hidden bg-gray-50">
-                                    <img
-                                        src={product.imagePost || '/images/placeholder.jpg'}
-                                        alt={product.title}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                    />
-                                    
-                                    {/* Professional overlay */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-gray-900/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                    
-                                    {/* Industrial action button */}
-                                    <div className="absolute bottom-4 right-4 w-12 h-12 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full shadow-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                        </svg>
-                                    </div>
-                                    
-                                    {/* Technical indicators */}
-                                    <div className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                        <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                                    </div>
-                                </div>
-                                
-                                {/* Professional content */}
-                                <div className="p-6 relative">
-                                    <h3 className="text-lg font-bold text-gray-800 text-center mb-4 group-hover:text-green-700 transition-colors duration-300 line-clamp-2">
-                                        {product.title}
-                                    </h3>
-                                    
-                                    {/* Category with industrial styling */}
-                                    {product.category && (
-                                        <div className="flex justify-center mb-4">
-                                            <span className="px-3 py-1 bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 rounded-lg font-medium text-sm border border-green-200">
-                                                🔧 {product.category}
-                                            </span>
-                                        </div>
-                                    )}
-                                    
-                                    {/* Professional CTA */}
-                                    <div className="text-center opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                                        <span className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg text-sm shadow-md hover:shadow-lg transition-all duration-300">
-                                            � Детайли
-                                        </span>
-                                    </div>
-                                    
-                                    {/* Technical separator */}
-                                    <div className="mt-4 flex justify-center">
-                                        <div className="w-12 h-0.5 bg-gradient-to-r from-transparent via-green-400 to-transparent"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
-        
-        {/* CSS Animations */}
-        <style>{`
-            @keyframes fadeInUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(20px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-        `}</style>
-    </div>
-);
-
 };
 
 export default Shop;
