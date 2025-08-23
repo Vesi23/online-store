@@ -9,7 +9,11 @@ interface ProductType {
     imagePost: string;
     image: string;
     category: string;
-    createdOn: number;
+    price: number;
+    priceBGN: number;
+    priceEUR: number;
+    size: string;
+    createdOn: string | number;
 }
 const Product = () => {
     const { id } = useParams<{ id: string }>();
@@ -179,55 +183,71 @@ const Product = () => {
 
                     {/* Right - Product Info Section */}
                     <div className="bg-white rounded-2xl shadow-lg p-8">
-                        <div className="mb-4">
-                            <span className="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                        {/* Category Badge */}
+                        <div className="mb-6">
+                            <span className="inline-block bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-md">
                                 {product.category}
                             </span>
                         </div>
 
-                        <h1 className="text-3xl font-bold text-gray-800 mb-4">
+                        {/* Product Title */}
+                        <h1 className="text-4xl font-black text-gray-900 mb-6 leading-tight">
                             {product.title}
                         </h1>
 
-                        <div className="text-sm text-gray-500 mb-4">Size: 7,60 fl oz / 225ml</div>
-
-                        {/* Rating */}
-                        <div className="flex items-center mb-6">
-                            <div className="flex text-yellow-400 text-lg mr-2">
-                                {"★".repeat(4)}{"☆"}
+                        {/* Size Info */}
+                        <div className="mb-6 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                            <div className="flex items-center">
+                                <svg className="w-5 h-5 mr-2 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                </svg>
+                                <span className="text-gray-800 font-semibold">Размер: </span>
+                                <span className="text-gray-600 ml-1">{product.size || 'Не е посочен'}</span>
                             </div>
-                            <span className="text-sm text-gray-600">(103 Reviews)</span>
                         </div>
 
-                        {/* Price */}
-                        <div className="text-4xl font-bold text-gray-900 mb-8">
-                            ${Math.floor(Math.random()*20+5)}.99
-                        </div>
-
-                        {/* Quantity and Add to Cart */}
-                        <div className="flex items-center gap-4 mb-8">
-                            <div className="flex items-center border border-gray-300 rounded-lg">
-                                <button className="px-3 py-2 hover:bg-gray-100 transition-colors">-</button>
-                                <span className="px-4 py-2 border-x border-gray-300">1</span>
-                                <button className="px-3 py-2 hover:bg-gray-100 transition-colors">+</button>
+                        {/* Prices */}
+                        <div className="mb-8 p-6  rounded-2xl">
+                            <div className="flex items-center justify-center gap-6">
+                                <div className="flex flex-col text-center">
+                                    <span className="text-3xl font-black text-green-800">
+                                        {product.priceBGN?.toFixed(2) || product.price?.toFixed(2) || '0.00'} лв.
+                                    </span>
+                                </div>
+                                <div className="h-12 w-px bg-green-300"></div>
+                                <div className="flex flex-col text-center">
+                                    <span className="text-3xl font-black text-green-800">
+                                        €{product.priceEUR?.toFixed(2) || (product.price / 1.95583).toFixed(2)}
+                                    </span>
+                                </div>
                             </div>
-                            <button className="flex-1 bg-gray-900 text-white py-3 px-6 rounded-lg font-semibold hover:bg-gray-800 transition-colors">
-                                Add to Cart
-                            </button>
                         </div>
+
 
                         {/* Description */}
-                        <div className="mb-6">
-                            <h3 className="text-xl font-semibold text-gray-800 mb-3">Description</h3>
-                            <p className="text-gray-600 leading-relaxed whitespace-pre-wrap">
-                                {product.description}
-                            </p>
+                        <div className="mb-8">
+                            <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                                <svg className="w-6 h-6 mr-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                                Описание
+                            </h3>
+                            <div className="p-4  rounded-xl border border-gray-200 text-start">
+                                <p className="text-gray-700 leading-relaxed whitespace-pre-wrap text-base">
+                                    {product.description}
+                                </p>
+                            </div>
                         </div>
 
-                        <div className="border-t border-gray-200 pt-4">
-                            <p className="text-sm text-gray-500">
-                                Added on: {new Date(product.createdOn).toLocaleDateString()}
-                            </p>
+                        {/* Product Info Footer */}
+                        <div className="border-t border-gray-200 pt-6">
+                            <div className="flex items-center text-sm text-gray-500">
+                                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-4 8a2 2 0 100-4 2 2 0 000 4zm0 0v4a2 2 0 002 2h.01M12 12h.01" />
+                                </svg>
+                                <span className="font-medium">Добавен на:</span>
+                                <span className="ml-2">{new Date(product.createdOn).toLocaleDateString('bg-BG')}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
