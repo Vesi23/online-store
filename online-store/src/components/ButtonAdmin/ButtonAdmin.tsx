@@ -3,6 +3,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../config/firebase-config';
 import { useAppContext } from '../../context/appContext';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 interface ButtonAdminProps {
     showLogin?: boolean;
@@ -17,7 +18,6 @@ const ButtonAdmin = ({ showLogin = false, onClose }: ButtonAdminProps) => {
         password: ''
     });
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -29,7 +29,6 @@ const ButtonAdmin = ({ showLogin = false, onClose }: ButtonAdminProps) => {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError('');
         setIsLoading(true);
 
         try {
@@ -42,13 +41,15 @@ const ButtonAdmin = ({ showLogin = false, onClose }: ButtonAdminProps) => {
                 adminData: { email: user.email }
             });
             
+            toast.success('Успешно влизане в системата!');
+            
             // Затваряме модала
             closeModal();
             
             // Пренасочваме към create страницата
             navigate('/create');
         } catch (err: any) {
-            setError('Невалидни данни за влизане');
+            toast.error('Невалидни данни за влизане');
         } finally {
             setIsLoading(false);
         }
@@ -57,7 +58,6 @@ const ButtonAdmin = ({ showLogin = false, onClose }: ButtonAdminProps) => {
     const closeModal = () => {
         if (onClose) onClose();
         setFormData({ email: '', password: '' });
-        setError('');
     };
 
     return (
@@ -91,18 +91,6 @@ const ButtonAdmin = ({ showLogin = false, onClose }: ButtonAdminProps) => {
 
                         {/* Form с подобрен стилизиране */}
                         <form onSubmit={handleLogin} className="p-8 space-y-6">
-                            {/* Error Message с анимация */}
-                            {error && (
-                                <div className="bg-red-50 border-l-4 border-red-500 text-red-700 px-6 py-4 rounded-r-xl animate-slideIn">
-                                    <div className="flex items-center">
-                                        <svg className="w-5 h-5 mr-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        <span className="font-medium">{error}</span>
-                                    </div>
-                                </div>
-                            )}
-
                             {/* Email Field с икона */}
                             <div className="space-y-2">
                                 <label className="block text-sm font-bold text-gray-700">
