@@ -1,4 +1,4 @@
-import { ref, push, get, query, orderByChild } from 'firebase/database';
+import { ref, push, get, query, orderByChild, remove } from 'firebase/database';
 import { db } from '../config/firebase-config';
 
 
@@ -72,6 +72,17 @@ export const getProductById = async (id: string) => {
     }];
 
     return product;
+};
+
+// Delete product
+export const deleteProduct = async (id: string) => {
+    try {
+        await remove(ref(db, `products/${id}`));
+        return true;
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        throw error;
+    }
 };
 
 
