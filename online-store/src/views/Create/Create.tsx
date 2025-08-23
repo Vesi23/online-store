@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { addProduct } from "../../service/product";
 import { uploadProductImage } from "../../utils/storage";
+import toast from 'react-hot-toast';
 
 const Create = () => {
     const [product, setProduct] = useState({
@@ -27,7 +28,7 @@ const Create = () => {
         const files = Array.from(e.target.files || []);
         const totalFiles = selectedImages.length + files.length;
         if (totalFiles > 10) {
-            alert("Може да качите максимум 10 снимки!");
+            toast.error("Може да качите максимум 10 снимки!");
             return;
         }
 
@@ -52,32 +53,32 @@ const Create = () => {
 
         if (product.title.length < 3 || product.title.length > 60) {
             isValid = false;
-            alert('Title must be between 3 and 60 characters');
+            toast.error('Заглавието трябва да е между 3 и 60 символа');
         }
 
         if (product.description.length < 10 || product.description.length > 1500) {
             isValid = false;
-            alert('Description must be between 10 and 1500 characters');
+            toast.error('Описанието трябва да е между 10 и 1500 символа');
         }
 
         if (selectedImages.length === 0) {
             isValid = false;
-            alert('Моля добавете поне една снимка');
+            toast.error('Моля добавете поне една снимка');
         }
 
         if (!product.price || parseFloat(product.price) <= 0) {
             isValid = false;
-            alert('Моля въведете валидна цена');
+            toast.error('Моля въведете валидна цена');
         }
 
         if (!product.size.trim()) {
             isValid = false;
-            alert('Моля въведете размер');
+            toast.error('Моля въведете размер');
         }
 
         // if (!category) {
         //     isValid = false;
-        //     alert('Моля изберете категория');
+        //     toast.error('Моля изберете категория');
         // }
 
         if (!isValid) {
@@ -98,7 +99,7 @@ const Create = () => {
                     imageUrls.push(imageUrl);
                 } catch (error) {
                     console.error(`Error uploading image ${i + 1}:`, error);
-                    alert(`Грешка при качване на снимка ${i + 1}`);
+                    toast.error(`Грешка при качване на снимка ${i + 1}`);
                     return;
                 }
             }
@@ -131,9 +132,10 @@ const Create = () => {
             setSelectedImages([]);
             setImagePreviews([]);
 
-            alert('Product created successfully');
+            toast.success('Продуктът е създаден успешно!');
         } catch (error) {
-            alert('Error creating product');
+            console.error('Error creating product:', error);
+            toast.error('Възникна грешка при създаване на продукта');
         } finally {
             setIsLoading(false);
             setUploadingImages(false);
