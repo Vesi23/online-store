@@ -14,6 +14,7 @@ import { AppContext, type Admin as AdminType, type AdminData } from './context/a
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './config/firebase-config';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const [context, setContext] = useState<{ admin: AdminType | any; adminData: AdminData | any }>({
@@ -89,6 +90,10 @@ function App() {
       isLoggedIn
     }}>
       <BrowserRouter>
+        <Toaster
+          position="top-center"
+          reverseOrder={false}
+        />
         <Header />
         <WhatsAppButton />
         <Routes>
