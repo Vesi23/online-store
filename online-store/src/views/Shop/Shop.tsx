@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { getAllProducts } from "../../service/product";
+import { getAllProducts, deleteProduct } from "../../service/product";
 import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../../context/appContext";
+import toast from "react-hot-toast";
 import './Shop.css';
 interface Product {
     id: string;
@@ -24,6 +26,7 @@ const Shop = () => {
     const [showMobileFilters, setShowMobileFilters] = useState(false);
 
     const navigate = useNavigate();
+    const { isLoggedIn } = useAppContext();
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -56,6 +59,18 @@ const Shop = () => {
         (!search || p.title.toLowerCase().includes(search.toLowerCase())) &&
         (!category || p.category === category)
     );
+
+    // Handle delete product
+    const handleDeleteProduct = async (productId: string, productTitle: string) => {
+        try {
+            await deleteProduct(productId);
+            setProducts(prev => prev.filter(p => p.id !== productId));
+            toast.success(`Продуктът "${productTitle}" беше изтрит успешно`);
+        } catch (error) {
+            console.error('Error deleting product:', error);
+            toast.error('Грешка при изтриване на продукта');
+        }
+    };
 
     return (
         <div className="min-h-screen">
@@ -265,35 +280,54 @@ const Shop = () => {
                             {filteredProducts.map((product) => (
                                 <div 
                                     key={product.id}
-                                    onClick={() => navigate(`/product/${product.id}`)}
-                                    className="group rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden cursor-pointer border border-gray-200 hover:border-emerald-400 flex flex-col mt-5 mb-5 bg-white hover:-translate-y-1"
+                                    className="group rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-emerald-400 flex flex-col mt-5 mb-5 bg-white hover:-translate-y-1 relative"
                                 >
-                                    <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-50 to-white">
-                                        <img
-                                            src={product.imagePost || '/images/placeholder.jpg'}
-                                            alt={product.title}
-                                            className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
-                                        />
-                                        <div className="absolute top-3 left-3 bg-emerald-500 text-white rounded-full px-3 py-1 text-xs font-bold shadow-lg">
-                                            {product.size || '' }
+                                    {/* Admin delete button */}
+                                    {isLoggedIn && (
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                if (window.confirm(`Сигурни ли сте, че искате да изтриете "${product.title}"?`)) {
+                                                    handleDeleteProduct(product.id, product.title);
+                                                }
+                                            }}
+                                            className="absolute top-2 right-2 z-10 bg-red-500 hover:bg-red-600 text-white rounded-full p-2 shadow-lg transition-colors duration-200"
+                                            title="Изтрий продукт"
+                                        >
+                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    )}
+
+                                    <div 
+                                        onClick={() => navigate(`/product/${product.id}`)}
+                                        className="cursor-pointer flex flex-col h-full"
+                                    >
+                                        <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-50 to-white">
+                                            <img
+                                                src={product.imagePost || '/images/placeholder.jpg'}
+                                                alt={product.title}
+                                                className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+                                            />
+                                            <div className="absolute top-3 left-3 bg-emerald-500 text-white rounded-full px-3 py-1 text-xs font-bold shadow-lg">
+                                                {product.size || '' }
+                                            </div>
                                         </div>
                                         
-                                
-                                    </div>
-                                    
-                                    <div className="p-4 flex-1 flex flex-col bg-gray-50">
-                                        <h3 className="font-bold text-gray-800 mb-3 line-clamp-2 text-sm lg:text-base leading-tight">{product.title}</h3>
-                                        
-                                    
-                                        <div className="mt-auto">
-                                            <div className="flex items-center justify-center gap-2 rounded-lg p-2">
-                                                <span className="text-sm font-bold">
-                                                    {product.priceBGN?.toFixed(2) || product.price?.toFixed(2) || '0.00'} лв.
-                                                </span>
-                                                <div className="h-4 w-px bg-gray-300"></div>
-                                                <span className="text-sm font-bold">
-                                                    €{product.priceEUR?.toFixed(2) || (product.price / 1.95583).toFixed(2)}
-                                                </span>
+                                        <div className="p-4 flex-1 flex flex-col bg-gray-50">
+                                            <h3 className="font-bold text-gray-800 mb-3 line-clamp-2 text-sm lg:text-base leading-tight">{product.title}</h3>
+                                            
+                                            <div className="mt-auto">
+                                                <div className="flex items-center justify-center gap-2 rounded-lg p-2">
+                                                    <span className="text-sm font-bold">
+                                                        {product.priceBGN?.toFixed(2) || product.price?.toFixed(2) || '0.00'} лв.
+                                                    </span>
+                                                    <div className="h-4 w-px bg-gray-300"></div>
+                                                    <span className="text-sm font-bold">
+                                                        €{product.priceEUR?.toFixed(2) || (product.price / 1.95583).toFixed(2)}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
