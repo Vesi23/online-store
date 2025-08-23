@@ -58,7 +58,7 @@ const Shop = () => {
     );
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-100">
+        <div className="min-h-screen">
             {/* Header & Search */}
             <div className=" mx-auto pt-10 pb-6 px-6 background-shop-header">
                 <h1 className="text-4xl font-black text-center mb-6 bg-gradient-to-r from-green-700 via-emerald-600 to-green-800 bg-clip-text text-transparent">
@@ -266,41 +266,32 @@ const Shop = () => {
                                 <div 
                                     key={product.id}
                                     onClick={() => navigate(`/product/${product.id}`)}
-                                    className="group rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer border border-gray-200 hover:border-green-300 flex flex-col mt-5 mb-5"
-                                    style={{ backgroundColor: '#0c2529' }}
+                                    className="group rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden cursor-pointer border border-gray-200 hover:border-emerald-400 flex flex-col mt-5 mb-5 bg-white hover:-translate-y-1"
                                 >
-                                    <div className="relative aspect-square overflow-hidden bg-gray-50">
+                                    <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-50 to-white">
                                         <img
                                             src={product.imagePost || '/images/placeholder.jpg'}
                                             alt={product.title}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                            className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                                         />
-                                        <div className="absolute top-2 left-2 bg-white/90 rounded-full px-2 py-1 text-xs font-medium text-gray-700 shadow">
-                                            {product.category}
+                                        <div className="absolute top-3 left-3 bg-emerald-500 text-white rounded-full px-3 py-1 text-xs font-bold shadow-lg">
+                                            {product.size || '' }
                                         </div>
-                                        <div className="absolute bottom-2 right-2">
-                                            <button 
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    // Add to cart logic here
-                                                }}
-                                                className="bg-green-600 text-white rounded-full p-1.5 lg:p-2 shadow-lg hover:scale-110 transition-transform"
-                                            >
-                                                <svg className="w-3 h-3 lg:w-4 lg:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4" />
-                                                </svg>
-                                            </button>
-                                        </div>
+                                        
+                                
                                     </div>
-                                    <div className="p-3 lg:p-4 flex-1 flex flex-col">
-                                        <h3 className="font-bold text-white mb-2 line-clamp-2 text-xs lg:text-sm">{product.title}</h3>
-                                        <p className="text-xs text-gray-300 mb-2 hidden lg:block">Размер: {product.size || 'Не е посочен'}</p>
-                                        <div className="mt-auto flex flex-col lg:flex-row lg:items-center lg:justify-between">
-                                            <div className="flex flex-col">
-                                                <span className="text-sm lg:text-lg font-bold text-white">
+                                    
+                                    <div className="p-4 flex-1 flex flex-col bg-gray-50">
+                                        <h3 className="font-bold text-gray-800 mb-3 line-clamp-2 text-sm lg:text-base leading-tight">{product.title}</h3>
+                                        
+                                    
+                                        <div className="mt-auto">
+                                            <div className="flex items-center justify-center gap-2 rounded-lg p-2">
+                                                <span className="text-sm font-bold">
                                                     {product.priceBGN?.toFixed(2) || product.price?.toFixed(2) || '0.00'} лв.
                                                 </span>
-                                                <span className="text-xs lg:text-sm text-gray-300">
+                                                <div className="h-4 w-px bg-gray-300"></div>
+                                                <span className="text-sm font-bold">
                                                     €{product.priceEUR?.toFixed(2) || (product.price / 1.95583).toFixed(2)}
                                                 </span>
                                             </div>
