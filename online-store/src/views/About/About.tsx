@@ -59,7 +59,7 @@ const About = () => {
                     <h1 className="text-5xl font-black mb-6 bg-gradient-to-r from-blue-600 via-green-400 to-indigo-700 bg-clip-text text-transparent">
                         За нас
                     </h1>
-                    <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed  text-color text-start">
+                    <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed  text-white text-start">
                         Свържете се с нас и открийте как можем да ви помогнем да постигнете целите си
                     </p>
                 </div>
@@ -298,9 +298,9 @@ const About = () => {
                                     </div>
                                     <h4 className="font-bold text-gray-800">Албайрак ЕООД</h4>
                                 </div>
-                                <p className="text-sm text-gray-600 mb-1">📍 ул.Георги Герасимов 2</p>
-                                <p className="text-sm text-gray-600 mb-2">гр.Пазарджик</p>
-                                <div className="text-xs text-gray-500">
+                                <p className="text-sm text-gray-600 mb-1 text-start">📍 ул.Георги Герасимов 2</p>
+                                <p className="text-sm text-gray-600 mb-2 text-start">гр.Пазарджик</p>
+                                <div className="text-xs text-gray-500 text-start">
                                     <p>📞 +359 882 042 698</p>
                                     <p>✉️ albayrak.ood@gmail.com</p>
                                 </div>
