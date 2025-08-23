@@ -9,6 +9,10 @@ interface Product {
     imagePost: string;
     image: string;
     category: string;
+    price: number;
+    priceBGN: number;
+    priceEUR: number;
+    size: string;
     createdOn: number;
 }
 
@@ -17,8 +21,6 @@ const Shop = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [search, setSearch] = useState("");
     const [category, setCategory] = useState("");
-    const [priceRange, setPriceRange] = useState<[number, number] | null>(null);
-    const [rating, setRating] = useState<number | null>(null);
 
     const navigate = useNavigate();
 
@@ -151,8 +153,6 @@ const Shop = () => {
                                 onClick={() => {
                                     setSearch("");
                                     setCategory("");
-                                    setPriceRange(null);
-                                    setRating(null);
                                 }}
                                 className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50"
                             >
@@ -173,7 +173,7 @@ const Shop = () => {
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {filteredProducts.map((product, index) => (
+                            {filteredProducts.map((product) => (
                                 <div 
                                     key={product.id}
                                     onClick={() => navigate(`/product/${product.id}`)}
@@ -204,8 +204,16 @@ const Shop = () => {
                                     </div>
                                     <div className="p-4 flex-1 flex flex-col">
                                         <h3 className="font-bold text-gray-800 mb-2 line-clamp-2 text-sm">{product.title}</h3>
+                                        <p className="text-xs text-gray-600 mb-2">Размер: {product.size || 'Не е посочен'}</p>
                                         <div className="mt-auto flex items-center justify-between">
-                                            <span className="text-xl font-bold text-gray-900">${Math.floor(Math.random()*20+5)}.99</span>
+                                            <div className="flex flex-col">
+                                                <span className="text-lg font-bold text-gray-900">
+                                                    {product.priceBGN?.toFixed(2) || product.price?.toFixed(2) || '0.00'} лв.
+                                                </span>
+                                                <span className="text-sm text-gray-500">
+                                                    €{product.priceEUR?.toFixed(2) || (product.price / 1.95583).toFixed(2)}
+                                                </span>
+                                            </div>
                                             <div className="flex items-center gap-2">
                                           
                                             </div>
