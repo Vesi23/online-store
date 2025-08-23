@@ -59,7 +59,7 @@ const About = () => {
                     <h1 className="text-5xl font-black mb-6 bg-gradient-to-r from-blue-600 via-green-400 to-indigo-700 bg-clip-text text-transparent">
                         За нас
                     </h1>
-                    <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed  text-white text-start">
+                    <p className="text-xl text-white max-w-3xl mx-auto leading-relaxed text-justify">
                         Свържете се с нас и открийте как можем да ви помогнем да постигнете целите си
                     </p>
                 </div>
