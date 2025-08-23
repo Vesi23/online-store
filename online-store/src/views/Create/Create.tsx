@@ -8,7 +8,9 @@ const Create = () => {
         description: '',
         imagePost: '',
         image: '',
-        category: ''
+        category: '',
+        price: '',
+        size: ''
     });
 
     const [category, setCategory] = useState('');
@@ -63,6 +65,16 @@ const Create = () => {
             alert('Моля добавете поне една снимка');
         }
 
+        if (!product.price || parseFloat(product.price) <= 0) {
+            isValid = false;
+            alert('Моля въведете валидна цена');
+        }
+
+        if (!product.size.trim()) {
+            isValid = false;
+            alert('Моля въведете размер');
+        }
+
         // if (!category) {
         //     isValid = false;
         //     alert('Моля изберете категория');
@@ -101,7 +113,9 @@ const Create = () => {
                 product.description,
                 mainImage, // главна снимка
                 allImages, // всички снимки като JSON
-                category
+                category,
+                product.price,
+                product.size
             );
 
             setProduct({
@@ -109,7 +123,9 @@ const Create = () => {
                 description: '',
                 imagePost: '',
                 image: '',
-                category: ''
+                category: '',
+                price: '',
+                size: ''
             });
             setCategory('');
             setSelectedImages([]);
@@ -172,6 +188,62 @@ const Create = () => {
                                     rows={5}
                                     className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 placeholder-gray-400 resize-none"
                                 />
+                            </div>
+
+                            {/* Price and Size Row */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* Price Input */}
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-bold text-gray-700">
+                                        Цена (лв.)
+                                    </label>
+                                    <div className="relative">
+                                        <input
+                                            type="number"
+                                            step="0.01"
+                                            min="0"
+                                            placeholder="0.00"
+                                            value={product.price}
+                                            onChange={(e) => setProduct({ ...product, price: e.target.value })}
+                                            className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 placeholder-gray-400"
+                                        />
+                                        <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                                            <span className="text-gray-500 font-medium">лв.</span>
+                                        </div>
+                                    </div>
+                                    {product.price && parseFloat(product.price) > 0 && (
+                                        <div className="text-sm text-gray-600 mt-2 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center">
+                                                    <svg className="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                                    </svg>
+                                                    <span className="font-medium text-blue-700">Цена в евро:</span>
+                                                </div>
+                                                <span className="font-bold text-green-600">
+                                                    €{(parseFloat(product.price) / 1.95583).toFixed(2)}
+                                                </span>
+                                            </div>
+                                            <div className="text-xs text-gray-500 mt-1">
+                                                Курс: 1 EUR = 1.95583 BGN
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Size Input */}
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-bold text-gray-700">
+                                        Размер
+                                    </label>
+                                    <input
+                                        type="text"
+                                        placeholder="напр. S, M, L или 42, 44..."
+                                        value={product.size}
+                                        onChange={(e) => setProduct({ ...product, size: e.target.value })}
+                                        className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 placeholder-gray-400"
+                                    />
+                                </div>
                             </div>
 
                             {/* Category Select */}
