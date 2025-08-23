@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import { addFeedbackMessage } from '../../service/feedback';
+import toast from 'react-hot-toast';
 import "./About.css";
 
 const About = () => {
@@ -11,7 +12,6 @@ const About = () => {
         message: ''
     });
     const [isLoading, setIsLoading] = useState(false);
-    const [isSubmitted, setIsSubmitted] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -23,6 +23,47 @@ const About = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        
+        // Валидация на полетата
+        if (!formData.name.trim()) {
+            toast.error('Моля въведете вашето име');
+            return;
+        }
+        
+        if (!formData.phone.trim()) {
+            toast.error('Моля въведете телефон за връзка');
+            return;
+        }
+        
+        // Проверка за валиден телефонен номер (основна проверка)
+        const phoneRegex = /^[\+]?[0-9\s\-\(\)]{6,}$/;
+        if (!phoneRegex.test(formData.phone.trim())) {
+            toast.error('Моля въведете валиден телефонен номер');
+            return;
+        }
+        
+        if (!formData.email.trim()) {
+            toast.error('Моля въведете имейл адрес');
+            return;
+        }
+        
+        // Проверка за валиден имейл
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email.trim())) {
+            toast.error('Моля въведете валиден имейл адрес');
+            return;
+        }
+        
+        if (!formData.message.trim()) {
+            toast.error('Моля въведете вашето съобщение');
+            return;
+        }
+        
+        if (formData.message.trim().length < 10) {
+            toast.error('Съобщението трябва да е поне 10 символа');
+            return;
+        }
+
         setIsLoading(true);
 
         try {
@@ -32,20 +73,16 @@ const About = () => {
                 formData.email,
                 formData.message
             );
-            setIsSubmitted(true);
             setFormData({
                 name: '',
                 phone: '',
                 email: '',
                 message: ''
             });
-            // Hide success message after 5 seconds
-            setTimeout(() => {
-                setIsSubmitted(false);
-            }, 5000);
+            toast.success('Успешно изпратено запитване');
         } catch (error) {
             console.error('Грешка при изпращане на съобщението:', error);
-            alert('Възникна грешка при изпращане на съобщението. Моля опитайте отново.');
+            toast.error('Възникна грешка при изпращане на съобщението. Моля опитайте отново.');
         } finally {
             setIsLoading(false);
         }
@@ -82,17 +119,6 @@ const About = () => {
                         </div>
                         
                         <form className="space-y-8 text-start text-gray-500" onSubmit={handleSubmit}>
-                            {isSubmitted && (
-                                <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-800 px-6 py-4 rounded-2xl shadow-lg animate-pulse">
-                                    <div className="flex items-center">
-                                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                        </svg>
-                                        Съобщението е изпратено успешно! Ще се свържем с вас скоро.
-                                    </div>
-                                </div>
-                            )}
-                            
                             <div className="relative text-start">
                                 <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-3">
                                     Име и Фамилия *
@@ -104,7 +130,6 @@ const About = () => {
                                         name="name"
                                         value={formData.name}
                                         onChange={handleChange}
-                                        required 
                                         className="w-full px-4 py-4 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 text-lg placeholder-gray-400"
                                         placeholder="Въведете вашето име"
                                     />
@@ -121,7 +146,6 @@ const About = () => {
                                     name="phone"
                                     value={formData.phone}
                                     onChange={handleChange}
-                                    required 
                                     className="w-full px-4 py-4 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 text-lg placeholder-gray-400"
                                     placeholder="+359 ..."
                                 />
@@ -137,7 +161,6 @@ const About = () => {
                                     name="email"
                                     value={formData.email}
                                     onChange={handleChange}
-                                    required 
                                     className="w-full px-4 py-4 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 text-lg placeholder-gray-400"
                                     placeholder="your.email@example.com"
                                 />
@@ -152,7 +175,6 @@ const About = () => {
                                     name="message"
                                     value={formData.message}
                                     onChange={handleChange}
-                                    required 
                                     rows={6}
                                     className="w-full px-4 py-4 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 text-lg placeholder-gray-400 resize-none"
                                     placeholder="Как можем да ви помогнем?"
