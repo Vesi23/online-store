@@ -184,7 +184,7 @@ const Product = () => {
                     </div>
 
                     {/* Right - Product Info Section */}
-                    <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl shadow-2xl p-4 lg:p-8 ring-1 ring-slate-600/50">
+                    <div className="bg-white font-black  to-slate-900 rounded-2xl shadow-2xl p-4 lg:p-8 ring-1 ring-slate-600/50">
                         {/* Category Badge */}
                         <div className="mb-4 lg:mb-6">
                             <span className="inline-block bg-gradient-to-r from-emerald-500 to-green-500 text-white px-3 py-1.5 lg:px-4 lg:py-2 rounded-full text-xs lg:text-sm font-bold shadow-lg shadow-emerald-500/30">
@@ -193,32 +193,32 @@ const Product = () => {
                         </div>
 
                         {/* Product Title */}
-                        <h1 className="text-2xl lg:text-4xl font-black text-white mb-4 lg:mb-6 leading-tight drop-shadow-lg">
+                        <h1 className="text-2xl lg:text-4xl font-black text-black mb-4 lg:mb-6 leading-tight drop-shadow-lg">
                             {product.title}
                         </h1>
 
                         {/* Size Info */}
-                        <div className="mb-4 lg:mb-6 p-3 lg:p-4 bg-slate-700/50 rounded-xl border border-slate-600 backdrop-blur-sm">
+                        <div className="mb-4 lg:mb-6 p-3 lg:p-4 bg-gray-100 rounded-xl border border-gray-300 backdrop-blur-sm">
                             <div className="flex items-center">
                                 <svg className="w-4 h-4 lg:w-5 lg:h-5 mr-2 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                                 </svg>
-                                <span className="text-slate-200 font-semibold text-sm lg:text-base">Размер: </span>
-                                <span className="text-slate-300 ml-1 text-sm lg:text-base">{product.size || 'Не е посочен'}</span>
+                                <span className="text-black font-semibold text-sm lg:text-base">Размер: </span>
+                                <span className="text-gray-700 ml-1 text-sm lg:text-base">{product.size || 'Не е посочен'}</span>
                             </div>
                         </div>
 
                         {/* Prices */}
-                        <div className="mb-6 lg:mb-8 p-4 lg:p-6 bg-gradient-to-r from-emerald-900/30 to-green-900/30 rounded-2xl border border-emerald-600/30 backdrop-blur-sm shadow-lg">
+                        <div className="mb-6 lg:mb-8 p-4 lg:p-6 bg-emerald-50 rounded-2xl border border-emerald-200 shadow-lg">
                             <div className="flex items-center justify-center gap-4 lg:gap-6">
                                 <div className="flex flex-col text-center">
-                                    <span className="text-lg lg:text-2xl font-black text-emerald-300 drop-shadow-lg">
+                                    <span className="text-lg lg:text-2xl font-black text-emerald-700">
                                         {product.priceBGN?.toFixed(2) || product.price?.toFixed(2) || '0.00'} лв.
                                     </span>
                                 </div>
-                                <div className="h-8 lg:h-12 w-px bg-emerald-400/50 shadow-lg shadow-emerald-400/20"></div>
+                                <div className="h-8 lg:h-12 w-px bg-emerald-400 shadow-lg shadow-emerald-400/20"></div>
                                 <div className="flex flex-col text-center">
-                                    <span className="text-lg lg:text-2xl font-black text-emerald-300 drop-shadow-lg">
+                                    <span className="text-lg lg:text-2xl font-black text-emerald-700">
                                         €{product.priceEUR?.toFixed(2) || (product.price / 1.95583).toFixed(2)}
                                     </span>
                                 </div>
@@ -228,22 +228,22 @@ const Product = () => {
 
                         {/* Description */}
                         <div className="mb-6 lg:mb-8">
-                            <h3 className="text-lg lg:text-2xl font-bold text-white mb-3 lg:mb-4 flex items-center drop-shadow-lg">
+                            <h3 className="text-lg lg:text-2xl font-bold text-black mb-3 lg:mb-4 flex items-center drop-shadow-lg">
                                 <svg className="w-5 h-5 lg:w-6 lg:h-6 mr-2 lg:mr-3 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
                                 Описание
                             </h3>
-                            <div className="p-3 lg:p-4 bg-slate-700/50 rounded-xl border border-slate-600 backdrop-blur-sm">
-                                <p className="text-slate-200 leading-relaxed whitespace-pre-wrap text-sm lg:text-base">
+                            <div className="p-3 lg:p-4 rounded-xl border border-gray-300 backdrop-blur-sm">
+                                <p className="text-start leading-relaxed whitespace-pre-wrap text-sm lg:text-base">
                                     {product.description}
                                 </p>
-                            </div>
+                            </div>  
                         </div>
 
                         {/* Product Info Footer */}
-                        <div className="border-t border-slate-600 pt-4 lg:pt-6">
-                            <div className="flex items-center text-xs lg:text-sm text-slate-400">
+                        <div className="border-t border-gray-300 pt-4 lg:pt-6">
+                            <div className="flex items-center text-xs lg:text-sm text-gray-600">
                                 <svg className="w-3 h-3 lg:w-4 lg:h-4 mr-2 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-4 8a2 2 0 100-4 2 2 0 000 4zm0 0v4a2 2 0 002 2h.01M12 12h.01" />
                                 </svg>
