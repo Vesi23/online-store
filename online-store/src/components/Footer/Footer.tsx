@@ -217,6 +217,11 @@ const Footer = () => {
 
              
             </div>
+
+            {/* Admin Modal */}
+            {showAdminModal && (
+                <ButtonAdmin showLogin={true} onClose={() => setShowAdminModal(false)} />
+            )}
         </footer>
     );
 };
