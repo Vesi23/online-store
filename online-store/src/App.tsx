@@ -8,7 +8,7 @@ import Create from './views/Create/Create';
 import WhatsAppButton from './components/WhatsApp-btn/WhatsApp-btn';
 import Shop from './views/Shop/Shop';
 import Feedback from './views/Feedback/Feedback';
-import Product from './views/Shop/Product';
+import Product from './views/Product/Product';
 import Authenticated from './components/Authenticated/Authenticated';
 import { AppContext, type Admin as AdminType, type AdminData } from './context/appContext';
 import { useEffect, useState } from 'react';
