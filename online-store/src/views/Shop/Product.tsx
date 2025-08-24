@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getProductById } from '../../service/product';
+import { getProductById, updateProduct } from '../../service/product';
+import { useAppContext } from '../../context/appContext';
+import toast from 'react-hot-toast';
 
 interface ProductType {
     id: string;
@@ -18,10 +20,21 @@ interface ProductType {
 const Product = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const { isLoggedIn } = useAppContext();
     const [product, setProduct] = useState<ProductType | null>(null);
     const [loading, setLoading] = useState(true);
     const [images, setImages] = useState<string[]>([]);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editForm, setEditForm] = useState({
+        title: '',
+        description: '',
+        category: '',
+        price: '',
+        size: '',
+        imagePost: '',
+        image: ''
+    });
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -31,6 +44,17 @@ const Product = () => {
                 const productData = await getProductById(id);
                 if (productData && productData.length > 0) {
                     setProduct(productData[0]);
+                    
+                    // Initialize edit form with current product data
+                    setEditForm({
+                        title: productData[0].title,
+                        description: productData[0].description,
+                        category: productData[0].category,
+                        price: productData[0].price.toString(),
+                        size: productData[0].size,
+                        imagePost: productData[0].imagePost,
+                        image: productData[0].image
+                    });
                     
                     // Parse images from JSON string
                     try {
@@ -49,6 +73,70 @@ const Product = () => {
 
         fetchProduct();
     }, [id]);
+
+    const handleEditToggle = () => {
+        setIsEditing(!isEditing);
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setEditForm(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleSaveEdit = async () => {
+        if (!id || !product) return;
+        
+        try {
+            await updateProduct(
+                id,
+                editForm.title,
+                editForm.description,
+                editForm.imagePost,
+                editForm.image,
+                editForm.category,
+                editForm.price,
+                editForm.size
+            );
+            
+            // Update local state
+            setProduct({
+                ...product,
+                title: editForm.title,
+                description: editForm.description,
+                category: editForm.category,
+                price: parseFloat(editForm.price),
+                priceBGN: parseFloat(editForm.price),
+                priceEUR: parseFloat(editForm.price) / 1.95583,
+                size: editForm.size,
+                imagePost: editForm.imagePost,
+                image: editForm.image
+            });
+            
+            setIsEditing(false);
+            toast.success('Продуктът беше обновен успешно!');
+        } catch (error) {
+            console.error('Error updating product:', error);
+            toast.error('Грешка при обновяване на продукта');
+        }
+    };
+
+    const handleCancelEdit = () => {
+        if (product) {
+            setEditForm({
+                title: product.title,
+                description: product.description,
+                category: product.category,
+                price: product.price.toString(),
+                size: product.size,
+                imagePost: product.imagePost,
+                image: product.image
+            });
+        }
+        setIsEditing(false);
+    };
 
     if (loading) {
         return (
@@ -185,17 +273,74 @@ const Product = () => {
 
                     {/* Right - Product Info Section */}
                     <div className="bg-white font-black  to-slate-900 rounded-2xl shadow-2xl p-4 lg:p-8 ring-1 ring-slate-600/50">
+                        {/* Admin Edit Button */}
+                        {isLoggedIn && (
+                            <div className="mb-4 lg:mb-6 flex gap-2">
+                                {!isEditing ? (
+                                    <button
+                                        onClick={handleEditToggle}
+                                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+                                    >
+                                        ✏️ Редактирай
+                                    </button>
+                                ) : (
+                                    <>
+                                        <button
+                                            onClick={handleSaveEdit}
+                                            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+                                        >
+                                            ✅ Запази
+                                        </button>
+                                        <button
+                                            onClick={handleCancelEdit}
+                                            className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+                                        >
+                                            ❌ Откажи
+                                        </button>
+                                    </>
+                                )}
+                            </div>
+                        )}
+
                         {/* Category Badge */}
                         <div className="mb-4 lg:mb-6">
-                            <span className="inline-block bg-gradient-to-r from-emerald-500 to-green-500 text-white px-3 py-1.5 lg:px-4 lg:py-2 rounded-full text-xs lg:text-sm font-bold shadow-lg shadow-emerald-500/30">
-                                {product.category}
-                            </span>
+                            {isEditing ? (
+                                <select
+                                    name="category"
+                                    value={editForm.category}
+                                    onChange={handleInputChange}
+                                    className="bg-gradient-to-r from-emerald-500 to-green-500 text-white px-3 py-1.5 lg:px-4 lg:py-2 rounded-full text-xs lg:text-sm font-bold shadow-lg shadow-emerald-500/30 border-none"
+                                >
+                                    <option value="electronics">Електроника</option>
+                                    <option value="fashion">Мода</option>
+                                    <option value="home">Дом и градина</option>
+                                    <option value="sports">Спорт</option>
+                                    <option value="books">Книги</option>
+                                    <option value="beauty">Красота</option>
+                                </select>
+                            ) : (
+                                <span className="inline-block bg-gradient-to-r from-emerald-500 to-green-500 text-white px-3 py-1.5 lg:px-4 lg:py-2 rounded-full text-xs lg:text-sm font-bold shadow-lg shadow-emerald-500/30">
+                                    {product.category}
+                                </span>
+                            )}
                         </div>
 
                         {/* Product Title */}
-                        <h1 className="text-2xl lg:text-4xl font-black text-black mb-4 lg:mb-6 leading-tight drop-shadow-lg">
-                            {product.title}
-                        </h1>
+                        <div className="mb-4 lg:mb-6">
+                            {isEditing ? (
+                                <input
+                                    type="text"
+                                    name="title"
+                                    value={editForm.title}
+                                    onChange={handleInputChange}
+                                    className="text-2xl lg:text-4xl font-black text-black leading-tight drop-shadow-lg w-full border-2 border-gray-300 rounded-lg p-2"
+                                />
+                            ) : (
+                                <h1 className="text-2xl lg:text-4xl font-black text-black leading-tight drop-shadow-lg">
+                                    {product.title}
+                                </h1>
+                            )}
+                        </div>
 
                         {/* Size Info */}
                         <div className="mb-4 lg:mb-6 p-3 lg:p-4 bg-gray-100 rounded-xl border border-gray-300 backdrop-blur-sm">
@@ -204,25 +349,50 @@ const Product = () => {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                                 </svg>
                                 <span className="text-black font-semibold text-sm lg:text-base">Размер: </span>
-                                <span className="text-gray-700 ml-1 text-sm lg:text-base">{product.size || 'Не е посочен'}</span>
+                                {isEditing ? (
+                                    <input
+                                        type="text"
+                                        name="size"
+                                        value={editForm.size}
+                                        onChange={handleInputChange}
+                                        className="ml-1 text-sm lg:text-base border border-gray-300 rounded px-2 py-1"
+                                        placeholder="Размер"
+                                    />
+                                ) : (
+                                    <span className="text-gray-700 ml-1 text-sm lg:text-base">{product.size || 'Не е посочен'}</span>
+                                )}
                             </div>
                         </div>
 
                         {/* Prices */}
                         <div className="mb-6 lg:mb-8 p-4 lg:p-6 bg-emerald-50 rounded-2xl border border-emerald-200 shadow-lg">
-                            <div className="flex items-center justify-center gap-4 lg:gap-6">
-                                <div className="flex flex-col text-center">
-                                    <span className="text-lg lg:text-2xl font-black text-emerald-700">
-                                        {product.priceBGN?.toFixed(2) || product.price?.toFixed(2) || '0.00'} лв.
-                                    </span>
+                            {isEditing ? (
+                                <div className="flex items-center justify-center">
+                                    <span className="text-sm font-medium text-emerald-700 mr-2">Цена (лв.):</span>
+                                    <input
+                                        type="number"
+                                        name="price"
+                                        value={editForm.price}
+                                        onChange={handleInputChange}
+                                        step="0.01"
+                                        className="text-lg lg:text-2xl font-black text-emerald-700 border border-emerald-300 rounded px-2 py-1"
+                                    />
                                 </div>
-                                <div className="h-8 lg:h-12 w-px bg-emerald-400 shadow-lg shadow-emerald-400/20"></div>
-                                <div className="flex flex-col text-center">
-                                    <span className="text-lg lg:text-2xl font-black text-emerald-700">
-                                        €{product.priceEUR?.toFixed(2) || (product.price / 1.95583).toFixed(2)}
-                                    </span>
+                            ) : (
+                                <div className="flex items-center justify-center gap-4 lg:gap-6">
+                                    <div className="flex flex-col text-center">
+                                        <span className="text-lg lg:text-2xl font-black text-emerald-700">
+                                            {product.priceBGN?.toFixed(2) || product.price?.toFixed(2) || '0.00'} лв.
+                                        </span>
+                                    </div>
+                                    <div className="h-8 lg:h-12 w-px bg-emerald-400 shadow-lg shadow-emerald-400/20"></div>
+                                    <div className="flex flex-col text-center">
+                                        <span className="text-lg lg:text-2xl font-black text-emerald-700">
+                                            €{product.priceEUR?.toFixed(2) || (product.price / 1.95583).toFixed(2)}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
 
 
@@ -235,9 +405,20 @@ const Product = () => {
                                 Описание
                             </h3>
                             <div className="p-3 lg:p-4 rounded-xl border border-gray-300 backdrop-blur-sm">
-                                <p className="text-start leading-relaxed whitespace-pre-wrap text-sm lg:text-base">
-                                    {product.description}
-                                </p>
+                                {isEditing ? (
+                                    <textarea
+                                        name="description"
+                                        value={editForm.description}
+                                        onChange={handleInputChange}
+                                        rows={6}
+                                        className="w-full text-start leading-relaxed text-sm lg:text-base border-none resize-none outline-none"
+                                        placeholder="Описание на продукта..."
+                                    />
+                                ) : (
+                                    <p className="text-justify text-gray-600 leading-relaxed whitespace-pre-wrap text-sm lg:text-base">
+                                        {product.description}
+                                    </p>
+                                )}
                             </div>  
                         </div>
 
