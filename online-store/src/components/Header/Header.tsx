@@ -15,6 +15,14 @@ const Header = () => {
   useEffect(() => {
     const currentPath = window.location.pathname;
     setActiveItem(currentPath);
+    
+    // Слушател за промени в URL-а
+    const handleLocationChange = () => {
+      setActiveItem(window.location.pathname);
+    };
+    
+    window.addEventListener('popstate', handleLocationChange);
+    return () => window.removeEventListener('popstate', handleLocationChange);
   }, []);
 
   // Затваряме менюто при кликване извън него
@@ -32,6 +40,7 @@ const Header = () => {
   }, [showUserMenu]);
 
   const handleNavigation = (path: string) => {
+    setActiveItem(path);
     navigate(path);
   };
 
@@ -53,22 +62,22 @@ const Header = () => {
       <nav className="nav nav-css">
         <ul className="menu">
           <li
-            className={activeItem === '/home' ? 'active' : ''}
-            onClick={() => handleNavigation('/home')}
+            className={activeItem === '/' || activeItem === '/home' ? 'active' : ''}
+            onClick={() => handleNavigation('/')}
           >
-            <span>Home</span>
+            <span>Начало</span>
           </li>
           <li
-            className={activeItem === '/' ? 'active' : ''}
+            className={activeItem === '/shop' ? 'active' : ''}
             onClick={() => handleNavigation('/shop')}
           >
-            <span>Shop</span>
+            <span>Продукти</span>
           </li>
           <li
             className={activeItem === '/about' ? 'active' : ''}
             onClick={() => handleNavigation('/about')}
           >
-            <span>About us</span>
+            <span>За нас</span>
           </li>
 
 
