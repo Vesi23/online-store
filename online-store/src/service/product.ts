@@ -1,4 +1,4 @@
-import { ref, push, get, query, orderByChild, remove } from 'firebase/database';
+import { ref, push, get, query, orderByChild, remove, goOffline, goOnline, update } from 'firebase/database';
 import { db } from '../config/firebase-config';
 
 
@@ -81,6 +81,35 @@ export const deleteProduct = async (id: string) => {
         return true;
     } catch (error) {
         console.error('Error deleting product:', error);
+        throw error;
+    }
+};
+
+// Update product
+export const updateProduct = async (id: string, title: string, description: string, imagePost: string, image: string, category: string, price: string, size: string) => {
+    const exchangeRate = 1.95583;
+    const priceBGN = parseFloat(price);
+    const priceEUR = priceBGN / exchangeRate;
+
+    try {
+        const productRef = ref(db, `products/${id}`);
+        const updates = {
+            title,
+            description,
+            image,
+            imagePost,
+            category,
+            price: priceBGN,
+            priceBGN: Math.round(priceBGN * 100) / 100,
+            priceEUR: Math.round(priceEUR * 100) / 100,
+            size,
+            updatedOn: Date.now()
+        };
+        
+        await update(productRef, updates);
+        return true;
+    } catch (error) {
+        console.error('Error updating product:', error);
         throw error;
     }
 };
