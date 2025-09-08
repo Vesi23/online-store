@@ -70,27 +70,109 @@ const Create = () => {
         },
         'opakovachni-mashini': {
             name: 'Опаковъчни машини',
-            subcategories: {}
+            subcategories: {
+                'strech-mashini': {
+                    name: 'Стреч машини',
+                    items: ['Полуавтоматични', 'Автоматични', 'Роботизирани']
+                },
+                'vakuum-mashini': {
+                    name: 'Вакуум машини',
+                    items: ['Камерни', 'Външно засмукване', 'Двойно затваряне']
+                },
+                'termosvivaemi-mashini': {
+                    name: 'Термосвиващи машини',
+                    items: ['Тунелни', 'L-образни', 'Комбинирани']
+                },
+                'etiketirovachni': {
+                    name: 'Етикетировачни машини',
+                    items: ['Ръчни', 'Полуавтоматични', 'Автоматични']
+                }
+            }
         },
         'krepezhni-sistemi': {
             name: 'Крепежни системи',
-            subcategories: {}
+            subcategories: {
+                'chember-sistemi': {
+                    name: 'Чембер системи',
+                    items: ['Ръчни инструменти', 'Пневматични инструменти', 'Консумативи']
+                },
+                'vezivni-materiali': {
+                    name: 'Вързващи материали',
+                    items: ['Полипропиленови ленти', 'Полиестерни ленти', 'Стоманени ленти']
+                },
+                'zashtitni-elementi': {
+                    name: 'Защитни елементи',
+                    items: ['Ъглови предпазители', 'Защитни плочки', 'Амортизиращи материали']
+                }
+            }
         },
         'kompresori': {
             name: 'Компресори',
-            subcategories: {}
+            subcategories: {
+                'butalovi': {
+                    name: 'Бутални компресори',
+                    items: ['Едноцилиндрови', 'Двуцилиндрови', 'Многоцилиндрови']
+                },
+                'vintovi': {
+                    name: 'Винтови компресори',
+                    items: ['С ремъчна предавка', 'С директно задвижване', 'Променливи обороти']
+                },
+                'rezervoari': {
+                    name: 'Въздушни резервоари',
+                    items: ['Вертикални', 'Хоризонтални', 'Мобилни']
+                }
+            }
         },
         'pnevmatichni-instrumenti': {
             name: 'Пневматични инструменти',
-            subcategories: {}
+            subcategories: {
+                'udarnii': {
+                    name: 'Ударни инструменти',
+                    items: ['Пневматични чукове', 'Ударни гайковерти', 'Пневматични дълбачки']
+                },
+                'rotacionnii': {
+                    name: 'Ротационни инструменти',
+                    items: ['Пневматични бормашини', 'Шлайфмашини', 'Полирмашини']
+                },
+                'rezeshti': {
+                    name: 'Режещи инструменти',
+                    items: ['Пневматични ножици', 'Отрезни машини', 'Пили']
+                }
+            }
         },
         'skladova-tehnika': {
             name: 'Складова техника',
-            subcategories: {}
+            subcategories: {
+                'paletonosachi': {
+                    name: 'Палетоносачи',
+                    items: ['Ръчни', 'Електрически', 'Полуелектрически']
+                },
+                'motokari': {
+                    name: 'Мотокари',
+                    items: ['Електрически', 'Дизелови', 'Газови']
+                },
+                'skladovi-kolички': {
+                    name: 'Складови колички',
+                    items: ['Платформени', 'Кутийни', 'Специализирани']
+                }
+            }
         },
         'presi-otpadaci': {
             name: 'Преси за отпадъци',
-            subcategories: {}
+            subcategories: {
+                'vertikalni-presi': {
+                    name: 'Вертикални преси',
+                    items: ['Малки', 'Средни', 'Големи']
+                },
+                'horizontalni-presi': {
+                    name: 'Хоризонтални преси',
+                    items: ['Полуавтоматични', 'Автоматични', 'Непрекъснати']
+                },
+                'kompaktori': {
+                    name: 'Компактори',
+                    items: ['За контейнери', 'Стационарни', 'Мобилни']
+                }
+            }
         }
     };
 
@@ -397,70 +479,156 @@ const Create = () => {
                             </div>
 
                             {/* Category and Subcategory Selection */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {/* Main Category */}
-                                <div className="space-y-2">
-                                    <label className="block text-sm font-bold text-gray-700">
-                                        Основна категория
-                                    </label>
-                                    <select
-                                        value={category}
-                                        onChange={handleCategory}
-                                        className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 bg-white"
-                                    >
-                                        <option value="">Изберете категория</option>
-                                        {Object.entries(categories).map(([key, cat]) => (
-                                            <option key={key} value={key}>
-                                                {cat.name}
-                                            </option>
-                                        ))}
-                                    </select>
+                            <div className="bg-green-50 p-6 rounded-2xl border-2 border-green-200 shadow-lg">
+                                <h3 className="text-lg font-bold text-green-800 mb-6 flex items-center">
+                                    <svg className="w-6 h-6 mr-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                    </svg>
+                                    Категоризация на продукта
+                                </h3>
+                                
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {/* Main Category */}
+                                    <div className="space-y-3">
+                                        <label className="block text-sm font-bold text-green-800 flex items-center">
+                                            <span className="w-2 h-2 bg-green-600 rounded-full mr-2"></span>
+                                            Основна категория
+                                        </label>
+                                        <div className="relative">
+                                            <select
+                                                value={category}
+                                                onChange={handleCategory}
+                                                className="w-full px-4 py-4 border-2 border-green-300 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-green-800 bg-white shadow-sm appearance-none font-semibold"
+                                            >
+                                                <option value="">📦 Изберете категория</option>
+                                                {Object.entries(categories).map(([key, cat]) => (
+                                                    <option key={key} value={key}>
+                                                        {cat.name}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                                <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Subcategory - показва се само ако избраната категория има подкатегории */}
+                                    {category && categories[category as keyof typeof categories] && 
+                                     Object.keys(categories[category as keyof typeof categories].subcategories).length > 0 && (
+                                        <div className="space-y-3">
+                                            <label className="block text-sm font-bold text-green-800 flex items-center">
+                                                <span className="w-2 h-2 bg-emerald-600 rounded-full mr-2"></span>
+                                                Подкатегория
+                                            </label>
+                                            <div className="relative">
+                                                <select
+                                                    value={subcategory}
+                                                    onChange={handleSubcategory}
+                                                    className="w-full px-4 py-4 border-2 border-green-300 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-green-800 bg-white shadow-sm appearance-none font-semibold"
+                                                >
+                                                    <option value="">🏷️ Изберете подкатегория</option>
+                                                    {Object.entries(categories[category as keyof typeof categories].subcategories).map(([key, subcat]) => (
+                                                        <option key={key} value={key}>
+                                                            {subcat.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                                    <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
 
-                                {/* Subcategory - показва се само ако избраната категория има подкатегории */}
-                                {category && categories[category as keyof typeof categories] && 
-                                 Object.keys(categories[category as keyof typeof categories].subcategories).length > 0 && (
-                                    <div className="space-y-2">
-                                        <label className="block text-sm font-bold text-gray-700">
-                                            Подкатегория
-                                        </label>
-                                        <select
-                                            value={subcategory}
-                                            onChange={handleSubcategory}
-                                            className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 bg-white"
-                                        >
-                                            <option value="">Изберете подкатегория</option>
-                                            {Object.entries(categories[category as keyof typeof categories].subcategories).map(([key, subcat]) => (
-                                                <option key={key} value={key}>
-                                                    {subcat.name}
-                                                </option>
-                                            ))}
-                                        </select>
+                                {/* Показваме информация за избраната категория */}
+                                {category && (
+                                    <div className="mt-6 p-4 bg-white rounded-lg border-2 border-green-300 shadow-sm">
+                                        <div className="flex items-center text-sm text-green-700">
+                                            <svg className="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            Избрана категория: <span className="font-bold text-green-800 ml-1">{categories[category as keyof typeof categories].name}</span>
+                                            {subcategory && (
+                                                <>
+                                                    <span className="mx-2 text-green-600">→</span>
+                                                    <span className="font-bold text-emerald-700">
+                                                        {(categories[category as keyof typeof categories].subcategories as any)[subcategory].name}
+                                                    </span>
+                                                </>
+                                            )}
+                                        </div>
                                     </div>
                                 )}
                             </div>
 
                             {/* Показваме допълнителни опции ако подкатегорията има items */}
-                            {subcategory && categories[category as keyof typeof categories] &&
-                             categories[category as keyof typeof categories].subcategories[subcategory] &&
-                             categories[category as keyof typeof categories].subcategories[subcategory].items.length > 0 && (
-                                <div className="space-y-2">
-                                    <label className="block text-sm font-bold text-gray-700">
-                                        Тип продукт
-                                    </label>
-                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                                        {categories[category as keyof typeof categories].subcategories[subcategory].items.map((item, index) => (
-                                            <div key={index} className="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
+                            {subcategory && category && categories[category as keyof typeof categories] &&
+                             (categories[category as keyof typeof categories].subcategories as any)[subcategory] &&
+                             (categories[category as keyof typeof categories].subcategories as any)[subcategory].items.length > 0 && (
+                                <div className="bg-emerald-50 p-6 rounded-2xl border-2 border-emerald-200 shadow-lg">
+                                    <h3 className="text-lg font-bold text-emerald-800 mb-4 flex items-center">
+                                        <svg className="w-6 h-6 mr-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a1.414 1.414 0 01-2.828 0l-7-7A1.414 1.414 0 013 12V7a4 4 0 014-4z" />
+                                        </svg>
+                                        Специализация на продукта
+                                        <span className="ml-3 text-xs bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full font-medium border border-emerald-300">
+                                            Опционално
+                                        </span>
+                                    </h3>
+                                    
+                                    <p className="text-sm text-emerald-700 mb-6 font-medium bg-white p-3 rounded-lg border border-emerald-200">
+                                        💡 Изберете един или повече типове, които описват вашия продукт най-точно
+                                    </p>
+                                    
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        {(categories[category as keyof typeof categories].subcategories as any)[subcategory].items.map((item: string, index: number) => (
+                                            <div key={index} className="group relative">
                                                 <input
                                                     type="checkbox"
                                                     id={`item-${index}`}
-                                                    className="rounded border-gray-300 text-green-600 focus:ring-green-500"
+                                                    className="sr-only peer"
                                                 />
-                                                <label htmlFor={`item-${index}`} className="text-sm text-gray-700 cursor-pointer">
-                                                    {item}
+                                                <label
+                                                    htmlFor={`item-${index}`}
+                                                    className="flex items-center space-x-3 p-4 bg-white rounded-xl border-2 border-emerald-200 hover:border-emerald-400 hover:bg-emerald-50 transition-all duration-200 cursor-pointer group-hover:shadow-md peer-checked:border-emerald-500 peer-checked:bg-emerald-50 peer-checked:shadow-lg"
+                                                >
+                                                    <div className="flex-shrink-0">
+                                                        <div className="w-5 h-5 border-2 border-emerald-300 rounded peer-checked:border-emerald-500 peer-checked:bg-emerald-500 flex items-center justify-center transition-colors">
+                                                            <svg className="w-3 h-3 text-white opacity-0 peer-checked:opacity-100" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                            </svg>
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex-1 min-w-0">
+                                                        <span className="text-sm font-bold text-emerald-800 group-hover:text-emerald-700 peer-checked:text-emerald-700 transition-colors">
+                                                            {item}
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 peer-checked:opacity-100 transition-opacity">
+                                                        <svg className="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                                        </svg>
+                                                    </div>
                                                 </label>
                                             </div>
                                         ))}
+                                    </div>
+                                    
+                                    <div className="mt-6 p-4 bg-green-100 rounded-lg border-2 border-green-300">
+                                        <div className="flex items-start">
+                                            <svg className="w-5 h-5 text-green-600 mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            <p className="text-sm text-green-800 font-bold">
+                                                <strong>Съвет:</strong> Колкото по-точно опишете продукта си, толкова по-лесно клиентите ще го намерят при търсене.
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             )}
