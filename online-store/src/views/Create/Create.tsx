@@ -15,14 +15,93 @@ const Create = () => {
     });
 
     const [category, setCategory] = useState('');
+    const [subcategory, setSubcategory] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [selectedImages, setSelectedImages] = useState<File[]>([]);
     const [imagePreviews, setImagePreviews] = useState<string[]>([]);
     const [uploadingImages, setUploadingImages] = useState(false);
 
+    // Структура с категории и подкатегории
+    const categories = {
+        'opakovachni-konsumativii': {
+            name: 'Опаковъчни консумативи',
+            subcategories: {
+                'strech-folio': {
+                    name: 'Стреч фолио',
+                    items: ['Ръчно', 'Машинно']
+                },
+                'termosvivaemo-folio': {
+                    name: 'Термосвиваемо фолио', 
+                    items: ['Полиолефин', 'PVC фолио', 'Термо PE-фолио']
+                },
+                'plikove-aerofolio': {
+                    name: 'Пликове с аерофолио',
+                    items: []
+                },
+                'chember-lenti': {
+                    name: 'Чембер ленти',
+                    items: ['Метален чембер', 'Полиестерен чембер', 'Полипропиленов чембер', 'Никшов чембер']
+                },
+                'skovi-chember': {
+                    name: 'Скоби за чембер',
+                    items: []
+                },
+                'dispensari-chember': {
+                    name: 'Диспенсъри за чембер',
+                    items: []
+                },
+                'predpazni-vagli': {
+                    name: 'Предпазни въгли',
+                    items: []
+                },
+                'tikso': {
+                    name: 'Тиксо',
+                    items: ['Ръчно', 'Машинно']
+                },
+                'dispensari-tikso': {
+                    name: 'Диспенсъри за тиксо',
+                    items: []
+                },
+                'zashtitno-opakovane': {
+                    name: 'Защитно опаковане',
+                    items: ['Аерофолио', 'Разпенен полиетилен', 'За запълване на обеми', 'Предпазни торби']
+                }
+            }
+        },
+        'opakovachni-mashini': {
+            name: 'Опаковъчни машини',
+            subcategories: {}
+        },
+        'krepezhni-sistemi': {
+            name: 'Крепежни системи',
+            subcategories: {}
+        },
+        'kompresori': {
+            name: 'Компресори',
+            subcategories: {}
+        },
+        'pnevmatichni-instrumenti': {
+            name: 'Пневматични инструменти',
+            subcategories: {}
+        },
+        'skladova-tehnika': {
+            name: 'Складова техника',
+            subcategories: {}
+        },
+        'presi-otpadaci': {
+            name: 'Преси за отпадъци',
+            subcategories: {}
+        }
+    };
+
     const handleCategory = (e: any) => {
         setCategory(e.target.value);
-    }
+        setSubcategory(''); // Нулираме подкатегорията при смяна на основната категория
+    };
+
+    const handleSubcategory = (e: any) => {
+        setSubcategory(e.target.value);
+    };
     // Handle image selection and preview
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files || []);
@@ -76,10 +155,17 @@ const Create = () => {
             toast.error('Моля въведете размер');
         }
 
-        // if (!category) {
-        //     isValid = false;
-        //     toast.error('Моля изберете категория');
-        // }
+        if (!category) {
+            isValid = false;
+            toast.error('Моля изберете категория');
+        }
+
+        // Проверка за подкатегория само ако основната категория има подкатегории
+        const selectedCategory = categories[category as keyof typeof categories];
+        if (selectedCategory && Object.keys(selectedCategory.subcategories).length > 0 && !subcategory) {
+            isValid = false;
+            toast.error('Моля изберете подкатегория');
+        }
 
         if (!isValid) {
             return;
@@ -109,12 +195,15 @@ const Create = () => {
             // Останалите снимки като допълнителни (или всички като JSON string)
             const allImages = JSON.stringify(imageUrls);
 
+            // Комбинираме категория и подкатегория
+            const finalCategory = subcategory ? `${category}/${subcategory}` : category;
+
             await addProduct(
                 product.title,
                 product.description,
                 mainImage, // главна снимка
                 allImages, // всички снимки като JSON
-                category,
+                finalCategory,
                 product.price,
                 product.size
             );
@@ -129,6 +218,7 @@ const Create = () => {
                 size: ''
             });
             setCategory('');
+            setSubcategory('');
             setSelectedImages([]);
             setImagePreviews([]);
 
@@ -248,83 +338,132 @@ const Create = () => {
                                 </div>
                             </div>
 
-                            {/* Category Select */}
+                            {/* Image Upload */}
                             <div className="space-y-2">
-                                {/* Image Upload */}
-                                {/* Image Upload */}
+                                <label className="block text-sm font-bold text-gray-700">
+                                    Снимки на продукта (до 10)
+                                </label>
+                                <div className="flex items-center justify-center w-full">
+                                    <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                            <svg className="w-8 h-8 mb-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                            </svg>
+                                            <p className="mb-2 text-sm text-gray-500">
+                                                <span className="font-semibold">Кликни за качване</span> или влачи файл
+                                            </p>
+                                            <p className="text-xs text-gray-500">PNG, JPG, GIF (до 10 снимки)</p>
+                                        </div>
+                                        <input
+                                            type="file"
+                                            multiple
+                                            accept="image/*"
+                                            onChange={handleImageChange}
+                                            className="hidden"
+                                        />
+                                    </label>
+                                </div>
+
+                                {imagePreviews.length > 0 && (
+                                    <div className="mt-4">
+                                        <p className="text-sm text-gray-600 mb-2">
+                                            Избрани снимки ({imagePreviews.length}/10):
+                                        </p>
+                                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                            {imagePreviews.map((url, idx) => (
+                                                <div key={idx} className="relative group">
+                                                    <img
+                                                        src={url}
+                                                        alt={`preview-${idx}`}
+                                                        className="w-full h-24 object-cover rounded-lg border-2 border-gray-200"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeImage(idx)}
+                                                        className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity"
+                                                    >
+                                                        ×
+                                                    </button>
+                                                    {idx === 0 && (
+                                                        <div className="absolute bottom-1 left-1 bg-blue-500 text-white text-xs px-2 py-1 rounded">
+                                                            Главна
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Category and Subcategory Selection */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {/* Main Category */}
                                 <div className="space-y-2">
                                     <label className="block text-sm font-bold text-gray-700">
-                                        Снимки на продукта (до 10)
+                                        Основна категория
                                     </label>
-                                    <div className="flex items-center justify-center w-full">
-                                        <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
-                                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                                <svg className="w-8 h-8 mb-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                                                </svg>
-                                                <p className="mb-2 text-sm text-gray-500">
-                                                    <span className="font-semibold">Кликни за качване</span> или влачи файл
-                                                </p>
-                                                <p className="text-xs text-gray-500">PNG, JPG, GIF (до 10 снимки)</p>
-                                            </div>
-                                            <input
-                                                type="file"
-                                                multiple
-                                                accept="image/*"
-                                                onChange={handleImageChange}
-                                                className="hidden"
-                                            />
-                                        </label>
-                                    </div>
-
-                                    {imagePreviews.length > 0 && (
-                                        <div className="mt-4">
-                                            <p className="text-sm text-gray-600 mb-2">
-                                                Избрани снимки ({imagePreviews.length}/10):
-                                            </p>
-                                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                                {imagePreviews.map((url, idx) => (
-                                                    <div key={idx} className="relative group">
-                                                        <img
-                                                            src={url}
-                                                            alt={`preview-${idx}`}
-                                                            className="w-full h-24 object-cover rounded-lg border-2 border-gray-200"
-                                                        />
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => removeImage(idx)}
-                                                            className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity"
-                                                        >
-                                                            ×
-                                                        </button>
-                                                        {idx === 0 && (
-                                                            <div className="absolute bottom-1 left-1 bg-blue-500 text-white text-xs px-2 py-1 rounded">
-                                                                Главна
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
+                                    <select
+                                        value={category}
+                                        onChange={handleCategory}
+                                        className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 bg-white"
+                                    >
+                                        <option value="">Изберете категория</option>
+                                        {Object.entries(categories).map(([key, cat]) => (
+                                            <option key={key} value={key}>
+                                                {cat.name}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
-                                <label className="block text-sm font-bold text-gray-700">
-                                    Категория
-                                </label>
-                                <select
-                                    value={category}
-                                    onChange={handleCategory}
-                                    className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 bg-white"
-                                >
-                                    <option value="">Изберете категория</option>
-                                    <option value="electronics">Електроника</option>
-                                    <option value="fashion">Мода</option>
-                                    <option value="home">Дом и градина</option>
-                                    <option value="sports">Спорт</option>
-                                    <option value="books">Книги</option>
-                                    <option value="beauty">Красота</option>
-                                </select>
+
+                                {/* Subcategory - показва се само ако избраната категория има подкатегории */}
+                                {category && categories[category as keyof typeof categories] && 
+                                 Object.keys(categories[category as keyof typeof categories].subcategories).length > 0 && (
+                                    <div className="space-y-2">
+                                        <label className="block text-sm font-bold text-gray-700">
+                                            Подкатегория
+                                        </label>
+                                        <select
+                                            value={subcategory}
+                                            onChange={handleSubcategory}
+                                            className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 bg-white"
+                                        >
+                                            <option value="">Изберете подкатегория</option>
+                                            {Object.entries(categories[category as keyof typeof categories].subcategories).map(([key, subcat]) => (
+                                                <option key={key} value={key}>
+                                                    {subcat.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                )}
                             </div>
+
+                            {/* Показваме допълнителни опции ако подкатегорията има items */}
+                            {subcategory && categories[category as keyof typeof categories] &&
+                             categories[category as keyof typeof categories].subcategories[subcategory] &&
+                             categories[category as keyof typeof categories].subcategories[subcategory].items.length > 0 && (
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-bold text-gray-700">
+                                        Тип продукт
+                                    </label>
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                        {categories[category as keyof typeof categories].subcategories[subcategory].items.map((item, index) => (
+                                            <div key={index} className="flex items-center space-x-2 p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
+                                                <input
+                                                    type="checkbox"
+                                                    id={`item-${index}`}
+                                                    className="rounded border-gray-300 text-green-600 focus:ring-green-500"
+                                                />
+                                                <label htmlFor={`item-${index}`} className="text-sm text-gray-700 cursor-pointer">
+                                                    {item}
+                                                </label>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
 
                             {/* Submit Button */}
                             <button
