@@ -75,27 +75,109 @@ const Shop = () => {
         },
         'opakovachni-mashini': {
             name: 'Опаковъчни машини',
-            subcategories: {}
+            subcategories: {
+                'strech-mashini': {
+                    name: 'Стреч машини',
+                    items: ['Полуавтоматични', 'Автоматични', 'Роботизирани']
+                },
+                'vakuum-mashini': {
+                    name: 'Вакуум машини',
+                    items: ['Камерни', 'Външно засмукване', 'Двойно затваряне']
+                },
+                'termosvivaemi-mashini': {
+                    name: 'Термосвиващи машини',
+                    items: ['Тунелни', 'L-образни', 'Комбинирани']
+                },
+                'etiketirovachni': {
+                    name: 'Етикетировачни машини',
+                    items: ['Ръчни', 'Полуавтоматични', 'Автоматични']
+                }
+            }
         },
         'krepezhni-sistemi': {
             name: 'Крепежни системи',
-            subcategories: {}
+            subcategories: {
+                'chember-sistemi': {
+                    name: 'Чембер системи',
+                    items: ['Ръчни инструменти', 'Пневматични инструменти', 'Консумативи']
+                },
+                'vezivni-materiali': {
+                    name: 'Вързващи материали',
+                    items: ['Полипропиленови ленти', 'Полиестерни ленти', 'Стоманени ленти']
+                },
+                'zashtitni-elementi': {
+                    name: 'Защитни елементи',
+                    items: ['Ъглови предпазители', 'Защитни плочки', 'Амортизиращи материали']
+                }
+            }
         },
         'kompresori': {
             name: 'Компресори',
-            subcategories: {}
+            subcategories: {
+                'butalovi': {
+                    name: 'Бутални компресори',
+                    items: ['Едноцилиндрови', 'Двуцилиндрови', 'Многоцилиндрови']
+                },
+                'vintovi': {
+                    name: 'Винтови компресори',
+                    items: ['С ремъчна предавка', 'С директно задвижване', 'Променливи обороти']
+                },
+                'rezervoari': {
+                    name: 'Въздушни резервоари',
+                    items: ['Вертикални', 'Хоризонтални', 'Мобилни']
+                }
+            }
         },
         'pnevmatichni-instrumenti': {
             name: 'Пневматични инструменти',
-            subcategories: {}
+            subcategories: {
+                'udarnii': {
+                    name: 'Ударни инструменти',
+                    items: ['Пневматични чукове', 'Ударни гайковерти', 'Пневматични дълбачки']
+                },
+                'rotacionnii': {
+                    name: 'Ротационни инструменти',
+                    items: ['Пневматични бормашини', 'Шлайфмашини', 'Полирмашини']
+                },
+                'rezeshti': {
+                    name: 'Режещи инструменти',
+                    items: ['Пневматични ножици', 'Отрезни машини', 'Пили']
+                }
+            }
         },
         'skladova-tehnika': {
             name: 'Складова техника',
-            subcategories: {}
+            subcategories: {
+                'paletonosachi': {
+                    name: 'Палетоносачи',
+                    items: ['Ръчни', 'Електрически', 'Полуелектрически']
+                },
+                'motokari': {
+                    name: 'Мотокари',
+                    items: ['Електрически', 'Дизелови', 'Газови']
+                },
+                'skladovi-kolички': {
+                    name: 'Складови колички',
+                    items: ['Платформени', 'Кутийни', 'Специализирани']
+                }
+            }
         },
         'presi-otpadaci': {
             name: 'Преси за отпадъци',
-            subcategories: {}
+            subcategories: {
+                'vertikalni-presi': {
+                    name: 'Вертикални преси',
+                    items: ['Малки', 'Средни', 'Големи']
+                },
+                'horizontalni-presi': {
+                    name: 'Хоризонтални преси',
+                    items: ['Полуавтоматични', 'Автоматични', 'Непрекъснати']
+                },
+                'kompaktori': {
+                    name: 'Компактори',
+                    items: ['За контейнери', 'Стационарни', 'Мобилни']
+                }
+            }
         }
     };
 
@@ -239,7 +321,7 @@ const Shop = () => {
                 <div className="lg:hidden max-w-7xl mx-auto px-6 mb-6 mt-5">
                     <div className="bg-white rounded-xl shadow-lg p-4 border border-black animate-in slide-in-from-top-5 duration-300">
                         <div className="flex items-center justify-between mb-3 ">
-                            <h4 className="font-semibold text-gray-700">Категории</h4>
+                            <h4 className="text-lg font-black text-gray-800">Категории</h4>
                             <div className="flex items-center gap-3">
                                 <span className="text-sm text-gray-500">{filteredProducts.length} резултата</span>
                                 <button 
@@ -339,12 +421,10 @@ const Shop = () => {
                 {/* Left Sidebar - Hidden on mobile */}
                 <div className="hidden lg:block w-64 flex-shrink-0">
                     <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-4 mt-5 mb-5">
-                        <h3 className="text-xl font-bold text-gray-800 mb-4">Found</h3>
-                        <p className="text-3xl font-black text-gray-900 mb-6">{filteredProducts.length} Results</p>
-                        
+                       
                         {/* Categories */}
                         <div className="mb-6">
-                            <h4 className="font-semibold text-gray-700 mb-3">Категории</h4>
+                            <h4 className="text-lg font-black text-gray-800 mb-3">Категории</h4>
                             <div className="space-y-2">
                                 <button 
                                     onClick={() => {
