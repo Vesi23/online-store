@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 // import { database } from '../../config/firebase-config';
 import { ref, onValue, remove, update } from 'firebase/database';
 import { db } from '../../config/firebase-config';
+import toast from 'react-hot-toast';
 
 interface FeedbackData {
     id: string;
@@ -41,16 +42,53 @@ const Feedback = () => {
     }, []);
 
     const handleDelete = async (id: string) => {
-        if (window.confirm('Are you sure you want to delete this feedback?')) {
-            try {
-                const feedbackRef = ref(db, `feedbacks/${id}`);
-                await remove(feedbackRef);
-                console.log('Feedback deleted successfully');
-            } catch (error) {
-                console.error("Error deleting feedback:", error);
-                alert('Грешка при изтриване на feedback-а');
-            }
-        }
+        toast((t) => (
+            <div className="flex flex-col space-y-3">
+                <div className="flex items-center space-x-2">
+                    <span className="text-red-500 text-xl">🗑️</span>
+                    <span className="font-semibold">Потвърждение за изтриване</span>
+                </div>
+                <p className="text-gray-600">
+                    Сигурни ли сте, че искате да изтриете това съобщение?
+                </p>
+                <div className="flex space-x-2 pt-2">
+                    <button
+                        onClick={async () => {
+                            toast.dismiss(t.id);
+                            try {
+                                const feedbackRef = ref(db, `feedbacks/${id}`);
+                                await remove(feedbackRef);
+                                toast.success('Съобщението е изтрито успешно!', {
+                                    icon: '✅',
+                                    duration: 3000,
+                                });
+                            } catch (error) {
+                                console.error("Error deleting feedback:", error);
+                                toast.error('Грешка при изтриване на съобщението', {
+                                    icon: '❌',
+                                    duration: 4000,
+                                });
+                            }
+                        }}
+                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                    >
+                        Изтрий
+                    </button>
+                    <button
+                        onClick={() => toast.dismiss(t.id)}
+                        className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
+                    >
+                        Отказ
+                    </button>
+                </div>
+            </div>
+        ), {
+            duration: Infinity,
+            style: {
+                maxWidth: '400px',
+                padding: '20px',
+            },
+        });
     };
     // Филтрирай feedback-ите
     const filteredFeedbacks = filterStatus === 'all'
