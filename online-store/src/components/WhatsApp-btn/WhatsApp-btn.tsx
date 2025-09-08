@@ -1,6 +1,6 @@
 const WhatsAppButton = () => {
     const handleClick = () => {
-        const phoneNumber = "359896271175"; // Replace with your phone number
+        const phoneNumber = "359882042698"; // Replace with your phone number
         const message = "Hello, I need assistance!"; // Default message
         const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
         window.open(url, "_blank");
