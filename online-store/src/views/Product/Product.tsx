@@ -26,6 +26,8 @@ const Product = () => {
     const [images, setImages] = useState<string[]>([]);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     const [isEditing, setIsEditing] = useState(false);
+    const [category, setCategory] = useState('');
+    const [subcategory, setSubcategory] = useState('');
     const [editForm, setEditForm] = useState({
         title: '',
         description: '',
@@ -35,6 +37,186 @@ const Product = () => {
         imagePost: '',
         image: ''
     });
+
+    // Структура с категории и подкатегории
+    const categories = {
+        'opakovachni-konsumativii': {
+            name: 'Опаковъчни консумативи',
+            subcategories: {
+                'strech-folio': {
+                    name: 'Стреч фолио',
+                    items: ['Ръчно', 'Машинно']
+                },
+                'termosvivaemo-folio': {
+                    name: 'Термосвиваемо фолио', 
+                    items: ['Полиолефин', 'PVC фолио', 'Термо PE-фолио']
+                },
+                'plikove-aerofolio': {
+                    name: 'Пликове с аерофолио',
+                    items: []
+                },
+                'chember-lenti': {
+                    name: 'Чембер ленти',
+                    items: ['Метален чембер', 'Полиестерен чембер', 'Полипропиленов чембер', 'Никшов чембер']
+                },
+                'skovi-chember': {
+                    name: 'Скоби за чембер',
+                    items: []
+                },
+                'dispensari-chember': {
+                    name: 'Диспенсъри за чембер',
+                    items: []
+                },
+                'predpazni-vagli': {
+                    name: 'Предпазни въгли',
+                    items: []
+                },
+                'tikso': {
+                    name: 'Тиксо',
+                    items: ['Ръчно', 'Машинно']
+                },
+                'dispensari-tikso': {
+                    name: 'Диспенсъри за тиксо',
+                    items: []
+                },
+                'zashtitno-opakovane': {
+                    name: 'Защитно опаковане',
+                    items: ['Аерофолио', 'Разпенен полиетилен', 'За запълване на обеми', 'Предпазни торби']
+                }
+            }
+        },
+        'opakovachni-mashini': {
+            name: 'Опаковъчни машини',
+            subcategories: {
+                'strech-mashini': {
+                    name: 'Стреч машини',
+                    items: ['Полуавтоматични', 'Автоматични', 'Роботизирани']
+                },
+                'vakuum-mashini': {
+                    name: 'Вакуум машини',
+                    items: ['Камерни', 'Външно засмукване', 'Двойно затваряне']
+                },
+                'termosvivaemi-mashini': {
+                    name: 'Термосвиващи машини',
+                    items: ['Тунелни', 'L-образни', 'Комбинирани']
+                },
+                'etiketirovachni': {
+                    name: 'Етикетировачни машини',
+                    items: ['Ръчни', 'Полуавтоматични', 'Автоматични']
+                }
+            }
+        },
+        'krepezhni-sistemi': {
+            name: 'Крепежни системи',
+            subcategories: {
+                'chember-sistemi': {
+                    name: 'Чембер системи',
+                    items: ['Ръчни инструменти', 'Пневматични инструменти', 'Консумативи']
+                },
+                'vezivni-materiali': {
+                    name: 'Вързващи материали',
+                    items: ['Полипропиленови ленти', 'Полиестерни ленти', 'Стоманени ленти']
+                },
+                'zashtitni-elementi': {
+                    name: 'Защитни елементи',
+                    items: ['Ъглови предпазители', 'Защитни плочки', 'Амортизиращи материали']
+                }
+            }
+        },
+        'kompresori': {
+            name: 'Компресори',
+            subcategories: {
+                'butalovi': {
+                    name: 'Бутални компресори',
+                    items: ['Едноцилиндрови', 'Двуцилиндрови', 'Многоцилиндрови']
+                },
+                'vintovi': {
+                    name: 'Винтови компресори',
+                    items: ['С ремъчна предавка', 'С директно задвижване', 'Променливи обороти']
+                },
+                'rezervoari': {
+                    name: 'Въздушни резервоари',
+                    items: ['Вертикални', 'Хоризонтални', 'Мобилни']
+                }
+            }
+        },
+        'pnevmatichni-instrumenti': {
+            name: 'Пневматични инструменти',
+            subcategories: {
+                'udarnii': {
+                    name: 'Ударни инструменти',
+                    items: ['Пневматични чукове', 'Ударни гайковерти', 'Пневматични дълбачки']
+                },
+                'rotacionnii': {
+                    name: 'Ротационни инструменти',
+                    items: ['Пневматични бормашини', 'Шлайфмашини', 'Полирмашини']
+                },
+                'rezeshti': {
+                    name: 'Режещи инструменти',
+                    items: ['Пневматични ножици', 'Отрезни машини', 'Пили']
+                }
+            }
+        },
+        'skladova-tehnika': {
+            name: 'Складова техника',
+            subcategories: {
+                'paletonosachi': {
+                    name: 'Палетоносачи',
+                    items: ['Ръчни', 'Електрически', 'Полуелектрически']
+                },
+                'motokari': {
+                    name: 'Мотокари',
+                    items: ['Електрически', 'Дизелови', 'Газови']
+                },
+                'skladovi-kolички': {
+                    name: 'Складови колички',
+                    items: ['Платформени', 'Кутийни', 'Специализирани']
+                }
+            }
+        },
+        'presi-otpadaci': {
+            name: 'Преси за отпадъци',
+            subcategories: {
+                'vertikalni-presi': {
+                    name: 'Вертикални преси',
+                    items: ['Малки', 'Средни', 'Големи']
+                },
+                'horizontalni-presi': {
+                    name: 'Хоризонтални преси',
+                    items: ['Полуавтоматични', 'Автоматични', 'Непрекъснати']
+                },
+                'kompaktori': {
+                    name: 'Компактори',
+                    items: ['За контейнери', 'Стационарни', 'Мобилни']
+                }
+            }
+        }
+    };
+
+    const handleCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedCategory = e.target.value;
+        setCategory(selectedCategory);
+        setSubcategory('');
+        
+        // Parse current category from editForm to maintain structure
+        const finalCategory = subcategory ? `${selectedCategory}/${subcategory}` : selectedCategory;
+        setEditForm(prev => ({
+            ...prev,
+            category: finalCategory
+        }));
+    };
+
+    const handleSubcategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedSubcategory = e.target.value;
+        setSubcategory(selectedSubcategory);
+        
+        // Combine category and subcategory for final value
+        const finalCategory = selectedSubcategory ? `${category}/${selectedSubcategory}` : category;
+        setEditForm(prev => ({
+            ...prev,
+            category: finalCategory
+        }));
+    };
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -55,6 +237,38 @@ const Product = () => {
                         imagePost: productData[0].imagePost,
                         image: productData[0].image
                     });
+
+                    // Parse category and subcategory from product
+                    const productCategory = productData[0].category;
+                    
+                    // Find matching category and subcategory by name
+                    let foundCategoryKey = '';
+                    let foundSubcategoryKey = '';
+                    
+                    for (const [catKey, catData] of Object.entries(categories)) {
+                        if (catData.name === productCategory) {
+                            foundCategoryKey = catKey;
+                            break;
+                        }
+                        
+                        // Check subcategories
+                        for (const [subKey, subData] of Object.entries(catData.subcategories)) {
+                            if (subData.name === productCategory) {
+                                foundCategoryKey = catKey;
+                                foundSubcategoryKey = subKey;
+                                break;
+                            }
+                        }
+                        
+                        if (foundCategoryKey) break;
+                    }
+                    
+                    if (foundCategoryKey) {
+                        setCategory(foundCategoryKey);
+                        if (foundSubcategoryKey) {
+                            setSubcategory(foundSubcategoryKey);
+                        }
+                    }
                     
                     // Parse images from JSON string
                     try {
@@ -89,6 +303,17 @@ const Product = () => {
     const handleSaveEdit = async () => {
         if (!id || !product) return;
         
+        // Строим пълната категория
+        let finalCategory = category;
+        if (subcategory && categories[category as keyof typeof categories]) {
+            const subcatData = (categories[category as keyof typeof categories].subcategories as any)[subcategory];
+            if (subcatData) {
+                finalCategory = subcatData.name;
+            }
+        } else if (category && categories[category as keyof typeof categories]) {
+            finalCategory = categories[category as keyof typeof categories].name;
+        }
+        
         try {
             await updateProduct(
                 id,
@@ -96,7 +321,7 @@ const Product = () => {
                 editForm.description,
                 editForm.imagePost,
                 editForm.image,
-                editForm.category,
+                finalCategory || editForm.category,
                 editForm.price,
                 editForm.size
             );
@@ -106,7 +331,7 @@ const Product = () => {
                 ...product,
                 title: editForm.title,
                 description: editForm.description,
-                category: editForm.category,
+                category: finalCategory || editForm.category,
                 price: parseFloat(editForm.price),
                 priceBGN: parseFloat(editForm.price),
                 priceEUR: parseFloat(editForm.price) / 1.95583,
@@ -116,6 +341,8 @@ const Product = () => {
             });
             
             setIsEditing(false);
+            setCategory('');
+            setSubcategory('');
             toast.success('Продуктът беше обновен успешно!');
         } catch (error) {
             console.error('Error updating product:', error);
@@ -135,6 +362,8 @@ const Product = () => {
                 image: product.image
             });
         }
+        setCategory('');
+        setSubcategory('');
         setIsEditing(false);
     };
 
@@ -302,22 +531,98 @@ const Product = () => {
                             </div>
                         )}
 
-                        {/* Category Badge */}
+                        {/* Category Selection */}
                         <div className="mb-4 lg:mb-6">
                             {isEditing ? (
-                                <select
-                                    name="category"
-                                    value={editForm.category}
-                                    onChange={handleInputChange}
-                                    className="bg-gradient-to-r from-emerald-500 to-green-500 text-white px-3 py-1.5 lg:px-4 lg:py-2 rounded-full text-xs lg:text-sm font-bold shadow-lg shadow-emerald-500/30 border-none"
-                                >
-                                    <option value="electronics">Електроника</option>
-                                    <option value="fashion">Мода</option>
-                                    <option value="home">Дом и градина</option>
-                                    <option value="sports">Спорт</option>
-                                    <option value="books">Книги</option>
-                                    <option value="beauty">Красота</option>
-                                </select>
+                                <div className="bg-green-50 p-4 rounded-2xl border-2 border-green-200 shadow-lg">
+                                    <h4 className="text-md font-bold text-green-800 mb-4 flex items-center">
+                                        <svg className="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                        </svg>
+                                        Категория на продукта
+                                    </h4>
+                                    
+                                    <div className="grid grid-cols-1 gap-4">
+                                        {/* Main Category */}
+                                        <div className="space-y-2">
+                                            <label className="block text-sm font-bold text-green-800 flex items-center">
+                                                <span className="w-2 h-2 bg-green-600 rounded-full mr-2"></span>
+                                                Основна категория
+                                            </label>
+                                            <div className="relative">
+                                                <select
+                                                    value={category}
+                                                    onChange={handleCategory}
+                                                    className="w-full px-3 py-2 border-2 border-green-300 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-green-800 bg-white shadow-sm appearance-none font-semibold"
+                                                >
+                                                    <option value="">📦 Изберете категория</option>
+                                                    {Object.entries(categories).map(([key, cat]) => (
+                                                        <option key={key} value={key}>
+                                                            {cat.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                                    <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Subcategory - показва се само ако избраната категория има подкатегории */}
+                                        {category && categories[category as keyof typeof categories] && 
+                                         Object.keys(categories[category as keyof typeof categories].subcategories).length > 0 && (
+                                            <div className="space-y-2">
+                                                <label className="block text-sm font-bold text-green-800 flex items-center">
+                                                    <span className="w-2 h-2 bg-emerald-600 rounded-full mr-2"></span>
+                                                    Подкатегория
+                                                </label>
+                                                <div className="relative">
+                                                    <select
+                                                        value={subcategory}
+                                                        onChange={handleSubcategory}
+                                                        className="w-full px-3 py-2 border-2 border-green-300 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-green-800 bg-white shadow-sm appearance-none font-semibold"
+                                                    >
+                                                        <option value="">🏷️ Изберете подкатегория</option>
+                                                        {Object.entries(categories[category as keyof typeof categories].subcategories).map(([key, subcat]) => (
+                                                            <option key={key} value={key}>
+                                                                {subcat.name}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                                        <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Показваме информация за избраната категория */}
+                                        {category && (
+                                            <div className="mt-2 p-2 bg-white rounded-lg border-2 border-green-300 shadow-sm">
+                                                <div className="flex items-center text-xs text-green-700">
+                                                    <svg className="w-3 h-3 mr-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                    Избрано: <span className="font-bold text-green-800 ml-1">
+                                                        {categories[category as keyof typeof categories]?.name || category}
+                                                    </span>
+                                                    {subcategory && categories[category as keyof typeof categories]?.subcategories && (
+                                                        <>
+                                                            <span className="mx-1 text-green-600">→</span>
+                                                            <span className="font-bold text-emerald-700">
+                                                                {(categories[category as keyof typeof categories].subcategories as any)[subcategory]?.name || subcategory}
+                                                            </span>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
                             ) : (
                                 <span className="inline-block bg-gradient-to-r from-emerald-500 to-green-500 text-white px-3 py-1.5 lg:px-4 lg:py-2 rounded-full text-xs lg:text-sm font-bold shadow-lg shadow-emerald-500/30">
                                     {product.category}
