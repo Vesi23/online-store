@@ -23,7 +23,81 @@ const Shop = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [search, setSearch] = useState("");
     const [category, setCategory] = useState("");
+    const [subcategory, setSubcategory] = useState("");
     const [showMobileFilters, setShowMobileFilters] = useState(false);
+
+    // Структура с категории и подкатегории
+    const categories = {
+        'opakovachni-konsumativii': {
+            name: 'Опаковъчни консумативи',
+            subcategories: {
+                'strech-folio': {
+                    name: 'Стреч фолио',
+                    items: ['Ръчно', 'Машинно']
+                },
+                'termosvivaemo-folio': {
+                    name: 'Термосвиваемо фолио', 
+                    items: ['Полиолефин', 'PVC фолио', 'Термо PE-фолио']
+                },
+                'plikove-aerofolio': {
+                    name: 'Пликове с аерофолио',
+                    items: []
+                },
+                'chember-lenti': {
+                    name: 'Чембер ленти',
+                    items: ['Метален чембер', 'Полиестерен чембер', 'Полипропиленов чембер', 'Никшов чембер']
+                },
+                'skovi-chember': {
+                    name: 'Скоби за чембер',
+                    items: []
+                },
+                'dispensari-chember': {
+                    name: 'Диспенсъри за чембер',
+                    items: []
+                },
+                'predpazni-vagli': {
+                    name: 'Предпазни въгли',
+                    items: []
+                },
+                'tikso': {
+                    name: 'Тиксо',
+                    items: ['Ръчно', 'Машинно']
+                },
+                'dispensari-tikso': {
+                    name: 'Диспенсъри за тиксо',
+                    items: []
+                },
+                'zashtitno-opakovane': {
+                    name: 'Защитно опаковане',
+                    items: ['Аерофолио', 'Разпенен полиетилен', 'За запълване на обеми', 'Предпазни торби']
+                }
+            }
+        },
+        'opakovachni-mashini': {
+            name: 'Опаковъчни машини',
+            subcategories: {}
+        },
+        'krepezhni-sistemi': {
+            name: 'Крепежни системи',
+            subcategories: {}
+        },
+        'kompresori': {
+            name: 'Компресори',
+            subcategories: {}
+        },
+        'pnevmatichni-instrumenti': {
+            name: 'Пневматични инструменти',
+            subcategories: {}
+        },
+        'skladova-tehnika': {
+            name: 'Складова техника',
+            subcategories: {}
+        },
+        'presi-otpadaci': {
+            name: 'Преси за отпадъци',
+            subcategories: {}
+        }
+    };
 
     const navigate = useNavigate();
     const { isLoggedIn } = useAppContext();
@@ -55,21 +129,69 @@ const Shop = () => {
     }
 
     // Филтрирани продукти
-    const filteredProducts = products.filter(p =>
-        (!search || p.title.toLowerCase().includes(search.toLowerCase())) &&
-        (!category || p.category === category)
-    );
+    const filteredProducts = products.filter(p => {
+        const matchesSearch = !search || p.title.toLowerCase().includes(search.toLowerCase());
+        
+        if (!category) return matchesSearch;
+        
+        // Ако има избрана подкатегория, филтрираме по комбинацията категория/подкатегория
+        if (subcategory) {
+            return matchesSearch && p.category === `${category}/${subcategory}`;
+        }
+        
+        // Ако няма подкатегория, филтрираме по основната категория или всички продукти от тази категория
+        return matchesSearch && (p.category === category || p.category.startsWith(`${category}/`));
+    });
 
     // Handle delete product
-    const handleDeleteProduct = async (productId: string, productTitle: string) => {
-        try {
-            await deleteProduct(productId);
-            setProducts(prev => prev.filter(p => p.id !== productId));
-            toast.success(`Продуктът "${productTitle}" беше изтрит успешно`);
-        } catch (error) {
-            console.error('Error deleting product:', error);
-            toast.error('Грешка при изтриване на продукта');
-        }
+    const handleDeleteProduct = (productId: string, productTitle: string) => {
+        toast((t) => (
+            <div className="flex flex-col space-y-3">
+                <div className="flex items-center space-x-2">
+                    <span className="text-red-500 text-xl">🗑️</span>
+                    <span className="font-semibold">Потвърждение за изтриване</span>
+                </div>
+                <p className="text-gray-600">
+                    Сигурни ли сте, че искате да изтриете "{productTitle}"?
+                </p>
+                <div className="flex space-x-2 pt-2">
+                    <button
+                        onClick={async () => {
+                            toast.dismiss(t.id);
+                            try {
+                                await deleteProduct(productId);
+                                setProducts(prev => prev.filter(p => p.id !== productId));
+                                toast.success(`Продуктът "${productTitle}" беше изтрит успешно`, {
+                                    icon: '✅',
+                                    duration: 3000,
+                                });
+                            } catch (error) {
+                                console.error('Error deleting product:', error);
+                                toast.error('Грешка при изтриване на продукта', {
+                                    icon: '❌',
+                                    duration: 4000,
+                                });
+                            }
+                        }}
+                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                    >
+                        Изтрий
+                    </button>
+                    <button
+                        onClick={() => toast.dismiss(t.id)}
+                        className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors"
+                    >
+                        Отказ
+                    </button>
+                </div>
+            </div>
+        ), {
+            duration: Infinity,
+            style: {
+                maxWidth: '400px',
+                padding: '20px',
+            },
+        });
     };
 
     return (
@@ -77,7 +199,7 @@ const Shop = () => {
             {/* Header & Search */}
             <div className=" mx-auto pt-10 pb-6 px-6 background-shop-header">
                 <h1 className="text-4xl font-black text-center mb-6 bg-gradient-to-r from-green-700 via-emerald-600 to-green-800 bg-clip-text text-transparent">
-                    Search Product
+                Нашите продукти
                 </h1>
                 
                 {/* Search Bar */}
@@ -130,55 +252,72 @@ const Shop = () => {
                                 </button>
                             </div>
                         </div>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="space-y-2">
                             <button 
-                                onClick={() => setCategory("")}
-                                className={`px-3 py-1.5 rounded-full text-xs font-medium ${category === "" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+                                onClick={() => {
+                                    setCategory("");
+                                    setSubcategory("");
+                                }}
+                                className={`w-full px-3 py-1.5 rounded-lg text-xs font-medium text-left ${category === "" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
                             >
-                                Всички
+                                Всички категории
                             </button>
-                            <button 
-                                onClick={() => setCategory("electronics")}
-                                className={`px-3 py-1.5 rounded-full text-xs font-medium ${category === "electronics" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
-                            >
-                                Електроника
-                            </button>
-                            <button 
-                                onClick={() => setCategory("fashion")}
-                                className={`px-3 py-1.5 rounded-full text-xs font-medium ${category === "fashion" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
-                            >
-                                Мода
-                            </button>
-                            <button 
-                                onClick={() => setCategory("home")}
-                                className={`px-3 py-1.5 rounded-full text-xs font-medium ${category === "home" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
-                            >
-                                Дом и градина
-                            </button>
-                            <button 
-                                onClick={() => setCategory("sports")}
-                                className={`px-3 py-1.5 rounded-full text-xs font-medium ${category === "sports" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
-                            >
-                                Спорт
-                            </button>
-                            <button 
-                                onClick={() => setCategory("books")}
-                                className={`px-3 py-1.5 rounded-full text-xs font-medium ${category === "books" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
-                            >
-                                Книги
-                            </button>
-                            <button 
-                                onClick={() => setCategory("beauty")}
-                                className={`px-3 py-1.5 rounded-full text-xs font-medium ${category === "beauty" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
-                            >
-                                Красота
-                            </button>
+                            {Object.entries(categories).map(([key, cat]) => (
+                                <div key={key} className="space-y-1">
+                                    <button 
+                                        onClick={() => {
+                                            if (category === key) {
+                                                setCategory("");
+                                                setSubcategory("");
+                                            } else {
+                                                setCategory(key);
+                                                setSubcategory("");
+                                            }
+                                        }}
+                                        className={`w-full px-3 py-1.5 rounded-lg text-xs font-medium text-left flex items-center justify-between ${category === key ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"}`}
+                                    >
+                                        <span>{cat.name}</span>
+                                        {Object.keys(cat.subcategories).length > 0 && (
+                                            <svg 
+                                                className={`w-4 h-4 transform transition-transform ${category === key ? "rotate-90" : ""}`} 
+                                                fill="none" 
+                                                stroke="currentColor" 
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                            </svg>
+                                        )}
+                                    </button>
+                                    
+                                    {/* Подкатегории - показват се веднага под категорията */}
+                                    {category === key && Object.keys(cat.subcategories).length > 0 && (
+                                        <div className="ml-4 space-y-1 animate-in slide-in-from-top-2 duration-200">
+                                            <button 
+                                                onClick={() => setSubcategory("")}
+                                                className={`w-full px-2 py-1 rounded text-xs font-medium text-left ${subcategory === "" ? "bg-green-700 text-white" : "bg-green-100 text-green-700 hover:bg-green-200"}`}
+                                            >
+                                                • Всички
+                                            </button>
+                                            {Object.entries(cat.subcategories).map(([subKey, subcat]) => (
+                                                <button 
+                                                    key={subKey}
+                                                    onClick={() => setSubcategory(subKey)}
+                                                    className={`w-full px-2 py-1 rounded text-xs font-medium text-left ${subcategory === subKey ? "bg-green-600 text-white" : "bg-green-100 text-green-700 hover:bg-green-200"}`}
+                                                >
+                                                    • {subcat.name}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
                         </div>
                         <div className="flex gap-2 mt-3">
                             <button 
                                 onClick={() => {
                                     setSearch("");
                                     setCategory("");
+                                    setSubcategory("");
                                 }}
                                 className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50"
                             >
@@ -208,47 +347,63 @@ const Shop = () => {
                             <h4 className="font-semibold text-gray-700 mb-3">Категории</h4>
                             <div className="space-y-2">
                                 <button 
-                                    onClick={() => setCategory("")}
+                                    onClick={() => {
+                                        setCategory("");
+                                        setSubcategory("");
+                                    }}
                                     className={`w-full text-left px-3 py-2 rounded-lg text-sm ${category === "" ? "bg-gray-900 text-white" : "hover:bg-gray-100"}`}
                                 >
-                                    Всички
+                                    Всички категории
                                 </button>
-                                <button 
-                                    onClick={() => setCategory("electronics")}
-                                    className={`w-full text-left px-3 py-2 rounded-lg text-sm ${category === "electronics" ? "bg-gray-900 text-white" : "hover:bg-gray-100"}`}
-                                >
-                                    Електроника
-                                </button>
-                                <button 
-                                    onClick={() => setCategory("fashion")}
-                                    className={`w-full text-left px-3 py-2 rounded-lg text-sm ${category === "fashion" ? "bg-gray-900 text-white" : "hover:bg-gray-100"}`}
-                                >
-                                    Мода
-                                </button>
-                                <button 
-                                    onClick={() => setCategory("home")}
-                                    className={`w-full text-left px-3 py-2 rounded-lg text-sm ${category === "home" ? "bg-gray-900 text-white" : "hover:bg-gray-100"}`}
-                                >
-                                    Дом и градина
-                                </button>
-                                <button 
-                                    onClick={() => setCategory("sports")}
-                                    className={`w-full text-left px-3 py-2 rounded-lg text-sm ${category === "sports" ? "bg-gray-900 text-white" : "hover:bg-gray-100"}`}
-                                >
-                                    Спорт
-                                </button>
-                                <button 
-                                    onClick={() => setCategory("books")}
-                                    className={`w-full text-left px-3 py-2 rounded-lg text-sm ${category === "books" ? "bg-gray-900 text-white" : "hover:bg-gray-100"}`}
-                                >
-                                    Книги
-                                </button>
-                                <button 
-                                    onClick={() => setCategory("beauty")}
-                                    className={`w-full text-left px-3 py-2 rounded-lg text-sm ${category === "beauty" ? "bg-gray-900 text-white" : "hover:bg-gray-100"}`}
-                                >
-                                    Красота
-                                </button>
+                                {Object.entries(categories).map(([key, cat]) => (
+                                    <div key={key} className="space-y-1">
+                                        <button 
+                                            onClick={() => {
+                                                if (category === key) {
+                                                    setCategory("");
+                                                    setSubcategory("");
+                                                } else {
+                                                    setCategory(key);
+                                                    setSubcategory("");
+                                                }
+                                            }}
+                                            className={`w-full text-left px-3 py-2 rounded-lg text-sm flex items-center justify-between group ${category === key ? "bg-gray-900 text-white" : "hover:bg-gray-100"}`}
+                                        >
+                                            <span>{cat.name}</span>
+                                            {Object.keys(cat.subcategories).length > 0 && (
+                                                <svg 
+                                                    className={`w-4 h-4 transform transition-transform ${category === key ? "rotate-90" : ""}`} 
+                                                    fill="none" 
+                                                    stroke="currentColor" 
+                                                    viewBox="0 0 24 24"
+                                                >
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                </svg>
+                                            )}
+                                        </button>
+                                        
+                                        {/* Подкатегории - показват се веднага под категорията */}
+                                        {category === key && Object.keys(cat.subcategories).length > 0 && (
+                                            <div className="ml-4 space-y-1 animate-in slide-in-from-top-2 duration-200">
+                                                <button 
+                                                    onClick={() => setSubcategory("")}
+                                                    className={`w-full text-left px-2 py-1.5 rounded text-xs ${subcategory === "" ? "bg-green-600 text-white" : "bg-green-50 text-green-700 hover:bg-green-100"}`}
+                                                >
+                                                    • Всички
+                                                </button>
+                                                {Object.entries(cat.subcategories).map(([subKey, subcat]) => (
+                                                    <button 
+                                                        key={subKey}
+                                                        onClick={() => setSubcategory(subKey)}
+                                                        className={`w-full text-left px-2 py-1.5 rounded text-xs ${subcategory === subKey ? "bg-green-600 text-white" : "bg-green-50 text-green-700 hover:bg-green-100"}`}
+                                                    >
+                                                        • {subcat.name}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
                             </div>
                         </div>
                         
@@ -257,6 +412,7 @@ const Shop = () => {
                                 onClick={() => {
                                     setSearch("");
                                     setCategory("");
+                                    setSubcategory("");
                                 }}
                                 className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50"
                             >
@@ -287,9 +443,7 @@ const Shop = () => {
                                         <button
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                if (window.confirm(`Сигурни ли сте, че искате да изтриете "${product.title}"?`)) {
-                                                    handleDeleteProduct(product.id, product.title);
-                                                }
+                                                handleDeleteProduct(product.id, product.title);
                                             }}
                                             className="absolute top-2 right-2 z-10 bg-red-500 hover:bg-red-600 text-white rounded-full p-2 shadow-lg transition-colors duration-200"
                                             title="Изтрий продукт"
