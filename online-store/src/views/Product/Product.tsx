@@ -504,11 +504,11 @@ const Product = () => {
                     <div className="bg-white font-black  to-slate-900 rounded-2xl shadow-2xl p-4 lg:p-8 ring-1 ring-slate-600/50">
                         {/* Admin Edit Button */}
                         {isLoggedIn && (
-                            <div className="mb-4 lg:mb-6 flex gap-2">
+                            <div className="mb-4 lg:mb-6 flex flex-col sm:flex-row gap-2">
                                 {!isEditing ? (
                                     <button
                                         onClick={handleEditToggle}
-                                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+                                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 lg:px-4 py-2 rounded-lg text-xs lg:text-sm font-medium transition-colors duration-200 w-full sm:w-auto"
                                     >
                                         ✏️ Редактирай
                                     </button>
@@ -516,13 +516,13 @@ const Product = () => {
                                     <>
                                         <button
                                             onClick={handleSaveEdit}
-                                            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+                                            className="bg-green-500 hover:bg-green-600 text-white px-3 lg:px-4 py-2 rounded-lg text-xs lg:text-sm font-medium transition-colors duration-200 flex-1 sm:flex-none"
                                         >
                                             ✅ Запази
                                         </button>
                                         <button
                                             onClick={handleCancelEdit}
-                                            className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+                                            className="bg-gray-500 hover:bg-gray-600 text-white px-3 lg:px-4 py-2 rounded-lg text-xs lg:text-sm font-medium transition-colors duration-200 flex-1 sm:flex-none"
                                         >
                                             ❌ Откажи
                                         </button>
@@ -534,26 +534,26 @@ const Product = () => {
                         {/* Category Selection */}
                         <div className="mb-4 lg:mb-6">
                             {isEditing ? (
-                                <div className="bg-green-50 p-4 rounded-2xl border-2 border-green-200 shadow-lg">
-                                    <h4 className="text-md font-bold text-green-800 mb-4 flex items-center">
-                                        <svg className="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div className="bg-green-50 p-3 lg:p-4 rounded-2xl border-2 border-green-200 shadow-lg">
+                                    <h4 className="text-sm lg:text-md font-bold text-green-800 mb-3 lg:mb-4 flex items-center">
+                                        <svg className="w-4 h-4 lg:w-5 lg:h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                                         </svg>
                                         Категория на продукта
                                     </h4>
                                     
-                                    <div className="grid grid-cols-1 gap-4">
+                                    <div className="grid grid-cols-1 gap-3 lg:gap-4">
                                         {/* Main Category */}
                                         <div className="space-y-2">
-                                            <label className="block text-sm font-bold text-green-800 flex items-center">
-                                                <span className="w-2 h-2 bg-green-600 rounded-full mr-2"></span>
+                                            <label className="block text-xs lg:text-sm font-bold text-green-800 flex items-center">
+                                                <span className="w-1.5 h-1.5 lg:w-2 lg:h-2 bg-green-600 rounded-full mr-2"></span>
                                                 Основна категория
                                             </label>
                                             <div className="relative">
                                                 <select
                                                     value={category}
                                                     onChange={handleCategory}
-                                                    className="w-full px-3 py-2 border-2 border-green-300 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-green-800 bg-white shadow-sm appearance-none font-semibold"
+                                                    className="w-full px-2 lg:px-3 py-2 lg:py-2 border-2 border-green-300 rounded-lg lg:rounded-xl focus:border-green-500 focus:ring-2 lg:focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-green-800 bg-white shadow-sm appearance-none font-semibold text-sm lg:text-base"
                                                 >
                                                     <option value="">📦 Изберете категория</option>
                                                     {Object.entries(categories).map(([key, cat]) => (
@@ -562,8 +562,8 @@ const Product = () => {
                                                         </option>
                                                     ))}
                                                 </select>
-                                                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                                    <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <div className="absolute inset-y-0 right-0 flex items-center pr-2 lg:pr-3 pointer-events-none">
+                                                    <svg className="w-3 h-3 lg:w-4 lg:h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                                     </svg>
                                                 </div>
@@ -574,15 +574,15 @@ const Product = () => {
                                         {category && categories[category as keyof typeof categories] && 
                                          Object.keys(categories[category as keyof typeof categories].subcategories).length > 0 && (
                                             <div className="space-y-2">
-                                                <label className="block text-sm font-bold text-green-800 flex items-center">
-                                                    <span className="w-2 h-2 bg-emerald-600 rounded-full mr-2"></span>
+                                                <label className="block text-xs lg:text-sm font-bold text-green-800 flex items-center">
+                                                    <span className="w-1.5 h-1.5 lg:w-2 lg:h-2 bg-emerald-600 rounded-full mr-2"></span>
                                                     Подкатегория
                                                 </label>
                                                 <div className="relative">
                                                     <select
                                                         value={subcategory}
                                                         onChange={handleSubcategory}
-                                                        className="w-full px-3 py-2 border-2 border-green-300 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-green-800 bg-white shadow-sm appearance-none font-semibold"
+                                                        className="w-full px-2 lg:px-3 py-2 lg:py-2 border-2 border-green-300 rounded-lg lg:rounded-xl focus:border-green-500 focus:ring-2 lg:focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-green-800 bg-white shadow-sm appearance-none font-semibold text-sm lg:text-base"
                                                     >
                                                         <option value="">🏷️ Изберете подкатегория</option>
                                                         {Object.entries(categories[category as keyof typeof categories].subcategories).map(([key, subcat]) => (
@@ -591,8 +591,8 @@ const Product = () => {
                                                             </option>
                                                         ))}
                                                     </select>
-                                                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                                                        <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <div className="absolute inset-y-0 right-0 flex items-center pr-2 lg:pr-3 pointer-events-none">
+                                                        <svg className="w-3 h-3 lg:w-4 lg:h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                                         </svg>
                                                     </div>
@@ -603,21 +603,26 @@ const Product = () => {
                                         {/* Показваме информация за избраната категория */}
                                         {category && (
                                             <div className="mt-2 p-2 bg-white rounded-lg border-2 border-green-300 shadow-sm">
-                                                <div className="flex items-center text-xs text-green-700">
-                                                    <svg className="w-3 h-3 mr-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                    Избрано: <span className="font-bold text-green-800 ml-1">
-                                                        {categories[category as keyof typeof categories]?.name || category}
-                                                    </span>
-                                                    {subcategory && categories[category as keyof typeof categories]?.subcategories && (
-                                                        <>
-                                                            <span className="mx-1 text-green-600">→</span>
-                                                            <span className="font-bold text-emerald-700">
-                                                                {(categories[category as keyof typeof categories].subcategories as any)[subcategory]?.name || subcategory}
-                                                            </span>
-                                                        </>
-                                                    )}
+                                                <div className="flex flex-col sm:flex-row sm:items-center text-xs lg:text-sm text-green-700 gap-1 sm:gap-0">
+                                                    <div className="flex items-center">
+                                                        <svg className="w-3 h-3 mr-1 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                        </svg>
+                                                        <span className="font-medium">Избрано:</span>
+                                                    </div>
+                                                    <div className="flex flex-wrap items-center gap-1 ml-4 sm:ml-2">
+                                                        <span className="font-bold text-green-800">
+                                                            {categories[category as keyof typeof categories]?.name || category}
+                                                        </span>
+                                                        {subcategory && categories[category as keyof typeof categories]?.subcategories && (
+                                                            <>
+                                                                <span className="text-green-600 mx-1">→</span>
+                                                                <span className="font-bold text-emerald-700">
+                                                                    {(categories[category as keyof typeof categories].subcategories as any)[subcategory]?.name || subcategory}
+                                                                </span>
+                                                            </>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         )}
@@ -638,10 +643,11 @@ const Product = () => {
                                     name="title"
                                     value={editForm.title}
                                     onChange={handleInputChange}
-                                    className="text-2xl lg:text-4xl font-black text-black leading-tight drop-shadow-lg w-full border-2 border-gray-300 rounded-lg p-2"
+                                    className="text-lg sm:text-xl lg:text-4xl font-black text-black leading-tight drop-shadow-lg w-full border-2 border-gray-300 rounded-lg p-2 lg:p-3"
+                                    placeholder="Заглавие на продукта"
                                 />
                             ) : (
-                                <h1 className="text-2xl lg:text-4xl font-black text-black leading-tight drop-shadow-lg">
+                                <h1 className="text-xl sm:text-2xl lg:text-4xl font-black text-black leading-tight drop-shadow-lg">
                                     {product.title}
                                 </h1>
                             )}
@@ -670,29 +676,30 @@ const Product = () => {
                         </div>
 
                         {/* Prices */}
-                        <div className="mb-6 lg:mb-8 p-4 lg:p-6 bg-emerald-50 rounded-2xl border border-emerald-200 shadow-lg">
+                        <div className="mb-6 lg:mb-8 p-3 lg:p-6 bg-emerald-50 rounded-2xl border border-emerald-200 shadow-lg">
                             {isEditing ? (
-                                <div className="flex items-center justify-center">
-                                    <span className="text-sm font-medium text-emerald-700 mr-2">Цена (лв.):</span>
+                                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-0">
+                                    <span className="text-xs lg:text-sm font-medium text-emerald-700 mr-0 sm:mr-2">Цена (лв.):</span>
                                     <input
                                         type="number"
                                         name="price"
                                         value={editForm.price}
                                         onChange={handleInputChange}
                                         step="0.01"
-                                        className="text-lg lg:text-2xl font-black text-emerald-700 border border-emerald-300 rounded px-2 py-1"
+                                        className="text-base sm:text-lg lg:text-2xl font-black text-emerald-700 border border-emerald-300 rounded px-2 py-1 w-full sm:w-auto max-w-32"
+                                        placeholder="0.00"
                                     />
                                 </div>
                             ) : (
-                                <div className="flex items-center justify-center gap-4 lg:gap-6">
+                                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 lg:gap-6">
                                     <div className="flex flex-col text-center">
-                                        <span className="text-lg lg:text-2xl font-black text-emerald-700">
+                                        <span className="text-base sm:text-lg lg:text-2xl font-black text-emerald-700">
                                             {product.priceBGN?.toFixed(2) || product.price?.toFixed(2) || '0.00'} лв.
                                         </span>
                                     </div>
-                                    <div className="h-8 lg:h-12 w-px bg-emerald-400 shadow-lg shadow-emerald-400/20"></div>
+                                    <div className="hidden sm:block h-8 lg:h-12 w-px bg-emerald-400 shadow-lg shadow-emerald-400/20"></div>
                                     <div className="flex flex-col text-center">
-                                        <span className="text-lg lg:text-2xl font-black text-emerald-700">
+                                        <span className="text-base sm:text-lg lg:text-2xl font-black text-emerald-700">
                                             €{product.priceEUR?.toFixed(2) || (product.price / 1.95583).toFixed(2)}
                                         </span>
                                     </div>
@@ -703,24 +710,24 @@ const Product = () => {
 
                         {/* Description */}
                         <div className="mb-6 lg:mb-8">
-                            <h3 className="text-lg lg:text-2xl font-bold text-black mb-3 lg:mb-4 flex items-center drop-shadow-lg">
-                                <svg className="w-5 h-5 lg:w-6 lg:h-6 mr-2 lg:mr-3 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <h3 className="text-base sm:text-lg lg:text-2xl font-bold text-black mb-3 lg:mb-4 flex items-center drop-shadow-lg">
+                                <svg className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 mr-2 lg:mr-3 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
                                 Описание
                             </h3>
-                            <div className="p-3 lg:p-4 rounded-xl border border-gray-300 backdrop-blur-sm">
+                            <div className="p-3 lg:p-4 rounded-xl border border-gray-300 backdrop-blur-sm bg-white">
                                 {isEditing ? (
                                     <textarea
                                         name="description"
                                         value={editForm.description}
                                         onChange={handleInputChange}
-                                        rows={6}
-                                        className="w-full text-start leading-relaxed text-sm lg:text-base border-none resize-none outline-none"
+                                        rows={4}
+                                        className="w-full text-start leading-relaxed text-xs sm:text-sm lg:text-base border-none resize-none outline-none min-h-[80px] sm:min-h-[100px] lg:min-h-[120px]"
                                         placeholder="Описание на продукта..."
                                     />
                                 ) : (
-                                    <p className="text-justify text-gray-600 leading-relaxed whitespace-pre-wrap text-sm lg:text-base">
+                                    <p className="text-justify text-gray-600 leading-relaxed whitespace-pre-wrap text-xs sm:text-sm lg:text-base">
                                         {product.description}
                                     </p>
                                 )}
