@@ -216,13 +216,23 @@ const Shop = () => {
         
         if (!category) return matchesSearch;
         
-        // Ако има избрана подкатегория, филтрираме по комбинацията категория/подкатегория
+        // Вземаме имената на категориите от ключовете
+        const categoryName = categories[category as keyof typeof categories]?.name;
+        
+        if (!categoryName) return matchesSearch;
+        
+        // Ако има избрана подкатегория, филтрираме по името на подкategorията
         if (subcategory) {
-            return matchesSearch && p.category === `${category}/${subcategory}`;
+            const subcategoryName = (categories[category as keyof typeof categories]?.subcategories as any)?.[subcategory]?.name;
+            return matchesSearch && p.category === subcategoryName;
         }
         
         // Ако няма подкатегория, филтрираме по основната категория или всички продукти от тази категория
-        return matchesSearch && (p.category === category || p.category.startsWith(`${category}/`));
+        // Проверяваме дали продуктът е от основната категория или от някоя от нейните подкатегории
+        const subcategories = categories[category as keyof typeof categories]?.subcategories || {};
+        const subcategoryNames = Object.values(subcategories).map((sub: any) => sub.name);
+        
+        return matchesSearch && (p.category === categoryName || subcategoryNames.includes(p.category));
     });
 
     // Handle delete product
