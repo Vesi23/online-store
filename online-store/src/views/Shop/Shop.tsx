@@ -548,18 +548,19 @@ const Shop = () => {
                                         onClick={() => navigate(`/product/${product.id}`)}
                                         className="cursor-pointer flex flex-col h-full"
                                     >
-                                        <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-50 to-white">
+                                        <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-50 to-white min-h-[180px]">
                                             <img
                                                 src={product.imagePost || '/images/placeholder.jpg'}
                                                 alt={product.title}
-                                                className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-300"
+                                                onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/images/placeholder.jpg'; }}
+                                                className="w-full h-full object-contain bg-white p-4 group-hover:scale-105 transition-transform duration-300"
                                             />
-                                            <div className="absolute top-3 left-3 bg-emerald-500 text-white rounded-full px-3 py-1 text-xs font-bold shadow-lg">
+                                            <div className="absolute top-3 left-3 bg-emerald-500 text-white rounded-full px-3 py-1 text-xs font-bold shadow-lg whitespace-nowrap">
                                                 {product.size || '' }
                                             </div>
                                         </div>
                                         
-                                        <div className="p-4 flex-1 flex flex-col bg-gray-50">
+                                        <div className="p-4 pt-6 flex-1 flex flex-col bg-gray-50">
                                             <h3 className="font-bold text-gray-800 mb-3 line-clamp-2 text-sm lg:text-base leading-tight">{product.title}</h3>
                                             
                                             <div className="mt-auto">
