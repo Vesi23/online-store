@@ -173,7 +173,7 @@ const Footer = () => {
 
                             {/* TikTok */}
                             <a
-                                href="https://www.tiktok.com"
+                                href="https://www.tiktok.com/@albayrak.eood"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="group relative"
