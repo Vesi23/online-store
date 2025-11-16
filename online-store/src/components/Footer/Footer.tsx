@@ -158,7 +158,7 @@ const Footer = () => {
 
                             {/* WhatsApp */}
                             <a
-                                href="https://wa.me/359896271175"
+                                href="https://wa.me/359882042698"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="group relative"
@@ -197,19 +197,19 @@ const Footer = () => {
                             </h5>
                             <div className="space-y-2 text-black">
                                 <p className="flex justify-between items-center">
-                                    <span>Понеделник - Петък:</span>
+                                    <span>Понеделник - Събота:</span>
                                     <span className="text-green-600 font-medium">9:00 - 18:00</span>
                                 </p>
-                                <p className="flex justify-between items-center">
+                                {/* <p className="flex justify-between items-center">
                                     <span>Събота:</span>
-                                    <span className="text-yellow-600 font-medium">10:00 - 16:00</span>
-                                </p>
+                                    <span className="text-yellow-600 font-medium"></span>
+                                </p> */}
                                 <p className="flex justify-between items-center">
                                     <span>Неделя:</span>
-                                    <span className="text-red-600 font-medium">Почивен ден</span>
+                                    <span className="text-yellow-600 font-medium">10:00 - 16:00</span>
                                 </p>
                             </div>
-                        </div>
+                        </div>  
                     </div>
                 </div>
 
