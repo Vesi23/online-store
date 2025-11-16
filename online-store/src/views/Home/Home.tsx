@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 const Home = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [currentProductIndex, setCurrentProductIndex] = useState(0);
-    const [autoPlay] = useState(true); // Добавете това
+    const [autoPlay] = useState(true); 
 
     const mediaFiles = [
         { src: "/images/office1.jpg", type: "image", alt: "Office 1" },
@@ -27,7 +27,7 @@ const Home = () => {
 
         const interval = setInterval(() => {
             setCurrentProductIndex((prev) => (prev + 1) % 8);
-        }, 4000); // Сменя на всеки 4 секунди
+        }, 2500); // Сменя на всеки 2.5 секунди
 
         return () => clearInterval(interval);
     }, [autoPlay]);
@@ -122,7 +122,7 @@ const Home = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {/* Първа колонка - Бърза доставка */}
-                        {/* Първа колонка - Бърза доставка */}
+
                         <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300">
                             <div className="text-center">
                                 {/* Икона */}
@@ -205,7 +205,7 @@ const Home = () => {
             </div>
 
             {/* Секция с продукти */}
-           <div className='home-products w-full min-h-[90vh] py-16 flex justify-center items-center'>
+            <div className='home-products w-full min-h-[90vh] py-16 flex justify-center items-center'>
                 <div className="max-w-6xl mx-auto px-8">
 
                     {/* Заглавие с модерен дизайн */}
@@ -217,7 +217,7 @@ const Home = () => {
                             {/* Декоративна линия под заглавието */}
                             <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-green-400 to-emerald-600 rounded-full shadow-lg"></div>
                         </div>
-        
+
                     </div>
                     {/* Основно съдържание */}
                     <div className="flex flex-col lg:flex-row gap-12 items-center">
@@ -235,28 +235,28 @@ const Home = () => {
                                             className="max-w-full max-h-full object-contain transition-all duration-500"
                                         />
                                     </div>
-                                 {/* Навигационни стрелки - по-малки */}
-<button
-    onClick={() => setCurrentProductIndex((prev) => prev === 0 ? 7 : prev - 1)}
-    className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300 hover:scale-110"
->
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-    </svg>
-</button>
+                                    {/* Навигационни стрелки - по-малки */}
+                                    <button
+                                        onClick={() => setCurrentProductIndex((prev) => prev === 0 ? 7 : prev - 1)}
+                                        className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300 hover:scale-110"
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                        </svg>
+                                    </button>
 
-<button
-    onClick={() => setCurrentProductIndex((prev) => prev === 7 ? 0 : prev + 1)}
-    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300 hover:scale-110"
->
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-    </svg>
-</button>
+                                    <button
+                                        onClick={() => setCurrentProductIndex((prev) => prev === 7 ? 0 : prev + 1)}
+                                        className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white p-2 rounded-full transition-all duration-300 hover:scale-110"
+                                    >
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                        </svg>
+                                    </button>
 
-                                  
+
                                 </div>
-                                
+
                                 {/* Thumbnail navigation с по-добър размер */}
                                 <div className="grid grid-cols-8 gap-2">
                                     {[1, 2, 3, 4, 5, 6, 7, 8].map((num, index) => (
