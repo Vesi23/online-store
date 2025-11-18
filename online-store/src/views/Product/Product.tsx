@@ -723,13 +723,21 @@ const Product = () => {
                                     />
                                 </div>
                             ) : (
-                                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 lg:gap-6">
+                                
+                                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 lg:gap-6">
+                                    <div className="flex items-center gap-3">
+                                        <span className="inline-block bg-emerald-700/90 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md tracking-wide">Цена с ДДС</span>
+                                    </div>
+
                                     <div className="flex flex-col text-center">
                                         <span className="text-base sm:text-lg lg:text-2xl font-black text-emerald-700">
                                             {product.priceBGN?.toFixed(2) || product.price?.toFixed(2) || '0.00'} лв.
                                         </span>
+                                   
                                     </div>
+
                                     <div className="hidden sm:block h-8 lg:h-12 w-px bg-emerald-400 shadow-lg shadow-emerald-400/20"></div>
+
                                     <div className="flex flex-col text-center">
                                         <span className="text-base sm:text-lg lg:text-2xl font-black text-emerald-700">
                                             €{product.priceEUR?.toFixed(2) || (product.price / 1.95583).toFixed(2)}
