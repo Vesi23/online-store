@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../context/appContext";
 import toast from "react-hot-toast";
 import './Shop.css';
+import CatalogBtn from "../../components/Catalog/CatalogBtn";
 interface Product {
     id: string;
     title: string;
@@ -360,6 +361,11 @@ const Shop = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                         </svg>
                     </button>
+                </div>
+
+                {/* Catalog download button */}
+                <div className="flex justify-center mt-4">
+                    <CatalogBtn href="/assets/catalog.pdf" filename="AlbayrakEOOD-katalog.pdf">Свали нашия каталог</CatalogBtn>
                 </div>
 
             </div>
