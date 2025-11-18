@@ -110,13 +110,38 @@ const Home = () => {
                 </div>
             </div>
 
-            {/* Catalog section - Разгледай нашия каталог */}
+            {/* Catalog section - Разгледай нашия каталог (enhanced) */}
             <div className="w-full py-16 catalog-section">
-                <div className="max-w-6xl mx-auto px-8 text-center ">
-                    <h2 className="text-3xl lg:text-4xl font-extrabold mb-4 text-gray-800">Разгледай нашия каталог</h2>
-                    <p className="text-gray-600 mb-6">Виж пълния ни асортимент и свали каталога за детайли и спецификации.</p>
-                    <div className="flex justify-center">
-                        <CatalogBtn href="/assets/catalog.pdf" filename="Katalog-Vesi.pdf">Свали каталога</CatalogBtn>
+                <div className="max-w-6xl mx-auto px-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                        {/* Left: decorative mockup */}
+                        <div className="flex justify-center md:justify-start">
+                            <div className="catalog-mockup relative">
+                                <div className="catalog-page page-1" />
+                                <div className="catalog-page page-2" />
+                                <div className="catalog-page page-3" />
+                                <div className="catalog-cover">
+                                    <img src="/images/catalog.png" alt="Каталог" className="catalog-cover-img" onError={(e)=>{(e.currentTarget as HTMLImageElement).src='/images/placeholder.jpg'}} />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Right: text + button */}
+                        <div className="text-center md:text-left">
+                            <h2 className="text-3xl lg:text-4xl font-extrabold mb-4 text-gray-800">Разгледай нашия каталог</h2>
+                            <p className="text-gray-600 mb-4">Виж пълния ни асортимент и свали каталога за детайли и спецификации. Включва технически листове, размери и препоръки за употреба.</p>
+
+                            <div className="flex items-center gap-4 justify-center md:justify-start mb-4">
+                                <CatalogBtn href="/assets/catalog.pdf" filename="Katalog-Vesi.pdf">Свали каталога</CatalogBtn>
+                                <span className="catalog-badge inline-block text-sm font-medium">PDF • 12 стр.</span>
+                            </div>
+
+                            <ul className="text-gray-600 list-disc pl-5 max-w-md mx-auto md:mx-0">
+                                <li>Бърз преглед на продуктите</li>
+                                <li>Спецификации и размери</li>
+                                <li>Решения за опаковане и консумативи</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
