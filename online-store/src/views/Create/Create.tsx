@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { addProduct } from "../../service/product";
 import { uploadProductImage } from "../../utils/storage";
+import { auth } from "../../config/firebase-config";
 import toast from 'react-hot-toast';
 
 const Create = () => {
@@ -257,7 +258,18 @@ const Create = () => {
         setUploadingImages(true);
 
         try {
-            const productId = Date.now().toString();
+            const currentUser = auth.currentUser;
+            if (!currentUser) {
+                toast.error('Моля влезте в профила си, за да качите продукти');
+                setIsLoading(false);
+                setUploadingImages(false);
+                return;
+            }
+
+            // Use user's UID as the top-level folder so rules like
+            // "match /products/{userId}/{allFiles=**} { allow write: if request.auth.uid == userId }"
+            // will allow authenticated users to write only into their own folder.
+            const productId = `${currentUser.uid}/${Date.now().toString()}`;
 
             // Качи всички снимки
             const imageUrls: string[] = [];
