@@ -19,6 +19,8 @@ interface Product {
 }
 
 const Shop = () => {
+    // VAT rate (e.g. 0.20 for 20%) — change here if needed
+    const VAT_RATE = 0.20;
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [search, setSearch] = useState("");
@@ -36,7 +38,7 @@ const Shop = () => {
                     items: ['Ръчно', 'Машинно']
                 },
                 'termosvivaemo-folio': {
-                    name: 'Термосвиваемо фолио', 
+                    name: 'Термосвиваемо фолио',
                     items: ['Полиолефин', 'PVC фолио', 'Термо PE-фолио']
                 },
                 'plikove-aerofolio': {
@@ -210,29 +212,65 @@ const Shop = () => {
         );
     }
 
+    // Helper to match product category stored in different formats
+    const productMatchesSelectedCategory = (productCategoryRaw: string) => {
+        const pCat = (productCategoryRaw || '').toString();
+
+        // If no category selected, everything matches
+        if (!category) return true;
+
+        const catKey = category; // selected category key (slug)
+        const catData = categories[catKey as keyof typeof categories];
+        const catName = catData?.name || '';
+
+        // If subcategory selected, check several possible stored formats:
+        // - display name (e.g. 'Стреч фолио')
+        // - slug path (e.g. 'opakovachni-konsumativii/strech-folio')
+        // - just subkey (e.g. 'strech-folio')
+        if (subcategory) {
+            const subKey = subcategory;
+            const subName = (catData?.subcategories as any)?.[subKey]?.name || '';
+
+            if (!pCat) return false;
+            if (pCat === subName) return true;
+            if (pCat === `${catKey}/${subKey}`) return true;
+            if (pCat === subKey) return true;
+            // Sometimes saved as "catKey/subName" — check that too
+            if (pCat === `${catKey}/${subName}`) return true;
+            // Also consider if stored as "catName / subName"
+            if (pCat === `${catName} / ${subName}`) return true;
+
+            return false;
+        }
+
+        // No subcategory selected — match main category in different formats:
+        // - display name (e.g. 'Опаковъчни консумативи')
+        // - slug key (e.g. 'opakovachni-konsumativii')
+        // - slug path starting with catKey (e.g. 'opakovachni-konsumativii/...')
+        // - product saved as one of the subcategory display names
+        if (!pCat) return false;
+
+        if (pCat === catName) return true;
+        if (pCat === catKey) return true;
+        if (pCat.startsWith(`${catKey}/`)) return true;
+
+        // if productCategory is one of the display names of the subcategories
+        const subcats = (catData?.subcategories) || {};
+        const subcatNames = Object.values(subcats).map((s: any) => s.name);
+        if (subcatNames.includes(pCat)) return true;
+
+        return false;
+    };
+
     // Филтрирани продукти
     const filteredProducts = products.filter(p => {
         const matchesSearch = !search || p.title.toLowerCase().includes(search.toLowerCase());
-        
-        if (!category) return matchesSearch;
-        
-        // Вземаме имената на категориите от ключовете
-        const categoryName = categories[category as keyof typeof categories]?.name;
-        
-        if (!categoryName) return matchesSearch;
-        
-        // Ако има избрана подкатегория, филтрираме по името на подкategorията
-        if (subcategory) {
-            const subcategoryName = (categories[category as keyof typeof categories]?.subcategories as any)?.[subcategory]?.name;
-            return matchesSearch && p.category === subcategoryName;
-        }
-        
-        // Ако няма подкатегория, филтрираме по основната категория или всички продукти от тази категория
-        // Проверяваме дали продуктът е от основната категория или от някоя от нейните подкатегории
-        const subcategories = categories[category as keyof typeof categories]?.subcategories || {};
-        const subcategoryNames = Object.values(subcategories).map((sub: any) => sub.name);
-        
-        return matchesSearch && (p.category === categoryName || subcategoryNames.includes(p.category));
+        if (!matchesSearch) return false;
+
+        // If no category filter selected, include
+        if (!category) return true;
+
+        return productMatchesSelectedCategory(p.category || '');
     });
 
     // Handle delete product
@@ -291,9 +329,9 @@ const Shop = () => {
             {/* Header & Search */}
             <div className=" mx-auto pt-10 pb-6 px-6 background-shop-header">
                 <h1 className="text-4xl font-black text-center mb-6 bg-gradient-to-r from-green-700 via-emerald-600 to-green-800 bg-clip-text text-transparent">
-                Нашите продукти
+                    Нашите продукти
                 </h1>
-                
+
                 {/* Search Bar */}
                 <div className="flex gap-3 items-center mb-4 max-w-4xl mx-auto">
                     <div className="relative flex-1">
@@ -308,7 +346,7 @@ const Shop = () => {
                             className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent text-lg"
                         />
                     </div>
-                    <button 
+                    <button
                         onClick={() => setShowMobileFilters(!showMobileFilters)}
                         className="p-3 bg-gray-100 rounded-xl border border-gray-300 hover:bg-gray-200 transition-colors lg:hidden"
                     >
@@ -334,7 +372,7 @@ const Shop = () => {
                             <h4 className="text-lg font-black text-gray-800">Категории</h4>
                             <div className="flex items-center gap-3">
                                 <span className="text-sm text-gray-500">{filteredProducts.length} резултата</span>
-                                <button 
+                                <button
                                     onClick={() => setShowMobileFilters(false)}
                                     className="text-gray-400 hover:text-gray-600 p-1"
                                 >
@@ -345,7 +383,7 @@ const Shop = () => {
                             </div>
                         </div>
                         <div className="space-y-2">
-                            <button 
+                            <button
                                 onClick={() => {
                                     setCategory("");
                                     setSubcategory("");
@@ -356,7 +394,7 @@ const Shop = () => {
                             </button>
                             {Object.entries(categories).map(([key, cat]) => (
                                 <div key={key} className="space-y-1">
-                                    <button 
+                                    <button
                                         onClick={() => {
                                             if (category === key) {
                                                 setCategory("");
@@ -370,28 +408,28 @@ const Shop = () => {
                                     >
                                         <span>{cat.name}</span>
                                         {Object.keys(cat.subcategories).length > 0 && (
-                                            <svg 
-                                                className={`w-4 h-4 transform transition-transform ${category === key ? "rotate-90" : ""}`} 
-                                                fill="none" 
-                                                stroke="currentColor" 
+                                            <svg
+                                                className={`w-4 h-4 transform transition-transform ${category === key ? "rotate-90" : ""}`}
+                                                fill="none"
+                                                stroke="currentColor"
                                                 viewBox="0 0 24 24"
                                             >
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                             </svg>
                                         )}
                                     </button>
-                                    
+
                                     {/* Подкатегории - показват се веднага под категорията */}
                                     {category === key && Object.keys(cat.subcategories).length > 0 && (
                                         <div className="ml-4 space-y-1 animate-in slide-in-from-top-2 duration-200">
-                                            <button 
+                                            <button
                                                 onClick={() => setSubcategory("")}
                                                 className={`w-full px-2 py-1 rounded text-xs font-medium text-left ${subcategory === "" ? "bg-green-700 text-white" : "bg-green-100 text-green-700 hover:bg-green-200"}`}
                                             >
                                                 • Всички
                                             </button>
                                             {Object.entries(cat.subcategories).map(([subKey, subcat]) => (
-                                                <button 
+                                                <button
                                                     key={subKey}
                                                     onClick={() => setSubcategory(subKey)}
                                                     className={`w-full px-2 py-1 rounded text-xs font-medium text-left ${subcategory === subKey ? "bg-green-600 text-white" : "bg-green-100 text-green-700 hover:bg-green-200"}`}
@@ -405,7 +443,7 @@ const Shop = () => {
                             ))}
                         </div>
                         <div className="flex gap-2 mt-3">
-                            <button 
+                            <button
                                 onClick={() => {
                                     setSearch("");
                                     setCategory("");
@@ -415,7 +453,7 @@ const Shop = () => {
                             >
                                 Изчисти филтрите
                             </button>
-                            <button 
+                            <button
                                 onClick={() => setShowMobileFilters(false)}
                                 className="flex-1 px-4 py-2 bg-gray-900 text-white rounded-lg text-sm hover:bg-gray-800"
                             >
@@ -431,12 +469,12 @@ const Shop = () => {
                 {/* Left Sidebar - Hidden on mobile */}
                 <div className="hidden lg:block w-64 flex-shrink-0">
                     <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-4 mt-5 mb-5">
-                       
+
                         {/* Categories */}
                         <div className="mb-6">
                             <h4 className="text-lg font-black text-gray-800 mb-3">Категории</h4>
                             <div className="space-y-2">
-                                <button 
+                                <button
                                     onClick={() => {
                                         setCategory("");
                                         setSubcategory("");
@@ -447,7 +485,7 @@ const Shop = () => {
                                 </button>
                                 {Object.entries(categories).map(([key, cat]) => (
                                     <div key={key} className="space-y-1">
-                                        <button 
+                                        <button
                                             onClick={() => {
                                                 if (category === key) {
                                                     setCategory("");
@@ -461,28 +499,28 @@ const Shop = () => {
                                         >
                                             <span>{cat.name}</span>
                                             {Object.keys(cat.subcategories).length > 0 && (
-                                                <svg 
-                                                    className={`w-4 h-4 transform transition-transform ${category === key ? "rotate-90" : ""}`} 
-                                                    fill="none" 
-                                                    stroke="currentColor" 
+                                                <svg
+                                                    className={`w-4 h-4 transform transition-transform ${category === key ? "rotate-90" : ""}`}
+                                                    fill="none"
+                                                    stroke="currentColor"
                                                     viewBox="0 0 24 24"
                                                 >
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                                 </svg>
                                             )}
                                         </button>
-                                        
+
                                         {/* Подкатегории - показват се веднага под категорията */}
                                         {category === key && Object.keys(cat.subcategories).length > 0 && (
                                             <div className="ml-4 space-y-1 animate-in slide-in-from-top-2 duration-200">
-                                                <button 
+                                                <button
                                                     onClick={() => setSubcategory("")}
                                                     className={`w-full text-left px-2 py-1.5 rounded text-xs ${subcategory === "" ? "bg-green-600 text-white" : "bg-green-50 text-green-700 hover:bg-green-100"}`}
                                                 >
                                                     • Всички
                                                 </button>
                                                 {Object.entries(cat.subcategories).map(([subKey, subcat]) => (
-                                                    <button 
+                                                    <button
                                                         key={subKey}
                                                         onClick={() => setSubcategory(subKey)}
                                                         className={`w-full text-left px-2 py-1.5 rounded text-xs ${subcategory === subKey ? "bg-green-600 text-white" : "bg-green-50 text-green-700 hover:bg-green-100"}`}
@@ -496,23 +534,22 @@ const Shop = () => {
                                 ))}
                             </div>
                         </div>
-                        
+
                         <div className="flex gap-2">
-                            <button 
+                            <button
                                 onClick={() => {
                                     setSearch("");
                                     setCategory("");
                                     setSubcategory("");
                                 }}
-                                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50"
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50"
                             >
                                 Reset
                             </button>
-                            <button className="flex-1 px-4 py-2 bg-gray-900 text-white rounded-lg text-sm hover:bg-gray-800">Apply</button>
                         </div>
                     </div>
                 </div>
-                
+
                 {/* Right Content - Full width on mobile */}
                 <div className="flex-1">
                     {filteredProducts.length === 0 ? (
@@ -524,7 +561,7 @@ const Shop = () => {
                     ) : (
                         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-6">
                             {filteredProducts.map((product) => (
-                                <div 
+                                <div
                                     key={product.id}
                                     className="group rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-200 hover:border-emerald-400 flex flex-col mt-5 mb-5 bg-white hover:-translate-y-1 relative"
                                 >
@@ -544,7 +581,7 @@ const Shop = () => {
                                         </button>
                                     )}
 
-                                    <div 
+                                    <div
                                         onClick={() => navigate(`/product/${product.id}`)}
                                         className="cursor-pointer flex flex-col h-full"
                                     >
@@ -556,22 +593,32 @@ const Shop = () => {
                                                 className="w-full h-full object-contain bg-white p-4 group-hover:scale-105 transition-transform duration-300"
                                             />
                                             <div className="absolute top-3 left-3 bg-emerald-500 text-white rounded-full px-3 py-1 text-xs font-bold shadow-lg whitespace-nowrap">
-                                                {product.size || '' }
+                                                {product.size || ''}
                                             </div>
                                         </div>
-                                        
+
                                         <div className="p-4 pt-6 flex-1 flex flex-col bg-gray-50">
                                             <h3 className="font-bold text-gray-800 mb-3 line-clamp-2 text-sm lg:text-base leading-tight">{product.title}</h3>
-                                            
+
                                             <div className="mt-auto">
-                                                <div className="flex items-center justify-center gap-2 rounded-lg p-2">
-                                                    <span className="text-sm font-bold">
-                                                        {product.priceBGN?.toFixed(2) || product.price?.toFixed(2) || '0.00'} лв.
-                                                    </span>
-                                                    <div className="h-4 w-px bg-gray-300"></div>
-                                                    <span className="text-sm font-bold">
-                                                        €{product.priceEUR?.toFixed(2) || (product.price / 1.95583).toFixed(2)}
-                                                    </span>
+                                                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 rounded-lg p-2">
+                                                    {/* VAT badge - responsive: shown as pill, moves above prices on small screens */}
+                                                    <div className="order-0 flex items-center gap-2 mb-1">
+                                                        <span className="inline-flex items-center bg-emerald-100 text-emerald-800 text-xs font-semibold px-2 py-1 rounded-full shadow-sm">
+                                                            <span className="whitespace-nowrap">Цена с ДДС:</span>
+                                                        </span>
+                                                    </div>
+
+                                                    {/* Prices */}
+                                                    <div className="order-0 sm:order-1 flex items-center gap-3">
+                                                        <div className="flex flex-col text-center">
+                                                            <span className="text-sm font-bold">{product.priceBGN?.toFixed(2) || product.price?.toFixed(2) || '0.00'} лв.</span>
+                                                        </div>
+                                                        <div className="h-4 w-px bg-gray-300"></div>
+                                                        <div className="flex flex-col text-center">
+                                                            <span className="text-sm font-bold">€{product.priceEUR?.toFixed(2) || (product.price / 1.95583).toFixed(2)}</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
