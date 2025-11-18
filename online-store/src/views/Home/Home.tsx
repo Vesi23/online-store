@@ -1,5 +1,6 @@
 import './Home.css';
 import { useState, useEffect } from 'react';
+import CatalogBtn from '../../components/Catalog/CatalogBtn';
 
 const Home = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -106,6 +107,17 @@ const Home = () => {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
                     </button>
+                </div>
+            </div>
+
+            {/* Catalog section - Разгледай нашия каталог */}
+            <div className="w-full py-16 catalog-section">
+                <div className="max-w-6xl mx-auto px-8 text-center ">
+                    <h2 className="text-3xl lg:text-4xl font-extrabold mb-4 text-gray-800">Разгледай нашия каталог</h2>
+                    <p className="text-gray-600 mb-6">Виж пълния ни асортимент и свали каталога за детайли и спецификации.</p>
+                    <div className="flex justify-center">
+                        <CatalogBtn href="/assets/catalog.pdf" filename="Katalog-Vesi.pdf">Свали каталога</CatalogBtn>
+                    </div>
                 </div>
             </div>
 
