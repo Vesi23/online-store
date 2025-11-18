@@ -240,33 +240,44 @@ const Product = () => {
 
                     // Parse category and subcategory from product
                     const productCategory = productData[0].category;
-                    
-                    // Find matching category and subcategory by name
-                    let foundCategoryKey = '';
-                    let foundSubcategoryKey = '';
-                    
-                    for (const [catKey, catData] of Object.entries(categories)) {
-                        if (catData.name === productCategory) {
-                            foundCategoryKey = catKey;
-                            break;
-                        }
-                        
-                        // Check subcategories
-                        for (const [subKey, subData] of Object.entries(catData.subcategories)) {
-                            if (subData.name === productCategory) {
-                                foundCategoryKey = catKey;
-                                foundSubcategoryKey = subKey;
-                                break;
+
+                    // If category was saved as a slug like "catKey/subKey" use those keys
+                    if (typeof productCategory === 'string' && productCategory.includes('/')) {
+                        const [catKey, subKey] = productCategory.split('/');
+                        if (categories[catKey]) {
+                            setCategory(catKey);
+                            if (subKey && (categories[catKey].subcategories as any)[subKey]) {
+                                setSubcategory(subKey);
                             }
                         }
-                        
-                        if (foundCategoryKey) break;
-                    }
-                    
-                    if (foundCategoryKey) {
-                        setCategory(foundCategoryKey);
-                        if (foundSubcategoryKey) {
-                            setSubcategory(foundSubcategoryKey);
+                    } else {
+                        // Otherwise try to find by display name (older products may store the name)
+                        let foundCategoryKey = '';
+                        let foundSubcategoryKey = '';
+
+                        for (const [catKey, catData] of Object.entries(categories)) {
+                            if (catData.name === productCategory) {
+                                foundCategoryKey = catKey;
+                                break;
+                            }
+
+                            // Check subcategories
+                            for (const [subKey, subData] of Object.entries(catData.subcategories)) {
+                                if (subData.name === productCategory) {
+                                    foundCategoryKey = catKey;
+                                    foundSubcategoryKey = subKey;
+                                    break;
+                                }
+                            }
+
+                            if (foundCategoryKey) break;
+                        }
+
+                        if (foundCategoryKey) {
+                            setCategory(foundCategoryKey);
+                            if (foundSubcategoryKey) {
+                                setSubcategory(foundSubcategoryKey);
+                            }
                         }
                     }
                     
@@ -630,7 +641,28 @@ const Product = () => {
                                 </div>
                             ) : (
                                 <span className="inline-block bg-gradient-to-r from-emerald-500 to-green-500 text-white px-3 py-1.5 lg:px-4 lg:py-2 rounded-full text-xs lg:text-sm font-bold shadow-lg shadow-emerald-500/30">
-                                    {product.category}
+                                    {(() => {
+                                        const catVal = product.category || '';
+                                        // If stored as slug like "catKey/subKey"
+                                        if (typeof catVal === 'string' && catVal.includes('/')) {
+                                            const [catKey, subKey] = catVal.split('/');
+                                            const cat = (categories as any)[catKey];
+                                            if (cat) {
+                                                if (subKey && cat.subcategories && (cat.subcategories as any)[subKey]) {
+                                                    return `${cat.name} / ${(cat.subcategories as any)[subKey].name}`;
+                                                }
+                                                return cat.name;
+                                            }
+                                        }
+
+                                        // If stored as a category key
+                                        if ((categories as any)[catVal]) {
+                                            return (categories as any)[catVal].name;
+                                        }
+
+                                        // Otherwise assume it's already a display name
+                                        return catVal;
+                                    })()}
                                 </span>
                             )}
                         </div>
