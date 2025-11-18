@@ -52,3 +52,8 @@ color: #e5e7eb;
 .home-product-t-l{
    text-align: left;
 }
+
+.catalog-section{
+    background-color: #d2eef1;
+    border-bottom: 1px solid #000000;
+}
