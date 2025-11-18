@@ -19,7 +19,7 @@ const CatalogBtn: React.FC<CatalogBtnProps> = ({
 			download={filename}
 			target="_blank"
 			rel="noopener noreferrer"
-			className={`inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold px-4 py-2 rounded-lg shadow-sm transition-colors ${className}`}
+			className={`inline-flex items-center gap-2 bg-[#018a46] hover:bg-green-600 text-white text-sm font-semibold px-4 py-2 rounded-lg ${className}`}
 			title="Изтегли каталога"
 		>
 			{/* File / icon */}
