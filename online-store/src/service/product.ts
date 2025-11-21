@@ -2,7 +2,7 @@ import { ref, push, get, query, orderByChild, remove, update } from 'firebase/da
 import { db } from '../config/firebase-config';
 
 
-export const addProduct = async (title: string, description: string, imagePost: string, image: string, category: string, price: string, size: string) => {
+export const addProduct = async (title: string, description: string, imagePost: string, image: string, category: string, price: string, size: string, color: string) => {
     // Конвертиране от лева към евро с фиксирания курс
     const exchangeRate = 1.95583;
     const priceBGN = parseFloat(price);
@@ -14,6 +14,7 @@ export const addProduct = async (title: string, description: string, imagePost: 
         image,
         imagePost,
         category,
+        color,
         price: priceBGN,
         priceBGN: Math.round(priceBGN * 100) / 100, // закръгляне до 2 знака
         priceEUR: Math.round(priceEUR * 100) / 100, // закръгляне до 2 знака
@@ -36,6 +37,7 @@ export const getAllProducts = async (search: string) => {
         image: snapshot.val()[key].image,
         imagePost: snapshot.val()[key].imagePost,
         category: snapshot.val()[key].category,
+        color: snapshot.val()[key].color,
         price: snapshot.val()[key].price,
         priceBGN: snapshot.val()[key].priceBGN,
         priceEUR: snapshot.val()[key].priceEUR,
@@ -63,6 +65,7 @@ export const getProductById = async (id: string) => {
         image: productData.image,
         imagePost: productData.imagePost,
         category: productData.category,
+        color: productData.color,
         price: productData.price,
         priceBGN: productData.priceBGN,
         priceEUR: productData.priceEUR,
@@ -86,7 +89,7 @@ export const deleteProduct = async (id: string) => {
 };
 
 // Update product
-export const updateProduct = async (id: string, title: string, description: string, imagePost: string, image: string, category: string, price: string, size: string) => {
+export const updateProduct = async (id: string, title: string, description: string, imagePost: string, image: string, category: string, price: string, size: string, color: string) => {
     const exchangeRate = 1.95583;
     const priceBGN = parseFloat(price);
     const priceEUR = priceBGN / exchangeRate;
@@ -99,6 +102,7 @@ export const updateProduct = async (id: string, title: string, description: stri
             image,
             imagePost,
             category,
+            color,
             price: priceBGN,
             priceBGN: Math.round(priceBGN * 100) / 100,
             priceEUR: Math.round(priceEUR * 100) / 100,
