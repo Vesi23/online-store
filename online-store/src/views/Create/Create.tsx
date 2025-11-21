@@ -12,7 +12,8 @@ const Create = () => {
         image: '',
         category: '',
         price: '',
-        size: ''
+        size: '',
+        color: ''
     });
 
     const [category, setCategory] = useState('');
@@ -238,6 +239,11 @@ const Create = () => {
             toast.error('Моля въведете размер');
         }
 
+        if (!product.color.trim()) {
+            isValid = false;
+            toast.error('Моля въведете цвят');
+        }
+
         if (!category) {
             isValid = false;
             toast.error('Моля изберете категория');
@@ -299,7 +305,8 @@ const Create = () => {
                 allImages, // всички снимки като JSON
                 finalCategory,
                 product.price,
-                product.size
+                product.size,
+                product.color
             );
 
             setProduct({
@@ -309,7 +316,8 @@ const Create = () => {
                 image: '',
                 category: '',
                 price: '',
-                size: ''
+                size: '',
+                color: ''
             });
             setCategory('');
             setSubcategory('');
@@ -377,7 +385,7 @@ const Create = () => {
                             </div>
 
                             {/* Price and Size Row */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 {/* Price Input */}
                                 <div className="space-y-2">
                                     <label className="block text-sm font-bold text-gray-700">
@@ -427,6 +435,20 @@ const Create = () => {
                                         placeholder="напр. S, M, L или 42, 44..."
                                         value={product.size}
                                         onChange={(e) => setProduct({ ...product, size: e.target.value })}
+                                        className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 placeholder-gray-400"
+                                    />
+                                </div>
+
+                                {/* Color Input (same as Size) */}
+                                <div className="space-y-2">
+                                    <label className="block text-sm font-bold text-gray-700">
+                                        Цвят
+                                    </label>
+                                    <input
+                                        type="text"
+                                        placeholder="напр. Червен, Син или #ffffff"
+                                        value={product.color}
+                                        onChange={(e) => setProduct({ ...product, color: e.target.value })}
                                         className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 placeholder-gray-400"
                                     />
                                 </div>
