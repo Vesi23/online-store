@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getProductById, updateProduct } from '../../service/product';
 import { useAppContext } from '../../context/appContext';
 import toast from 'react-hot-toast';
+import CatalogBtn from "../../components/Catalog/CatalogBtn";
 
 interface ProductType {
     id: string;
@@ -11,6 +12,7 @@ interface ProductType {
     imagePost: string;
     image: string;
     category: string;
+    color?: string;
     price: number;
     priceBGN: number;
     priceEUR: number;
@@ -34,6 +36,7 @@ const Product = () => {
         category: '',
         price: '',
         size: '',
+        color: '',
         imagePost: '',
         image: ''
     });
@@ -48,7 +51,7 @@ const Product = () => {
                     items: ['Ръчно', 'Машинно']
                 },
                 'termosvivaemo-folio': {
-                    name: 'Термосвиваемо фолио', 
+                    name: 'Термосвиваемо фолио',
                     items: ['Полиолефин', 'PVC фолио', 'Термо PE-фолио']
                 },
                 'plikove-aerofolio': {
@@ -197,7 +200,7 @@ const Product = () => {
         const selectedCategory = e.target.value;
         setCategory(selectedCategory);
         setSubcategory('');
-        
+
         // Parse current category from editForm to maintain structure
         const finalCategory = subcategory ? `${selectedCategory}/${subcategory}` : selectedCategory;
         setEditForm(prev => ({
@@ -209,7 +212,7 @@ const Product = () => {
     const handleSubcategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedSubcategory = e.target.value;
         setSubcategory(selectedSubcategory);
-        
+
         // Combine category and subcategory for final value
         const finalCategory = selectedSubcategory ? `${category}/${selectedSubcategory}` : category;
         setEditForm(prev => ({
@@ -221,12 +224,12 @@ const Product = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             if (!id) return;
-            
+
             try {
                 const productData = await getProductById(id);
                 if (productData && productData.length > 0) {
                     setProduct(productData[0]);
-                    
+
                     // Initialize edit form with current product data
                     setEditForm({
                         title: productData[0].title,
@@ -234,6 +237,7 @@ const Product = () => {
                         category: productData[0].category,
                         price: productData[0].price.toString(),
                         size: productData[0].size,
+                        color: productData[0].color || '',
                         imagePost: productData[0].imagePost,
                         image: productData[0].image
                     });
@@ -243,7 +247,8 @@ const Product = () => {
 
                     // If category was saved as a slug like "catKey/subKey" use those keys
                     if (typeof productCategory === 'string' && productCategory.includes('/')) {
-                        const [catKey, subKey] = productCategory.split('/');
+                        const [catKeyRaw, subKey] = productCategory.split('/');
+                        const catKey = catKeyRaw as keyof typeof categories;
                         if (categories[catKey]) {
                             setCategory(catKey);
                             if (subKey && (categories[catKey].subcategories as any)[subKey]) {
@@ -280,7 +285,7 @@ const Product = () => {
                             }
                         }
                     }
-                    
+
                     // Parse images from JSON string
                     try {
                         const parsedImages = JSON.parse(productData[0].image || '[]');
@@ -313,7 +318,7 @@ const Product = () => {
 
     const handleSaveEdit = async () => {
         if (!id || !product) return;
-        
+
         // Строим пълната категория
         let finalCategory = category;
         if (subcategory && categories[category as keyof typeof categories]) {
@@ -324,7 +329,7 @@ const Product = () => {
         } else if (category && categories[category as keyof typeof categories]) {
             finalCategory = categories[category as keyof typeof categories].name;
         }
-        
+
         try {
             await updateProduct(
                 id,
@@ -334,9 +339,10 @@ const Product = () => {
                 editForm.image,
                 finalCategory || editForm.category,
                 editForm.price,
-                editForm.size
+                editForm.size,
+                editForm.color
             );
-            
+
             // Update local state
             setProduct({
                 ...product,
@@ -347,10 +353,11 @@ const Product = () => {
                 priceBGN: parseFloat(editForm.price),
                 priceEUR: parseFloat(editForm.price) / 1.95583,
                 size: editForm.size,
+                color: editForm.color,
                 imagePost: editForm.imagePost,
                 image: editForm.image
             });
-            
+
             setIsEditing(false);
             setCategory('');
             setSubcategory('');
@@ -369,6 +376,7 @@ const Product = () => {
                 category: product.category,
                 price: product.price.toString(),
                 size: product.size,
+                color: (product as any).color || '',
                 imagePost: product.imagePost,
                 image: product.image
             });
@@ -391,7 +399,7 @@ const Product = () => {
         return (
             <div className="container mx-auto px-4 py-8 text-center">
                 <h1 className="text-2xl font-bold text-gray-800 mb-4">Product not found</h1>
-                <button 
+                <button
                     onClick={() => navigate('/shop')}
                     className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
                 >
@@ -405,7 +413,7 @@ const Product = () => {
         <div className="min-h-screen  from-slate-800 via-slate-700 to-gray-800">
             {/* Back Button */}
             <div className="max-w-5xl mx-auto px-5 pt-5">
-                <button 
+                <button
                     onClick={() => navigate('/shop')}
                     className="group flex items-center bg-gradient-to-r from-emerald-600 to-green-600 text-white px-4 py-2 rounded-xl shadow-lg hover:shadow-emerald-500/25 transition-all duration-300 transform hover:scale-105 hover:from-emerald-500 hover:to-green-500 mb-6 border border-emerald-400/30"
                 >
@@ -429,14 +437,14 @@ const Product = () => {
                                     className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-lg"
                                 />
                             </div>
-                            
+
                             {/* Image counter */}
                             {images.length > 1 && (
                                 <div className="absolute bottom-4 right-4 bg-slate-800/90 text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg backdrop-blur-sm">
                                     {selectedImageIndex + 1} / {images.length}
                                 </div>
                             )}
-                            
+
                             {/* Navigation arrows for main image */}
                             {images.length > 1 && (
                                 <>
@@ -459,7 +467,7 @@ const Product = () => {
                                 </>
                             )}
                         </div>
-                        
+
                         {/* Thumbnail Images Row - Bottom */}
                         {images.length > 1 && (
                             <div className="relative max-w-sm lg:max-w-md mx-auto">
@@ -468,11 +476,10 @@ const Product = () => {
                                         <button
                                             key={index}
                                             onClick={() => setSelectedImageIndex(index)}
-                                            className={`w-12 h-12 lg:w-16 lg:h-16 flex-shrink-0 overflow-hidden rounded-lg border-2 transition-all shadow-lg ${
-                                                selectedImageIndex === index 
-                                                    ? 'border-emerald-400 shadow-emerald-400/50 ring-2 ring-emerald-400/30' 
+                                            className={`w-12 h-12 lg:w-16 lg:h-16 flex-shrink-0 overflow-hidden rounded-lg border-2 transition-all shadow-lg ${selectedImageIndex === index
+                                                    ? 'border-emerald-400 shadow-emerald-400/50 ring-2 ring-emerald-400/30'
                                                     : 'border-slate-500 hover:border-slate-400 shadow-slate-500/30'
-                                            }`}
+                                                }`}
                                         >
                                             <div className="w-full h-full bg-gradient-to-br from-slate-100 to-white">
                                                 <img
@@ -483,7 +490,7 @@ const Product = () => {
                                             </div>
                                         </button>
                                     ))}
-                                    
+
                                     {/* Show more indicator if there are more than 5 images */}
                                     {images.length > 5 && (
                                         <div className="w-12 h-12 lg:w-16 lg:h-16 flex-shrink-0 border-2 border-dashed border-slate-400 bg-slate-600/20 rounded-lg flex items-center justify-center text-slate-300 text-xs backdrop-blur-sm">
@@ -491,18 +498,17 @@ const Product = () => {
                                         </div>
                                     )}
                                 </div>
-                                
+
                                 {/* Scroll indicators */}
                                 {images.length > 5 && (
                                     <div className="flex justify-center mt-2 gap-1">
                                         {Array.from({ length: Math.ceil(images.length / 5) }).map((_, pageIndex) => (
                                             <div
                                                 key={pageIndex}
-                                                className={`w-2 h-2 rounded-full transition-colors ${
-                                                    Math.floor(selectedImageIndex / 5) === pageIndex 
-                                                        ? 'bg-emerald-400 shadow-lg shadow-emerald-400/50' 
+                                                className={`w-2 h-2 rounded-full transition-colors ${Math.floor(selectedImageIndex / 5) === pageIndex
+                                                        ? 'bg-emerald-400 shadow-lg shadow-emerald-400/50'
                                                         : 'bg-slate-500'
-                                                }`}
+                                                    }`}
                                             />
                                         ))}
                                     </div>
@@ -552,7 +558,7 @@ const Product = () => {
                                         </svg>
                                         Категория на продукта
                                     </h4>
-                                    
+
                                     <div className="grid grid-cols-1 gap-3 lg:gap-4">
                                         {/* Main Category */}
                                         <div className="space-y-2">
@@ -582,34 +588,34 @@ const Product = () => {
                                         </div>
 
                                         {/* Subcategory - показва се само ако избраната категория има подкатегории */}
-                                        {category && categories[category as keyof typeof categories] && 
-                                         Object.keys(categories[category as keyof typeof categories].subcategories).length > 0 && (
-                                            <div className="space-y-2">
-                                                <label className="block text-xs lg:text-sm font-bold text-green-800 flex items-center">
-                                                    <span className="w-1.5 h-1.5 lg:w-2 lg:h-2 bg-emerald-600 rounded-full mr-2"></span>
-                                                    Подкатегория
-                                                </label>
-                                                <div className="relative">
-                                                    <select
-                                                        value={subcategory}
-                                                        onChange={handleSubcategory}
-                                                        className="w-full px-2 lg:px-3 py-2 lg:py-2 border-2 border-green-300 rounded-lg lg:rounded-xl focus:border-green-500 focus:ring-2 lg:focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-green-800 bg-white shadow-sm appearance-none font-semibold text-sm lg:text-base"
-                                                    >
-                                                        <option value="">🏷️ Изберете подкатегория</option>
-                                                        {Object.entries(categories[category as keyof typeof categories].subcategories).map(([key, subcat]) => (
-                                                            <option key={key} value={key}>
-                                                                {subcat.name}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                    <div className="absolute inset-y-0 right-0 flex items-center pr-2 lg:pr-3 pointer-events-none">
-                                                        <svg className="w-3 h-3 lg:w-4 lg:h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                                        </svg>
+                                        {category && categories[category as keyof typeof categories] &&
+                                            Object.keys(categories[category as keyof typeof categories].subcategories).length > 0 && (
+                                                <div className="space-y-2">
+                                                    <label className="block text-xs lg:text-sm font-bold text-green-800 flex items-center">
+                                                        <span className="w-1.5 h-1.5 lg:w-2 lg:h-2 bg-emerald-600 rounded-full mr-2"></span>
+                                                        Подкатегория
+                                                    </label>
+                                                    <div className="relative">
+                                                        <select
+                                                            value={subcategory}
+                                                            onChange={handleSubcategory}
+                                                            className="w-full px-2 lg:px-3 py-2 lg:py-2 border-2 border-green-300 rounded-lg lg:rounded-xl focus:border-green-500 focus:ring-2 lg:focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-green-800 bg-white shadow-sm appearance-none font-semibold text-sm lg:text-base"
+                                                        >
+                                                            <option value="">🏷️ Изберете подкатегория</option>
+                                                            {Object.entries(categories[category as keyof typeof categories].subcategories).map(([key, subcat]) => (
+                                                                <option key={key} value={key}>
+                                                                    {subcat.name}
+                                                                </option>
+                                                            ))}
+                                                        </select>
+                                                        <div className="absolute inset-y-0 right-0 flex items-center pr-2 lg:pr-3 pointer-events-none">
+                                                            <svg className="w-3 h-3 lg:w-4 lg:h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                                            </svg>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        )}
+                                            )}
 
                                         {/* Показваме информация за избраната категория */}
                                         {category && (
@@ -707,6 +713,28 @@ const Product = () => {
                             </div>
                         </div>
 
+                        {/* Color Info */}
+                        <div className="mb-4 lg:mb-6 p-3 lg:p-4 bg-gray-100 rounded-xl border border-gray-300 backdrop-blur-sm">
+                            <div className="flex items-center">
+                                <svg className="w-4 h-4 lg:w-5 lg:h-5 mr-2 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2l4 7h-8l4-7z M4 22h16v-2H4v2z" />
+                                </svg>
+                                <span className="text-black font-semibold text-sm lg:text-base">Цвят: </span>
+                                {isEditing ? (
+                                    <input
+                                        type="text"
+                                        name="color"
+                                        value={editForm.color}
+                                        onChange={handleInputChange}
+                                        className="ml-1 text-sm lg:text-base border border-gray-300 rounded px-2 py-1"
+                                        placeholder="Цвят"
+                                    />
+                                ) : (
+                                    <span className="text-gray-700 ml-1 text-sm lg:text-base">{(product as any).color || 'Не е посочен'}</span>
+                                )}
+                            </div>
+                        </div>
+
                         {/* Prices */}
                         <div className="mb-6 lg:mb-8 p-3 lg:p-6 bg-emerald-50 rounded-2xl border border-emerald-200 shadow-lg">
                             {isEditing ? (
@@ -723,7 +751,7 @@ const Product = () => {
                                     />
                                 </div>
                             ) : (
-                                
+
                                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 lg:gap-6">
                                     <div className="flex items-center gap-3">
                                         <span className="inline-block bg-emerald-700/90 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md tracking-wide">Цена с ДДС</span>
@@ -733,7 +761,7 @@ const Product = () => {
                                         <span className="text-base sm:text-lg lg:text-2xl font-black text-emerald-700">
                                             {product.priceBGN?.toFixed(2) || product.price?.toFixed(2) || '0.00'} лв.
                                         </span>
-                                   
+
                                     </div>
 
                                     <div className="hidden sm:block h-8 lg:h-12 w-px bg-emerald-400 shadow-lg shadow-emerald-400/20"></div>
@@ -771,7 +799,13 @@ const Product = () => {
                                         {product.description}
                                     </p>
                                 )}
-                            </div>  
+                            </div>
+                        </div>
+
+                        {/* Catalog download button */}
+                        <div className="flex justify-center mt-4">
+                            <span className="text-sm lg:text-base font-medium text-gray-700 mb-3">За повече информация:</span>
+                            <CatalogBtn href="/assets/catalog.pdf" filename="Katalog-Albayrak-EOOD.pdf" className="ml-2 mb-4 text-sm text-center ">Свали нашия каталог</CatalogBtn>
                         </div>
 
                         {/* Product Info Footer */}
