@@ -129,17 +129,17 @@ const Home = () => {
                         {/* Right: text + button */}
                         <div className="text-center md:text-left">
                             <h2 className="text-3xl lg:text-4xl font-extrabold mb-4 text-gray-800">Разгледай нашия каталог</h2>
-                            <p className="text-gray-600 mb-4">Виж пълния ни асортимент и свали каталога за детайли и спецификации. Включва технически листове, размери и препоръки за употреба.</p>
+                            <p className="text-gray-600 mb-4 text-justify">Виж пълния ни асортимент и свали каталога за детайли и спецификации. Включва технически листове, размери и препоръки за употреба.</p>
 
                             <div className="flex items-center gap-4 justify-center md:justify-start mb-4">
-                                <CatalogBtn href="/assets/catalog.pdf" filename="Katalog-Vesi.pdf">Свали каталога</CatalogBtn>
+                                <CatalogBtn href="/assets/catalog.pdf" filename="Katalog-Albayrak-EOOD.pdf">Свали каталога</CatalogBtn>
                                 <span className="catalog-badge inline-block text-sm font-medium">PDF • 12 стр.</span>
                             </div>
 
                             <ul className="text-gray-600 list-disc pl-5 max-w-md mx-auto md:mx-0">
-                                <li>Бърз преглед на продуктите</li>
-                                <li>Спецификации и размери</li>
-                                <li>Решения за опаковане и консумативи</li>
+                                <li className="text-justify">Бърз преглед на продуктите</li>
+                                <li className="text-justify">Спецификации и размери</li>
+                                <li className="text-justify">Решения за опаковане и консумативи</li>
                             </ul>
                         </div>
                     </div>
@@ -172,7 +172,7 @@ const Home = () => {
                                 <h4 className="text-lg font-semibold text-gray-800 mb-3">
                                     Бърза доставка
                                 </h4>
-                                <p className="text-gray-600 text-sm">
+                                <p className="text-gray-600 text-sm ">
                                     Получавате поръчките си навреме, без излишно чакане. Гарантираме експресна доставка до 24 часа.
                                 </p>
 
