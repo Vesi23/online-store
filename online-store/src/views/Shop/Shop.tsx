@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../context/appContext";
 import toast from "react-hot-toast";
 import './Shop.css';
-import CatalogBtn from "../../components/Catalog/CatalogBtn";
+
 interface Product {
     id: string;
     title: string;
@@ -20,8 +20,6 @@ interface Product {
 }
 
 const Shop = () => {
-    // VAT rate (e.g. 0.20 for 20%) — change here if needed
-    const VAT_RATE = 0.20;
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [search, setSearch] = useState("");
@@ -363,11 +361,7 @@ const Shop = () => {
                     </button>
                 </div>
 
-                {/* Catalog download button */}
-                <div className="flex justify-center mt-4">
-                    <CatalogBtn href="/assets/catalog.pdf" filename="AlbayrakEOOD-katalog.pdf">Свали нашия каталог</CatalogBtn>
-                </div>
-
+            
             </div>
 
             {/* Mobile Categories Filter - показва се само при натискане */}
