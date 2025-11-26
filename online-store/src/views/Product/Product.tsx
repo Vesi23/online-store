@@ -13,6 +13,14 @@ interface ProductType {
     image: string;
     category: string;
     color?: string;
+    innerDiameterMm?: string;
+    piecesPerBox?: string;
+    tensileStrengthKg?: string;
+    rollLengthM?: string;
+    stapleType?: string;
+    chamberSizes?: string;
+    diameter?: string;
+    unwind?: string;
     price: number;
     priceBGN: number;
     priceEUR: number;
@@ -37,6 +45,14 @@ const Product = () => {
         price: '',
         size: '',
         color: '',
+        innerDiameterMm: '',
+        piecesPerBox: '',
+        tensileStrengthKg: '',
+        rollLengthM: '',
+        stapleType: '',
+        chamberSizes: '',
+        diameter: '',
+        unwind: '',
         imagePost: '',
         image: ''
     });
@@ -238,6 +254,14 @@ const Product = () => {
                         price: productData[0].price.toString(),
                         size: productData[0].size,
                         color: productData[0].color || '',
+                        innerDiameterMm: productData[0].innerDiameterMm || '',
+                        piecesPerBox: productData[0].piecesPerBox || '',
+                        tensileStrengthKg: productData[0].tensileStrengthKg || '',
+                        rollLengthM: productData[0].rollLengthM || '',
+                        stapleType: productData[0].stapleType || '',
+                        chamberSizes: productData[0].chamberSizes || '',
+                        diameter: productData[0].diameter || '',
+                        unwind: productData[0].unwind || '',
                         imagePost: productData[0].imagePost,
                         image: productData[0].image
                     });
@@ -340,7 +364,15 @@ const Product = () => {
                 finalCategory || editForm.category,
                 editForm.price,
                 editForm.size,
-                editForm.color
+                editForm.color,
+                editForm.innerDiameterMm,
+                editForm.piecesPerBox,
+                editForm.tensileStrengthKg,
+                editForm.rollLengthM,
+                editForm.stapleType,
+                editForm.chamberSizes,
+                editForm.diameter,
+                editForm.unwind
             );
 
             // Update local state
@@ -354,6 +386,14 @@ const Product = () => {
                 priceEUR: parseFloat(editForm.price) / 1.95583,
                 size: editForm.size,
                 color: editForm.color,
+                innerDiameterMm: editForm.innerDiameterMm,
+                piecesPerBox: editForm.piecesPerBox,
+                tensileStrengthKg: editForm.tensileStrengthKg,
+                rollLengthM: editForm.rollLengthM,
+                stapleType: editForm.stapleType,
+                chamberSizes: editForm.chamberSizes,
+                diameter: editForm.diameter,
+                unwind: editForm.unwind,
                 imagePost: editForm.imagePost,
                 image: editForm.image
             });
@@ -377,6 +417,14 @@ const Product = () => {
                 price: product.price.toString(),
                 size: product.size,
                 color: (product as any).color || '',
+                innerDiameterMm: (product as any).innerDiameterMm || '',
+                piecesPerBox: (product as any).piecesPerBox || '',
+                tensileStrengthKg: (product as any).tensileStrengthKg || '',
+                rollLengthM: (product as any).rollLengthM || '',
+                stapleType: (product as any).stapleType || '',
+                chamberSizes: (product as any).chamberSizes || '',
+                diameter: (product as any).diameter || '',
+                unwind: (product as any).unwind || '',
                 imagePost: product.imagePost,
                 image: product.image
             });
@@ -681,7 +729,7 @@ const Product = () => {
                                     name="title"
                                     value={editForm.title}
                                     onChange={handleInputChange}
-                                    className="text-lg sm:text-xl lg:text-4xl font-black text-black leading-tight drop-shadow-lg w-full border-2 border-gray-300 rounded-lg p-2 lg:p-3"
+                                    className="text-lg sm:text-xl lg:text-4xl font-black text-black leading-tight drop-shadow-lg w-full border-2 border-gray-300 rounded-lg p-2 lg:p-3 placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500"
                                     placeholder="Заглавие на продукта"
                                 />
                             ) : (
@@ -704,7 +752,7 @@ const Product = () => {
                                         name="size"
                                         value={editForm.size}
                                         onChange={handleInputChange}
-                                        className="ml-1 text-sm lg:text-base border border-gray-300 rounded px-2 py-1"
+                                        className="ml-1 text-sm lg:text-base border border-gray-300 rounded px-2 py-1 placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500"
                                         placeholder="Размер"
                                     />
                                 ) : (
@@ -726,7 +774,7 @@ const Product = () => {
                                         name="color"
                                         value={editForm.color}
                                         onChange={handleInputChange}
-                                        className="ml-1 text-sm lg:text-base border border-gray-300 rounded px-2 py-1"
+                                        className="ml-1 text-sm lg:text-base border border-gray-300 rounded px-2 py-1 placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500"
                                         placeholder="Цвят"
                                     />
                                 ) : (
@@ -734,6 +782,110 @@ const Product = () => {
                                 )}
                             </div>
                         </div>
+
+                        {/* Additional technical parameters */}
+                        {(isEditing || (product as any).innerDiameterMm || (product as any).piecesPerBox || (product as any).tensileStrengthKg || (product as any).rollLengthM || (product as any).stapleType || (product as any).chamberSizes || (product as any).diameter || (product as any).unwind) && (
+                            <div className="mb-4 lg:mb-6 p-3 lg:p-4 bg-gray-50 rounded-xl border border-gray-200">
+                                <h4 className="text-sm font-bold text-gray-800 mb-3 dark:text-black">Допълнителни параметри</h4>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    {/* Inner diameter */}
+                                    {(isEditing || (product as any).innerDiameterMm) && (
+                                        <div className="flex items-center">
+                                            <span className="text-sm font-semibold w-48 text-gray-800 dark:text-black">Вътрешен диаметър (мм):</span>
+                                            {isEditing ? (
+                                                <input name="innerDiameterMm" value={(editForm as any).innerDiameterMm} onChange={handleInputChange} className="ml-2 px-2 py-1 border rounded w-full placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500" />
+                                            ) : (
+                                                <span className="ml-2 text-gray-700 dark:text-black">{(product as any).innerDiameterMm}</span>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* Pieces per box */}
+                                    {(isEditing || (product as any).piecesPerBox) && (
+                                        <div className="flex items-center">
+                                            <span className="text-sm font-semibold w-48 text-gray-800 dark:text-black">Бр./кашон:</span>
+                                            {isEditing ? (
+                                                <input name="piecesPerBox" value={(editForm as any).piecesPerBox} onChange={handleInputChange} className="ml-2 px-2 py-1 border rounded w-full placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500" />
+                                            ) : (
+                                                <span className="ml-2 text-gray-700 dark:text-black">{(product as any).piecesPerBox}</span>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* Tensile strength */}
+                                    {(isEditing || (product as any).tensileStrengthKg) && (
+                                        <div className="flex items-center">
+                                            <span className="text-sm font-semibold w-48 text-gray-800 dark:text-black">Сила на опън при скъсване (кг):</span>
+                                            {isEditing ? (
+                                                <input name="tensileStrengthKg" value={(editForm as any).tensileStrengthKg} onChange={handleInputChange} className="ml-2 px-2 py-1 border rounded w-full placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500" />
+                                            ) : (
+                                                <span className="ml-2 text-gray-700 dark:text-black">{(product as any).tensileStrengthKg}</span>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* Roll length */}
+                                    {(isEditing || (product as any).rollLengthM) && (
+                                        <div className="flex items-center">
+                                            <span className="text-sm font-semibold w-48 text-gray-800 dark:text-black">Дължина на ролка (м):</span>
+                                            {isEditing ? (
+                                                <input name="rollLengthM" value={(editForm as any).rollLengthM} onChange={handleInputChange} className="ml-2 px-2 py-1 border rounded w-full placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500" />
+                                            ) : (
+                                                <span className="ml-2 text-gray-700 dark:text-black">{(product as any).rollLengthM}</span>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* Staple type */}
+                                    {(isEditing || (product as any).stapleType) && (
+                                        <div className="flex items-center">
+                                            <span className="text-sm font-semibold w-48 text-gray-800 dark:text-black">Тип скоби:</span>
+                                            {isEditing ? (
+                                                <input name="stapleType" value={(editForm as any).stapleType} onChange={handleInputChange} className="ml-2 px-2 py-1 border rounded w-full placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500" />
+                                            ) : (
+                                                <span className="ml-2 text-gray-700 dark:text-black">{(product as any).stapleType}</span>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* Chamber sizes */}
+                                    {(isEditing || (product as any).chamberSizes) && (
+                                        <div className="flex items-center">
+                                            <span className="text-sm font-semibold w-48 text-gray-800 dark:text-black">Подходящи за чембер размери:</span>
+                                            {isEditing ? (
+                                                <input name="chamberSizes" value={(editForm as any).chamberSizes} onChange={handleInputChange} className="ml-2 px-2 py-1 border rounded w-full placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500" />
+                                            ) : (
+                                                <span className="ml-2 text-gray-700 dark:text-black">{(product as any).chamberSizes}</span>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* Diameter */}
+                                    {(isEditing || (product as any).diameter) && (
+                                        <div className="flex items-center">
+                                            <span className="text-sm font-semibold w-48 text-gray-800 dark:text-black">Диаметър:</span>
+                                            {isEditing ? (
+                                                <input name="diameter" value={(editForm as any).diameter} onChange={handleInputChange} className="ml-2 px-2 py-1 border rounded w-full placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500" />
+                                            ) : (
+                                                <span className="ml-2 text-gray-700 dark:text-black">{(product as any).diameter}</span>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* Unwind */}
+                                    {(isEditing || (product as any).unwind) && (
+                                        <div className="flex items-center">
+                                            <span className="text-sm font-semibold w-48 text-gray-800 dark:text-black">Развиване:</span>
+                                            {isEditing ? (
+                                                <input name="unwind" value={(editForm as any).unwind} onChange={handleInputChange} className="ml-2 px-2 py-1 border rounded w-full placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500" />
+                                            ) : (
+                                                <span className="ml-2 text-gray-700 dark:text-black">{(product as any).unwind}</span>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
 
                         {/* Prices */}
                         <div className="mb-6 lg:mb-8 p-3 lg:p-6 bg-emerald-50 rounded-2xl border border-emerald-200 shadow-lg">
@@ -746,30 +898,22 @@ const Product = () => {
                                         value={editForm.price}
                                         onChange={handleInputChange}
                                         step="0.01"
-                                        className="text-base sm:text-lg lg:text-2xl font-black text-emerald-700 border border-emerald-300 rounded px-2 py-1 w-full sm:w-auto max-w-32"
+                                        className="text-base sm:text-lg lg:text-2xl font-black text-emerald-700 border border-emerald-300 rounded px-2 py-1 w-full sm:w-auto max-w-32 placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500"
                                         placeholder="0.00"
                                     />
                                 </div>
                             ) : (
 
-                                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 lg:gap-6">
+                                <div className="flex flex-col items-center gap-3 lg:gap-6">
                                     <div className="flex items-center gap-3">
-                                        <span className="inline-block bg-emerald-700/90 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md tracking-wide">Цена с ДДС</span>
+                                        <span className="inline-block bg-emerald-700/90 dark:bg-emerald-700 text-white dark:text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md tracking-wide">Цена с ДДС</span>
                                     </div>
 
-                                    <div className="flex flex-col text-center">
-                                        <span className="text-base sm:text-lg lg:text-2xl font-black text-emerald-700">
-                                            {product.priceBGN?.toFixed(2) || product.price?.toFixed(2) || '0.00'} лв.
-                                        </span>
-
-                                    </div>
-
-                                    <div className="hidden sm:block h-8 lg:h-12 w-px bg-emerald-400 shadow-lg shadow-emerald-400/20"></div>
-
-                                    <div className="flex flex-col text-center">
-                                        <span className="text-base sm:text-lg lg:text-2xl font-black text-emerald-700">
-                                            €{product.priceEUR?.toFixed(2) || (product.price / 1.95583).toFixed(2)}
-                                        </span>
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-base sm:text-lg lg:text-2xl font-black text-emerald-700 dark:text-emerald-500">{product.priceBGN?.toFixed(2) || product.price?.toFixed(2) || '0.00'} лв.</span>
+                                        <div className="hidden lg:block h-8 w-px bg-emerald-400 shadow-lg shadow-emerald-400/20"></div>
+                                        <div className="h-6 w-px bg-emerald-400 shadow-lg shadow-emerald-400/20 mx-0 lg:mx-2"></div>
+                                        <span className="text-base sm:text-lg lg:text-2xl font-black text-emerald-700 dark:text-emerald-500">€{product.priceEUR?.toFixed(2) || (product.price / 1.95583).toFixed(2)}</span>
                                     </div>
                                 </div>
                             )}
@@ -787,13 +931,13 @@ const Product = () => {
                             <div className="p-3 lg:p-4 rounded-xl border border-gray-300 backdrop-blur-sm bg-white">
                                 {isEditing ? (
                                     <textarea
-                                        name="description"
-                                        value={editForm.description}
-                                        onChange={handleInputChange}
-                                        rows={4}
-                                        className="w-full text-start leading-relaxed text-xs sm:text-sm lg:text-base border-none resize-none outline-none min-h-[80px] sm:min-h-[100px] lg:min-h-[120px]"
-                                        placeholder="Описание на продукта..."
-                                    />
+                                            name="description"
+                                            value={editForm.description}
+                                            onChange={handleInputChange}
+                                            rows={4}
+                                            className="w-full text-start leading-relaxed text-xs sm:text-sm lg:text-base border-none resize-none outline-none min-h-[80px] sm:min-h-[100px] lg:min-h-[120px] placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500"
+                                            placeholder="Описание на продукта..."
+                                        />
                                 ) : (
                                     <p className="text-justify text-gray-600 leading-relaxed whitespace-pre-wrap text-xs sm:text-sm lg:text-base">
                                         {product.description}
@@ -805,7 +949,7 @@ const Product = () => {
                         {/* Catalog download button */}
                         <div className="flex justify-center mt-4">
                             <span className="text-sm lg:text-base font-medium text-gray-700 mb-3">За повече информация:</span>
-                            <CatalogBtn href="/assets/catalog.pdf" filename="Katalog-Albayrak-EOOD.pdf" className="ml-2 mb-4 text-sm text-center ">Свали нашия каталог</CatalogBtn>
+                            <CatalogBtn href="/assets/Katalog-Albayrak-EOOD.pdf" className="ml-2 mb-4 text-sm text-center ">Свали нашия каталог</CatalogBtn>
                         </div>
 
                         {/* Product Info Footer */}
