@@ -132,7 +132,7 @@ const Home = () => {
                             <p className="text-gray-600 mb-4 text-justify">Виж пълния ни асортимент и свали каталога за детайли и спецификации. Включва технически листове, размери и препоръки за употреба.</p>
 
                             <div className="flex items-center gap-4 justify-center md:justify-start mb-4">
-                                <CatalogBtn href="/assets/catalog.pdf" filename="Katalog-Albayrak-EOOD.pdf">Свали каталога</CatalogBtn>
+                                <CatalogBtn href="/assets/Katalog-Albayrak-EOOD.pdf">Свали каталога</CatalogBtn>
                                 <span className="catalog-badge inline-block text-sm font-medium">PDF • 12 стр.</span>
                             </div>
 
