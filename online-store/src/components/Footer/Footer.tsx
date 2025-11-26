@@ -70,14 +70,14 @@ const Footer = () => {
 
 
                     {/* Contact Information */}
-                    <div className="text-center md:text-left">
-                        <h4 className="text-xl font-bold mb-6 text-black flex items-center justify-center md:justify-start">
+                    <div className="text-left">
+                        <h4 className="text-xl font-bold mb-6 text-black flex items-center justify-start">
                             <svg className="w-5 h-5 mr-2 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
                             Информация за контакт
                         </h4>
-                        <div className="flex flex-wrap justify-center md:justify-start gap-4">
+                        <div className="flex flex-col items-start gap-4">
                             <div className="flex items-center group">
                                 <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg flex items-center justify-center mr-2 group-hover:scale-110 transition-transform">
                                     <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
