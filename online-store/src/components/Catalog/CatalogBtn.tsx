@@ -2,21 +2,21 @@ import React from "react";
 
 type CatalogBtnProps = {
 	href?: string; // path to the PDF file (public folder)
-	filename?: string; // suggested filename for download attribute
 	className?: string;
 	children?: React.ReactNode;
 };
 
+
+
 const CatalogBtn: React.FC<CatalogBtnProps> = ({
-	href = '/assets/catalog.pdf',
-	filename = 'catalog.pdf',
+	href = '/assets/Katalog-Albayrak-EOOD.pdf',
 	className = '',
 	children,
 }) => {
 	return (
 		<a
 			href={href}
-			download={filename}
+			// removed `download` to allow mobile browsers to preview PDFs in a new tab
 			target="_blank"
 			rel="noopener noreferrer"
 			className={`inline-flex items-center gap-2 bg-[#018a46] hover:bg-green-600 text-white text-sm font-semibold px-4 py-2 rounded-lg ${className}`}
