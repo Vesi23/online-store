@@ -13,7 +13,15 @@ const Create = () => {
         category: '',
         price: '',
         size: '',
-        color: ''
+        color: '',
+        innerDiameterMm: '',
+        piecesPerBox: '',
+        tensileStrengthKg: '',
+        rollLengthM: '',
+        stapleType: '',
+        chamberSizes: '',
+        diameter: '',
+        unwind: ''
     });
 
     const [category, setCategory] = useState('');
@@ -239,10 +247,7 @@ const Create = () => {
             toast.error('Моля въведете размер');
         }
 
-        if (!product.color.trim()) {
-            isValid = false;
-            toast.error('Моля въведете цвят');
-        }
+        // color and the additional technical fields are optional
 
         if (!category) {
             isValid = false;
@@ -306,7 +311,15 @@ const Create = () => {
                 finalCategory,
                 product.price,
                 product.size,
-                product.color
+                product.color,
+                product.innerDiameterMm,
+                product.piecesPerBox,
+                product.tensileStrengthKg,
+                product.rollLengthM,
+                product.stapleType,
+                product.chamberSizes,
+                product.diameter,
+                product.unwind
             );
 
             setProduct({
@@ -317,7 +330,15 @@ const Create = () => {
                 category: '',
                 price: '',
                 size: '',
-                color: ''
+                color: '',
+                innerDiameterMm: '',
+                piecesPerBox: '',
+                tensileStrengthKg: '',
+                rollLengthM: '',
+                stapleType: '',
+                chamberSizes: '',
+                diameter: '',
+                unwind: ''
             });
             setCategory('');
             setSubcategory('');
@@ -366,7 +387,7 @@ const Create = () => {
                                     placeholder="Въведете заглавие на продукта..."
                                     value={product.title}
                                     onChange={(e) => setProduct({ ...product, title: e.target.value })}
-                                    className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 placeholder-gray-400"
+                                    className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500"
                                 />
                             </div>
 
@@ -380,7 +401,7 @@ const Create = () => {
                                     value={product.description}
                                     onChange={(e) => setProduct({ ...product, description: e.target.value })}
                                     rows={5}
-                                    className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 placeholder-gray-400 resize-none"
+                                    className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 placeholder-gray-400 resize-none dark:bg-white dark:text-black dark:placeholder-gray-500"
                                 />
                             </div>
 
@@ -399,7 +420,7 @@ const Create = () => {
                                             placeholder="0.00"
                                             value={product.price}
                                             onChange={(e) => setProduct({ ...product, price: e.target.value })}
-                                            className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 placeholder-gray-400"
+                                            className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500"
                                         />
                                         <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
                                             <span className="text-gray-500 font-medium">лв.</span>
@@ -409,12 +430,12 @@ const Create = () => {
                                         <div className="text-sm text-gray-600 mt-2 p-3 bg-blue-50 rounded-lg border border-blue-200">
                                             <div className="flex items-center justify-between">
                                                 <div className="flex items-center">
-                                                    <svg className="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg className="w-4 h-4 mr-2 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                                                     </svg>
-                                                    <span className="font-medium text-blue-700">Цена в евро:</span>
+                                                    <span className="font-medium text-emerald-700">Цена в евро:</span>
                                                 </div>
-                                                <span className="font-bold text-green-600">
+                                                <span className="font-bold text-green-600 dark:text-green-400">
                                                     €{(parseFloat(product.price) / 1.95583).toFixed(2)}
                                                 </span>
                                             </div>
@@ -435,7 +456,7 @@ const Create = () => {
                                         placeholder="напр. S, M, L или 42, 44..."
                                         value={product.size}
                                         onChange={(e) => setProduct({ ...product, size: e.target.value })}
-                                        className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 placeholder-gray-400"
+                                        className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500"
                                     />
                                 </div>
 
@@ -449,8 +470,54 @@ const Create = () => {
                                         placeholder="напр. Червен, Син или #ffffff"
                                         value={product.color}
                                         onChange={(e) => setProduct({ ...product, color: e.target.value })}
-                                        className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 placeholder-gray-400"
+                                        className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500"
                                     />
+                                </div>
+                            </div>
+
+                            {/* Additional technical parameters (optional) */}
+                            <div className="space-y-2">
+                                <label className="block text-sm font-bold text-gray-700 dark:text-black">Допълнителни параметри (опционално)</label>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white p-4 rounded-xl border-2 border-gray-200">
+                                    <div className="space-y-2">
+                                        <label className="block text-xs font-medium text-gray-700 dark:text-black">Вътрешен диаметър на ролката (мм)</label>
+                                        <input type="text" placeholder="мм" value={product.innerDiameterMm} onChange={e => setProduct({ ...product, innerDiameterMm: e.target.value })} className="w-full px-3 py-2 border rounded placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500" />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="block text-xs font-medium text-gray-700 dark:text-black">Бр./кашон</label>
+                                        <input type="text" placeholder="напр. 10" value={product.piecesPerBox} onChange={e => setProduct({ ...product, piecesPerBox: e.target.value })} className="w-full px-3 py-2 border rounded placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500" />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="block text-xs font-medium text-gray-700 dark:text-black">Сила на опън при скъсване (кг)</label>
+                                        <input type="text" placeholder="кг" value={product.tensileStrengthKg} onChange={e => setProduct({ ...product, tensileStrengthKg: e.target.value })} className="w-full px-3 py-2 border rounded placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500" />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="block text-xs font-medium text-gray-700 dark:text-black">Дължина на ролка (м)</label>
+                                        <input type="text" placeholder="м" value={product.rollLengthM} onChange={e => setProduct({ ...product, rollLengthM: e.target.value })} className="w-full px-3 py-2 border rounded placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500" />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="block text-xs font-medium text-gray-700 dark:text-black">Тип скоби</label>
+                                        <input type="text" placeholder="напр. Метални" value={product.stapleType} onChange={e => setProduct({ ...product, stapleType: e.target.value })} className="w-full px-3 py-2 border rounded placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500" />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="block text-xs font-medium text-gray-700 dark:text-black">Подходящи за чембер размери</label>
+                                        <input type="text" placeholder="напр. 400x600" value={product.chamberSizes} onChange={e => setProduct({ ...product, chamberSizes: e.target.value })} className="w-full px-3 py-2 border rounded placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500" />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="block text-xs font-medium text-gray-700 dark:text-black">Диаметър</label>
+                                        <input type="text" placeholder="мм" value={product.diameter} onChange={e => setProduct({ ...product, diameter: e.target.value })} className="w-full px-3 py-2 border rounded placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500" />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="block text-xs font-medium text-gray-700 dark:text-black">Развиване</label>
+                                        <input type="text" placeholder="описание" value={product.unwind} onChange={e => setProduct({ ...product, unwind: e.target.value })} className="w-full px-3 py-2 border rounded placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500" />
+                                    </div>
                                 </div>
                             </div>
 
