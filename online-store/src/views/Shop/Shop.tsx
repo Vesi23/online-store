@@ -342,7 +342,7 @@ const Shop = () => {
                             placeholder="Cleaners"
                             value={search}
                             onChange={e => setSearch(e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent text-lg"
+                            className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent text-lg placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500"
                         />
                     </div>
                     <button
@@ -601,23 +601,19 @@ const Shop = () => {
                                             <h3 className="font-bold text-gray-800 mb-3 line-clamp-2 text-sm lg:text-base leading-tight">{product.title}</h3>
 
                                             <div className="mt-auto">
-                                                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 rounded-lg p-2">
-                                                    {/* VAT badge - responsive: shown as pill, moves above prices on small screens */}
-                                                    <div className="order-0 flex items-center gap-2 mb-1">
-                                                        <span className="inline-flex items-center bg-emerald-100 text-emerald-800 text-xs font-semibold px-2 py-1 rounded-full shadow-sm">
-                                                            <span className="whitespace-nowrap">Цена с ДДС:</span>
+                                                <div className="flex flex-col items-center gap-2 rounded-lg p-2">
+                                                    {/* VAT badge above prices */}
+                                                    <div className="flex items-center">
+                                                        <span className="inline-flex items-center bg-emerald-100 text-emerald-800 dark:bg-emerald-700 dark:text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+                                                            <span className="whitespace-nowrap">Цена с ДДС</span>
                                                         </span>
                                                     </div>
 
-                                                    {/* Prices */}
-                                                    <div className="order-0 sm:order-1 flex items-center gap-3">
-                                                        <div className="flex flex-col text-center">
-                                                            <span className="text-sm font-bold">{product.priceBGN?.toFixed(2) || product.price?.toFixed(2) || '0.00'} лв.</span>
-                                                        </div>
+                                                    {/* Prices on a single row */}
+                                                    <div className="flex items-center gap-3 mt-1">
+                                                        <span className="text-sm font-bold text-emerald-700 dark:text-emerald-500">{product.priceBGN?.toFixed(2) || product.price?.toFixed(2) || '0.00'} лв.</span>
                                                         <div className="h-4 w-px bg-gray-300"></div>
-                                                        <div className="flex flex-col text-center">
-                                                            <span className="text-sm font-bold">€{product.priceEUR?.toFixed(2) || (product.price / 1.95583).toFixed(2)}</span>
-                                                        </div>
+                                                        <span className="text-sm font-bold text-emerald-700 dark:text-emerald-500">€{product.priceEUR?.toFixed(2) || (product.price / 1.95583).toFixed(2)}</span>
                                                     </div>
                                                 </div>
                                             </div>
