@@ -611,8 +611,6 @@ const Shop = () => {
 
                                                     {/* Prices on a single row */}
                                                     <div className="flex items-center gap-3 mt-1">
-                                                        <span className="text-sm font-bold text-emerald-700 dark:text-emerald-500">{product.priceBGN?.toFixed(2) || product.price?.toFixed(2) || '0.00'} лв.</span>
-                                                        <div className="h-4 w-px bg-gray-300"></div>
                                                         <span className="text-sm font-bold text-emerald-700 dark:text-emerald-500">€{product.priceEUR?.toFixed(2) || (product.price / 1.95583).toFixed(2)}</span>
                                                     </div>
                                                 </div>

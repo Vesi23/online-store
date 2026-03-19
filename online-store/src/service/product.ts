@@ -20,10 +20,10 @@ export const addProduct = async (
     diameter: string,
     unwind: string
 ) => {
-    // Конвертиране от лева към евро с фиксирания курс
+    // Входната цена вече е в евро; записваме както евро, така и лева
     const exchangeRate = 1.95583;
-    const priceBGN = parseFloat(price);
-    const priceEUR = priceBGN / exchangeRate;
+    const priceEUR = parseFloat(price);
+    const priceBGN = priceEUR * exchangeRate;
 
     return push(ref(db, 'products'), {
         title,
@@ -40,9 +40,11 @@ export const addProduct = async (
         chamberSizes,
         diameter,
         unwind,
-        price: priceBGN,
-        priceBGN: Math.round(priceBGN * 100) / 100, // закръгляне до 2 знака
-        priceEUR: Math.round(priceEUR * 100) / 100, // закръгляне до 2 знака
+        // `price` остава за съвместимост със съществуващ код (във формати BGN),
+        // но входът е в EUR — затова записваме BGN в `price` и съхраняваме и `priceEUR`.
+        price: Math.round(priceBGN * 100) / 100,
+        priceBGN: Math.round(priceBGN * 100) / 100,
+        priceEUR: Math.round(priceEUR * 100) / 100,
         size,
         createdOn: Date.now()
     });
@@ -150,8 +152,8 @@ export const updateProduct = async (
     unwind: string
 ) => {
     const exchangeRate = 1.95583;
-    const priceBGN = parseFloat(price);
-    const priceEUR = priceBGN / exchangeRate;
+    const priceEUR = parseFloat(price);
+    const priceBGN = priceEUR * exchangeRate;
 
     try {
         const productRef = ref(db, `products/${id}`);
@@ -170,7 +172,7 @@ export const updateProduct = async (
             chamberSizes,
             diameter,
             unwind,
-            price: priceBGN,
+            price: Math.round(priceBGN * 100) / 100,
             priceBGN: Math.round(priceBGN * 100) / 100,
             priceEUR: Math.round(priceEUR * 100) / 100,
             size,
