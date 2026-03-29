@@ -95,6 +95,10 @@ const Shop = () => {
                 }
             }
         },
+        'mashini': {
+            name: 'Машини',
+            subcategories: {}
+        },
         'krepezhni-sistemi': {
             name: 'Крепежни системи',
             subcategories: {
@@ -602,17 +606,17 @@ const Shop = () => {
 
                                             <div className="mt-auto">
                                                 <div className="flex flex-col items-center gap-2 rounded-lg p-2">
-                                                    {/* VAT badge above prices */}
+                                                    {/* Price display removed per request
                                                     <div className="flex items-center">
                                                         <span className="inline-flex items-center bg-emerald-100 text-emerald-800 dark:bg-emerald-700 dark:text-white text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
                                                             <span className="whitespace-nowrap">Цена с ДДС</span>
                                                         </span>
                                                     </div>
 
-                                                    {/* Prices on a single row */}
                                                     <div className="flex items-center gap-3 mt-1">
                                                         <span className="text-sm font-bold text-emerald-700 dark:text-emerald-500">€{product.priceEUR?.toFixed(2) || (product.price / 1.95583).toFixed(2)}</span>
                                                     </div>
+                                                    */}
                                                 </div>
                                             </div>
                                         </div>

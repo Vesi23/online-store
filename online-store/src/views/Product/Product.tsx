@@ -21,9 +21,9 @@ interface ProductType {
     chamberSizes?: string;
     diameter?: string;
     unwind?: string;
-    price: number;
-    priceBGN: number;
-    priceEUR: number;
+    price?: number;
+    priceBGN?: number;
+    priceEUR?: number;
     size: string;
     createdOn: string | number;
 }
@@ -42,7 +42,7 @@ const Product = () => {
         title: '',
         description: '',
         category: '',
-        price: '',
+        // price field removed from edit form per request
         size: '',
         color: '',
         innerDiameterMm: '',
@@ -124,6 +124,10 @@ const Product = () => {
                     items: ['Ръчни', 'Полуавтоматични', 'Автоматични']
                 }
             }
+        },
+        'mashini': {
+            name: 'Машини',
+            subcategories: {}
         },
         'krepezhni-sistemi': {
             name: 'Крепежни системи',
@@ -251,8 +255,8 @@ const Product = () => {
                         title: productData[0].title,
                         description: productData[0].description,
                         category: productData[0].category,
-                        // edit form should show price in EUR (input is EUR)
-                        price: (productData[0].priceEUR ?? (productData[0].price / 1.95583)).toString(),
+                        // price hidden per request
+                        // price: (productData[0].priceEUR ?? (productData[0].price / 1.95583)).toString(),
                         size: productData[0].size,
                         color: productData[0].color || '',
                         innerDiameterMm: productData[0].innerDiameterMm || '',
@@ -363,7 +367,7 @@ const Product = () => {
                 editForm.imagePost,
                 editForm.image,
                 finalCategory || editForm.category,
-                editForm.price,
+                // price omitted
                 editForm.size,
                 editForm.color,
                 editForm.innerDiameterMm,
@@ -376,6 +380,8 @@ const Product = () => {
                 editForm.unwind
             );
 
+            // Price update/fields disabled per request
+            /*
             // Update local state (editForm.price is in EUR)
             const updatedPriceEUR = parseFloat(editForm.price);
             const updatedPriceBGN = Math.round(updatedPriceEUR * 1.95583 * 100) / 100;
@@ -388,6 +394,12 @@ const Product = () => {
                 price: updatedPriceBGN,
                 priceBGN: updatedPriceBGN,
                 priceEUR: Math.round(updatedPriceEUR * 100) / 100,
+            */
+            setProduct({
+                ...product,
+                title: editForm.title,
+                description: editForm.description,
+                category: finalCategory || editForm.category,
                 size: editForm.size,
                 color: editForm.color,
                 innerDiameterMm: editForm.innerDiameterMm,
@@ -418,7 +430,8 @@ const Product = () => {
                 title: product.title,
                 description: product.description,
                 category: product.category,
-                price: (product.priceEUR ?? (product.price / 1.95583)).toString(),
+                // price hidden per request
+                // price: (product.priceEUR ?? (product.price / 1.95583)).toString(),
                 size: product.size,
                 color: (product as any).color || '',
                 innerDiameterMm: (product as any).innerDiameterMm || '',
@@ -891,34 +904,7 @@ const Product = () => {
                             </div>
                         )}
 
-                        {/* Prices */}
-                        <div className="mb-6 lg:mb-8 p-3 lg:p-6 bg-emerald-50 rounded-2xl border border-emerald-200 shadow-lg">
-                            {isEditing ? (
-                                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-0">
-                                    <span className="text-xs lg:text-sm font-medium text-emerald-700 mr-0 sm:mr-2">Цена (€):</span>
-                                    <input
-                                        type="number"
-                                        name="price"
-                                        value={editForm.price}
-                                        onChange={handleInputChange}
-                                        step="0.01"
-                                        className="text-base sm:text-lg lg:text-2xl font-black text-emerald-700 border border-emerald-300 rounded px-2 py-1 w-full sm:w-auto max-w-32 placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500"
-                                        placeholder="0.00"
-                                    />
-                                </div>
-                            ) : (
-
-                                    <div className="flex flex-col items-center gap-3 lg:gap-6">
-                                    <div className="flex items-center gap-3">
-                                        <span className="inline-block bg-emerald-700/90 dark:bg-emerald-700 text-white dark:text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md tracking-wide">Цена с ДДС</span>
-                                    </div>
-
-                                    <div className="flex items-center gap-3">
-                                        <span className="text-base sm:text-lg lg:text-2xl font-black text-emerald-700 dark:text-emerald-500">€{product.priceEUR?.toFixed(2) || (product.price / 1.95583).toFixed(2)}</span>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
+                        {/* Prices removed per request */}
 
 
                         {/* Description */}

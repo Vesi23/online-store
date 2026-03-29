@@ -1,9 +1,9 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
-import { getAuth } from "firebase/auth";
+import { getAuth, connectAuthEmulator } from "firebase/auth";
 import { getDatabase } from "firebase/database";
-import { getStorage } from "firebase/storage";
+import { getStorage, connectStorageEmulator } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAtBJvydOcpJJQNPmhT9MsOR7ZQSBfKmhs",
@@ -22,3 +22,20 @@ const app = initializeApp(firebaseConfig);
 export const auth=getAuth(app);
 export const db = getDatabase(app);
 export const storage = getStorage(app);
+
+// Local emulator support (set VITE_USE_FIREBASE_EMULATOR=true in .env to enable)
+if (import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true') {
+  // Auth emulator defaults to http://localhost:9099
+  try {
+    connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
+  } catch (e) {
+    // ignore if already connected in hot-reload
+  }
+
+  // Storage emulator defaults to localhost:9199
+  try {
+    connectStorageEmulator(storage, 'localhost', 9199);
+  } catch (e) {
+    // ignore if already connected in hot-reload
+  }
+}

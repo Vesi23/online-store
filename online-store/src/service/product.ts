@@ -8,7 +8,7 @@ export const addProduct = async (
     imagePost: string,
     image: string,
     category: string,
-    price: string,
+    // price omitted on purpose
     size: string,
     color: string,
     innerDiameterMm: string,
@@ -20,11 +20,7 @@ export const addProduct = async (
     diameter: string,
     unwind: string
 ) => {
-    // Входната цена вече е в евро; записваме както евро, така и лева
-    const exchangeRate = 1.95583;
-    const priceEUR = parseFloat(price);
-    const priceBGN = priceEUR * exchangeRate;
-
+    // Price storage disabled — do not save price fields to DB
     return push(ref(db, 'products'), {
         title,
         description,
@@ -40,11 +36,6 @@ export const addProduct = async (
         chamberSizes,
         diameter,
         unwind,
-        // `price` остава за съвместимост със съществуващ код (във формати BGN),
-        // но входът е в EUR — затова записваме BGN в `price` и съхраняваме и `priceEUR`.
-        price: Math.round(priceBGN * 100) / 100,
-        priceBGN: Math.round(priceBGN * 100) / 100,
-        priceEUR: Math.round(priceEUR * 100) / 100,
         size,
         createdOn: Date.now()
     });
@@ -73,9 +64,9 @@ export const getAllProducts = async (search: string) => {
         chamberSizes: snapshot.val()[key].chamberSizes,
         diameter: snapshot.val()[key].diameter,
         unwind: snapshot.val()[key].unwind,
-        price: snapshot.val()[key].price,
-        priceBGN: snapshot.val()[key].priceBGN,
-        priceEUR: snapshot.val()[key].priceEUR,
+        // price: snapshot.val()[key].price,
+        // priceBGN: snapshot.val()[key].priceBGN,
+        // priceEUR: snapshot.val()[key].priceEUR,
         size: snapshot.val()[key].size,
         createdOn: snapshot.val()[key].createdOn,
         imageUrl: snapshot.val()[key].imageUrl,
@@ -109,9 +100,9 @@ export const getProductById = async (id: string) => {
         chamberSizes: productData.chamberSizes,
         diameter: productData.diameter,
         unwind: productData.unwind,
-        price: productData.price,
-        priceBGN: productData.priceBGN,
-        priceEUR: productData.priceEUR,
+        // price: productData.price,
+        // priceBGN: productData.priceBGN,
+        // priceEUR: productData.priceEUR,
         size: productData.size,
         createdOn: new Date(productData.createdOn).toString(),
         imageUrl: productData.imageUrl,
@@ -139,7 +130,7 @@ export const updateProduct = async (
     imagePost: string,
     image: string,
     category: string,
-    price: string,
+    // price omitted on purpose
     size: string,
     color: string,
     innerDiameterMm: string,
@@ -150,10 +141,13 @@ export const updateProduct = async (
     chamberSizes: string,
     diameter: string,
     unwind: string
-) => {
+ ) => {
+    // Price handling disabled for updates
+    /*
     const exchangeRate = 1.95583;
     const priceEUR = parseFloat(price);
     const priceBGN = priceEUR * exchangeRate;
+    */
 
     try {
         const productRef = ref(db, `products/${id}`);
@@ -172,9 +166,7 @@ export const updateProduct = async (
             chamberSizes,
             diameter,
             unwind,
-            price: Math.round(priceBGN * 100) / 100,
-            priceBGN: Math.round(priceBGN * 100) / 100,
-            priceEUR: Math.round(priceEUR * 100) / 100,
+            // price fields removed per request
             size,
             updatedOn: Date.now()
         };

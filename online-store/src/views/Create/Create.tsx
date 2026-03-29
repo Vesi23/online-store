@@ -99,6 +99,10 @@ const Create = () => {
                 }
             }
         },
+        'mashini': {
+            name: 'Машини',
+            subcategories: {}
+        },
         'krepezhni-sistemi': {
             name: 'Крепежни системи',
             subcategories: {
@@ -237,10 +241,13 @@ const Create = () => {
             toast.error('Моля добавете поне една снимка');
         }
 
+        // Price validation disabled per request
+        /*
         if (!product.price || parseFloat(product.price) <= 0) {
             isValid = false;
             toast.error('Моля въведете валидна цена');
         }
+        */
 
         if (!product.size.trim()) {
             isValid = false;
@@ -309,7 +316,7 @@ const Create = () => {
                 mainImage, // главна снимка
                 allImages, // всички снимки като JSON
                 finalCategory,
-                product.price,
+                // price omitted by request
                 product.size,
                 product.color,
                 product.innerDiameterMm,
@@ -407,28 +414,9 @@ const Create = () => {
 
                             {/* Price and Size Row */}
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                {/* Price Input */}
-                                <div className="space-y-2">
-                                    <label className="block text-sm font-bold text-gray-700">
-                                        Цена (€)
-                                    </label>
-                                    <div className="relative">
-                                        <input
-                                            type="number"
-                                            step="0.01"
-                                            min="0"
-                                            placeholder="0.00"
-                                            value={product.price}
-                                            onChange={(e) => setProduct({ ...product, price: e.target.value })}
-                                            className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-500/20 transition-all duration-200 text-gray-700 placeholder-gray-400 dark:bg-white dark:text-black dark:placeholder-gray-500"
-                                        />
-                                        <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                                            <span className="text-gray-500 font-medium">€</span>
-                                        </div>
-                                    </div>
-                                </div>
+                            
 
-                                {/* Size Input */}
+                              
                                 <div className="space-y-2">
                                     <label className="block text-sm font-bold text-gray-700">
                                         Размер
@@ -442,7 +430,7 @@ const Create = () => {
                                     />
                                 </div>
 
-                                {/* Color Input (same as Size) */}
+                             
                                 <div className="space-y-2">
                                     <label className="block text-sm font-bold text-gray-700">
                                         Цвят
